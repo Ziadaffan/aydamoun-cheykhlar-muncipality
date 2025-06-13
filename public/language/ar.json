@@ -1,0 +1,16 @@
+{
+  "navigation": {
+    "utility": {
+      "accessibility": "إمكانية الوصول",
+      "legal": "الشروط القانونية",
+      "sitemap": "خريطة الموقع"
+    },
+    "main": {
+      "logo": "البلدية",
+      "home": "الرئيسية",
+      "services": "الخدمات",
+      "news": "الأخبار",
+      "contact": "اتصل بنا"
+    }
+  }
+} 
