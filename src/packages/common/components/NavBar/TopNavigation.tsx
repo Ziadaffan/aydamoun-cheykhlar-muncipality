@@ -7,7 +7,7 @@ type TopNavigationProps = {
 
 export default function TopNavigation({ t }: TopNavigationProps) {
   return (
-    <nav className="bg-gray-100 py-2">
+    <nav className="py-2 bg-gradient-to-r from-blue-100 to-blue-300">
       <div className="flex justify-center max-w-7xl mx-auto px-4">
         <div className="flex justify-end items-center space-x-6">
           <Link

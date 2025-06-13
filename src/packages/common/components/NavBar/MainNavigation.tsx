@@ -11,7 +11,7 @@ export default function MainNavigation({ t }: MainNavigationProps) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   return (
-    <nav className="bg-white shadow-md sticky top-0 z-50 transition-all duration-300">
+    <nav className="bg-white shadow-md sticky top-0 z-50 bg-gradient-to-r from-blue-100 to-blue-300 border-t-2 border-blue-100">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-20">
           <div className="flex items-center">
