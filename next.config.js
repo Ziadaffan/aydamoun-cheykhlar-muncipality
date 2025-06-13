@@ -1,10 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  i18n: {
-    locales: ['fr', 'ar'],
-    defaultLocale: 'fr',
-    localeDetection: true
+  images: {
+    domains: ["tailwindcss.com"],
   }
-}
+};
 
-module.exports = nextConfig 
+module.exports = nextConfig;
