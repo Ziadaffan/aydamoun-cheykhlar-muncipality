@@ -3,9 +3,6 @@ import { initReactI18next } from "react-i18next";
 import Backend from "i18next-http-backend";
 import LanguageDetector from "i18next-browser-languagedetector";
 
-// Prevent i18next from loading resources on the server
-const isBrowser = typeof window !== "undefined";
-
 i18n
   .use(Backend)
   .use(LanguageDetector)
@@ -18,11 +15,7 @@ i18n
     defaultNS: "translation",
     load: "languageOnly",
     partialBundledLanguages: true,
-    resources: {
-      ar: {
-        translation: require("../public/language/ar.json")
-      }
-    },
+    initImmediate: false,
 
     interpolation: {
       escapeValue: false,
@@ -30,6 +23,9 @@ i18n
 
     backend: {
       loadPath: "/language/{{lng}}.json",
+      requestOptions: {
+        cache: "no-store",
+      },
     },
 
     detection: {
@@ -40,6 +36,8 @@ i18n
     // Prevent i18next from loading resources on the server
     react: {
       useSuspense: false,
+      bindI18n: "languageChanged loaded",
+      bindI18nStore: "added removed",
     },
   });
 

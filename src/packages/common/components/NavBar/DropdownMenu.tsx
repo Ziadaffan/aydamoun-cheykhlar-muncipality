@@ -1,4 +1,3 @@
-import { ReactNode } from "react";
 import NavLink from "./NavLink";
 
 export type DropdownItem = {

@@ -8,7 +8,7 @@ export default function ComingSoon() {
           Coming Soon
         </h1>
         <p className="text-xl md:text-2xl text-gray-600 mb-8">
-          We're working hard to bring you something amazing.
+          We&apos;re working hard to bring you something amazing.
         </p>
       </div>
     </div>
