@@ -1,5 +1,7 @@
 "use client";
 
+import ComingSoon from "@/packages/common/components/ComingSoon";
+
 export default function HomePage() {
-  return <div>Home Page</div>;
+  return <ComingSoon />;
 }

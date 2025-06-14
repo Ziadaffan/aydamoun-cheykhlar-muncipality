@@ -2,6 +2,10 @@ import Link from "next/link";
 import { TFunction } from "i18next";
 import Image from "next/image";
 import { useState } from "react";
+import NavLink from "./NavLink";
+import DropdownMenu from "./DropdownMenu";
+import MobileMenuButoon from "./MobileMenuButoon";
+import MobileMenu from "./MobileMenu";
 
 type MainNavigationProps = {
   t: TFunction<"translation", undefined>;
@@ -9,9 +13,41 @@ type MainNavigationProps = {
 
 export default function MainNavigation({ t }: MainNavigationProps) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isMobileMunicipalityOpen, setIsMobileMunicipalityOpen] = useState(false);
+  const [isMobileCouncilOpen, setIsMobileCouncilOpen] = useState(false);
+
+  const municipalityItems = [
+    {
+      href: "/municipality/mission",
+      label: t("navigation.main.municipality.mission")
+    },
+    {
+      href: "/municipality/purchases",
+      label: t("navigation.main.municipality.purchases")
+    },
+    {
+      href: "/municipality/official-transactions",
+      label: t("navigation.main.municipality.officialTransactions")
+    }
+  ];
+
+  const councilItems = [
+    {
+      href: "/council/members",
+      label: t("navigation.main.council.actualMembers")
+    },
+    {
+      href: "/council/membersCv",
+      label: t("navigation.main.council.cvMunicipalCouncilMembers")
+    },
+    {
+      href: "/council/previous",
+      label: t("navigation.main.council.previousCouncils")
+    }
+  ];
 
   return (
-    <nav className="bg-white shadow-md sticky top-0 z-50 bg-gradient-to-r from-blue-100 to-blue-300 border-t-2 border-blue-100">
+    <nav className="bg-white shadow-md sticky top-0 z-50 bg-gradient-to-r from-blue-200 to-blue-300 border-t-2 border-blue-100">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-20">
           <div className="flex items-center">
@@ -29,84 +65,48 @@ export default function MainNavigation({ t }: MainNavigationProps) {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
-            <Link
-              href="/actualites"
-              className="text-gray-700 hover:text-blue-800 font-medium transition-colors duration-200 relative group"
-            >
-              {t("navigation.main.news")}
-              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-800 transition-all duration-200 group-hover:w-full"></span>
-            </Link>
+            <DropdownMenu
+              isOpen={false}
+              label={t("navigation.main.municipality.name")}
+              items={municipalityItems}
+              onToggle={() => {}}
+            />
 
-            <Link
-              href="/services"
-              className="text-gray-700 hover:text-blue-800 font-medium transition-colors duration-200 relative group"
-            >
-              {t("navigation.main.services")}
-              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-800 transition-all duration-200 group-hover:w-full"></span>
-            </Link>
+            <NavLink href="/president-news">
+              {t("navigation.main.presidentNews")}
+            </NavLink>
 
-            <Link
-              href="/contact"
-              className="text-gray-700 hover:text-blue-800 font-medium transition-colors duration-200 relative group"
-            >
-              {t("navigation.main.contact")}
-              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-800 transition-all duration-200 group-hover:w-full"></span>
-            </Link>
+            <NavLink href="/advertisements">
+              {t("navigation.main.advertisements")}
+            </NavLink>
+
+            <DropdownMenu
+              isOpen={false}
+              label={t("navigation.main.council.name")}
+              items={councilItems}
+              onToggle={() => {}}
+            />
+
+            <NavLink href="/development-projects">
+              {t("navigation.main.developmentProjects")}
+            </NavLink>
           </div>
 
-          {/* Mobile menu button */}
-          <div className="md:hidden flex items-center">
-            <button
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="inline-flex items-center justify-center p-2 rounded-md text-gray-700 hover:text-blue-800 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-800"
-            >
-              <span className="sr-only">Open main menu</span>
-              <svg
-                className={`${isMobileMenuOpen ? 'hidden' : 'block'} h-6 w-6`}
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-              </svg>
-              <svg
-                className={`${isMobileMenuOpen ? 'block' : 'hidden'} h-6 w-6`}
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </button>
-          </div>
+          <MobileMenuButoon isMobileMenuOpen={isMobileMenuOpen} setIsMobileMenuOpen={setIsMobileMenuOpen} />
         </div>
       </div>
 
       {/* Mobile menu */}
-      <div className={`${isMobileMenuOpen ? 'block' : 'hidden'} md:hidden`}>
-        <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-white shadow-lg">
-          <Link
-            href="/actualites"
-            className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-800 hover:bg-gray-50 transition-colors duration-200"
-          >
-            {t("navigation.main.news")}
-          </Link>
-          <Link
-            href="/services"
-            className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-800 hover:bg-gray-50 transition-colors duration-200"
-          >
-            {t("navigation.main.services")}
-          </Link>
-          <Link
-            href="/contact"
-            className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-800 hover:bg-gray-50 transition-colors duration-200"
-          >
-            {t("navigation.main.contact")}
-          </Link>
-        </div>
-      </div>
+      <MobileMenu
+        t={t}
+        isMobileMenuOpen={isMobileMenuOpen}
+        isMobileMunicipalityOpen={isMobileMunicipalityOpen}
+        setIsMobileMunicipalityOpen={setIsMobileMunicipalityOpen}
+        isMobileCouncilOpen={isMobileCouncilOpen}
+        setIsMobileCouncilOpen={setIsMobileCouncilOpen}
+        municipalityItems={municipalityItems}
+        councilItems={councilItems} 
+      />
     </nav>
   );
 }

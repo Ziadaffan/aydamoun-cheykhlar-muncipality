@@ -1,16 +1,31 @@
 {
   "navigation": {
-    "utility": {
-      "accessibility": "إمكانية الوصول",
-      "legal": "الشروط القانونية",
-      "sitemap": "خريطة الموقع"
+    "top": {
+      "transactionInquiry": "استعلام عن المعاملات",
+      "complaintInquiry": "استعلام عن الشكاوي",
+      "searchForDecisions": "استعلام عن القرارات"
     },
     "main": {
-      "logo": "البلدية",
-      "home": "الرئيسية",
-      "services": "الخدمات",
-      "news": "الأخبار",
-      "contact": "اتصل بنا"
+      "home": "الصفحة الرئيسية",
+      "municipality": {
+        "name": "البلدية",
+        "mission": "المهمة البلدية",
+        "purchases": "مشتريات",
+        "officialTransactions": "المعاملات الرسمية"
+      },
+      "presidentNews": "أخبار الرئيس",
+      "advertisements": "إعلانات",
+      "budget": "موازنة",
+      "developmentProjects": "مشاريع تنموية",
+      "council": {
+        "name": " المجلس البلدي",
+        "actualMembers": "الأعضاء الحاليين",
+        "cvMunicipalCouncilMembers": "السيرة الذاتية لأعضاء المجلس البلدي",
+        "previousCouncils": "المجالس البلدي السابقة"
+      },
+      "submitComplaint": "تقديم شكوى",
+      "objectionToTheMunicipality": "إعتراض على البلدية",
+      "jobs": "الوظائف"
     }
   }
-} 
+}
