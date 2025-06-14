@@ -13,6 +13,16 @@ i18n
   .init({
     lng: "ar",
     fallbackLng: "ar",
+    preload: ["ar"],
+    ns: ["translation"],
+    defaultNS: "translation",
+    load: "languageOnly",
+    partialBundledLanguages: true,
+    resources: {
+      ar: {
+        translation: require("../public/language/ar.json")
+      }
+    },
 
     interpolation: {
       escapeValue: false,
@@ -31,9 +41,6 @@ i18n
     react: {
       useSuspense: false,
     },
-
-    // Only load resources in the browser
-    load: isBrowser ? "languageOnly" : "currentOnly",
   });
 
 export default i18n;
