@@ -11,6 +11,7 @@ export type CouncilMember = {
   name: string;
   position: string;
   image: string;
+  phone?: string | null;
 };
 
 export default function AboutUsPage() {
