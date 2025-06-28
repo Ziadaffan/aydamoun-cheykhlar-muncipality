@@ -1,10 +1,10 @@
-import React from "react";
+import React from 'react';
 
 export default function Spinner() {
   return (
-    <div className="flex items-center justify-center m-auto w-full h-full pointer-events-none select-none">
+    <div className="pointer-events-none m-auto flex h-full w-full items-center justify-center select-none">
       <svg
-        className="mr-3 size-8 animate-spin pointer-events-none"
+        className="pointer-events-none mr-3 size-8 animate-spin"
         viewBox="0 0 24 24"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"

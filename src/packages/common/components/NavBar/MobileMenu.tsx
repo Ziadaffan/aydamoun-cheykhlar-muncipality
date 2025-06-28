@@ -1,9 +1,9 @@
-import { TFunction } from "i18next";
-import React from "react";
-import NavigationItems from "./NavigationItems";
+import { TFunction } from 'i18next';
+import React from 'react';
+import NavigationItems from './NavigationItems';
 
 type MobileMenuProps = {
-  t: TFunction<"translation", undefined>;
+  t: TFunction<'translation', undefined>;
   isMobileMenuOpen: boolean;
   isMobileMunicipalityOpen: boolean;
   setIsMobileMunicipalityOpen: (isOpen: boolean) => void;
@@ -20,8 +20,8 @@ export default function MobileMenu({
   setIsMobileCouncilOpen,
 }: MobileMenuProps) {
   return (
-    <div className={`${isMobileMenuOpen ? "block" : "hidden"} md:hidden`}>
-      <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-white shadow-lg">
+    <div className={`${isMobileMenuOpen ? 'block' : 'hidden'} md:hidden`}>
+      <div className="space-y-1 bg-white px-2 pt-2 pb-3 shadow-lg sm:px-3">
         <NavigationItems
           t={t}
           isMobile={true}

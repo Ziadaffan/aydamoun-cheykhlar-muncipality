@@ -1,13 +1,11 @@
-import React from "react";
+import React from 'react';
 
 export default function ComingSoon() {
   return (
-    <div className="min-h-screen flex items-center justify-center">
-      <div className="text-center p-8">
-        <h1 className="text-4xl md:text-6xl font-bold text-blue-600 mb-4">
-          Coming Soon
-        </h1>
-        <p className="text-xl md:text-2xl text-gray-600 mb-8">
+    <div className="flex min-h-screen items-center justify-center">
+      <div className="p-8 text-center">
+        <h1 className="mb-4 text-4xl font-bold text-blue-600 md:text-6xl">Coming Soon</h1>
+        <p className="mb-8 text-xl text-gray-600 md:text-2xl">
           We&apos;re working hard to bring you something amazing.
         </p>
       </div>

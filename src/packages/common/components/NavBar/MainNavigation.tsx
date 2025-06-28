@@ -1,13 +1,13 @@
-import { TFunction } from "i18next";
-import Image from "next/image";
-import { useState } from "react";
-import Link from "next/link";
-import MobileMenuButoon from "./MobileMenuButoon";
-import MobileMenu from "./MobileMenu";
-import NavigationItems from "./NavigationItems";
+import { TFunction } from 'i18next';
+import Image from 'next/image';
+import { useState } from 'react';
+import Link from 'next/link';
+import MobileMenuButoon from './MobileMenuButoon';
+import MobileMenu from './MobileMenu';
+import NavigationItems from './NavigationItems';
 
 type MainNavigationProps = {
-  t: TFunction<"translation", undefined>;
+  t: TFunction<'translation', undefined>;
 };
 
 export default function MainNavigation({ t }: MainNavigationProps) {
@@ -16,11 +16,11 @@ export default function MainNavigation({ t }: MainNavigationProps) {
   const [isMobileCouncilOpen, setIsMobileCouncilOpen] = useState(false);
 
   return (
-    <nav className="bg-white shadow-md sticky top-0 z-50 bg-gradient-to-r from-blue-200 to-blue-300 border-t-2 border-blue-100">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between h-20">
+    <nav className="sticky top-0 z-50 border-t-2 border-blue-100 bg-white bg-gradient-to-r from-blue-200 to-blue-300 shadow-md">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="flex h-20 justify-between">
           <div className="flex items-center">
-            <Link href="/" className="flex-shrink-0 flex items-center">
+            <Link href="/" className="flex flex-shrink-0 items-center">
               <Image
                 src="/assets/images/logo.png"
                 alt="Municipality Logo"
@@ -33,11 +33,14 @@ export default function MainNavigation({ t }: MainNavigationProps) {
           </div>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-8">
+          <div className="hidden items-center space-x-8 md:flex">
             <NavigationItems t={t} />
           </div>
 
-          <MobileMenuButoon isMobileMenuOpen={isMobileMenuOpen} setIsMobileMenuOpen={setIsMobileMenuOpen} />
+          <MobileMenuButoon
+            isMobileMenuOpen={isMobileMenuOpen}
+            setIsMobileMenuOpen={setIsMobileMenuOpen}
+          />
         </div>
       </div>
 

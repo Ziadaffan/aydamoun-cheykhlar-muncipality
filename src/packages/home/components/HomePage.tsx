@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import { useTranslation } from "react-i18next";
-import HomeHeaderSection from "./HomeHeaderSection";
-import HomeServicesSection from "./HomeServicesSection";
-import HomeContactSection from "./HomeContactSection";
+import { useTranslation } from 'react-i18next';
+import HomeHeaderSection from './HomeHeaderSection';
+import HomeServicesSection from './HomeServicesSection';
+import HomeContactSection from './HomeContactSection';
 
 export default function HomePage() {
   const { t } = useTranslation();

@@ -1,14 +1,14 @@
-"use client";
+'use client';
 
-import { MapContainer, TileLayer } from "react-leaflet";
-import "leaflet/dist/leaflet.css";
+import { MapContainer, TileLayer } from 'react-leaflet';
+import 'leaflet/dist/leaflet.css';
 
 export default function MapCard() {
   return (
     <MapContainer
       center={[34.5970643, 36.2875492]}
       zoom={13}
-      style={{ height: "400px", width: "100%" }}
+      style={{ height: '400px', width: '100%' }}
       scrollWheelZoom={false}
     >
       <TileLayer
