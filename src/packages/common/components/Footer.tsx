@@ -13,16 +13,10 @@ export default function Footer() {
           </div>
 
           <div className="flex flex-col items-center space-y-2 md:flex-row md:space-y-0 md:space-x-6">
-            <Link
-              href="/privacy-policy"
-              className="text-gray-300 transition-colors duration-200 hover:text-white"
-            >
+            <Link href="/privacy-policy" className="text-gray-300 transition-colors duration-200 hover:text-white">
               {t('footer.privacyPolicy')}
             </Link>
-            <Link
-              href="/terms-of-use"
-              className="text-gray-300 transition-colors duration-200 hover:text-white"
-            >
+            <Link href="/terms-of-use" className="text-gray-300 transition-colors duration-200 hover:text-white">
               {t('footer.termsOfUse')}
             </Link>
 

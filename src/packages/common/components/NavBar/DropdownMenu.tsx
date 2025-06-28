@@ -13,13 +13,7 @@ type DropdownMenuProps = {
   isMobile?: boolean;
 };
 
-export default function DropdownMenu({
-  isOpen,
-  label,
-  items,
-  onToggle,
-  isMobile = false,
-}: DropdownMenuProps) {
+export default function DropdownMenu({ isOpen, label, items, onToggle, isMobile = false }: DropdownMenuProps) {
   if (isMobile) {
     return (
       <div>
@@ -41,9 +35,7 @@ export default function DropdownMenu({
             />
           </svg>
         </button>
-        <div
-          className={`${isOpen ? 'block' : 'hidden'} space-y-1 pl-4 transition-all duration-200`}
-        >
+        <div className={`${isOpen ? 'block' : 'hidden'} space-y-1 pl-4 transition-all duration-200`}>
           {items.map(item => (
             <NavLink key={item.href} href={item.href}>
               {item.label}

@@ -57,9 +57,7 @@ export default function HomeServicesSection({ t }: HomeServicesSectionProps) {
     <div className="bg-gray-50 px-4 py-16">
       <div className="mx-auto max-w-7xl">
         <div className="mb-12 text-center">
-          <h2 className="mb-4 text-3xl font-bold text-gray-800 md:text-4xl">
-            {t('home.services.title')}
-          </h2>
+          <h2 className="mb-4 text-3xl font-bold text-gray-800 md:text-4xl">{t('home.services.title')}</h2>
           <p className="text-xl text-gray-600">{t('home.services.subtitle')}</p>
         </div>
 

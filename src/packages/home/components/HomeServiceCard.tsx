@@ -14,9 +14,7 @@ export default function HomeServiceCard({ service, t }: HomeServiceCardProps) {
     <div
       key={service.id}
       className={`cursor-pointer rounded-lg bg-white p-6 text-center shadow-lg transition-all duration-300 ${
-        isHovered === service.id
-          ? '-translate-y-2 transform shadow-xl'
-          : 'hover:-translate-y-1 hover:transform'
+        isHovered === service.id ? '-translate-y-2 transform shadow-xl' : 'hover:-translate-y-1 hover:transform'
       }`}
       onMouseEnter={() => setIsHovered(service.id)}
       onMouseLeave={() => setIsHovered(null)}

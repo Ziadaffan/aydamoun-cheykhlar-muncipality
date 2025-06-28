@@ -21,14 +21,7 @@ export default function MainNavigation({ t }: MainNavigationProps) {
         <div className="flex h-20 justify-between">
           <div className="flex items-center">
             <Link href="/" className="flex flex-shrink-0 items-center">
-              <Image
-                src="/assets/images/logo.png"
-                alt="Municipality Logo"
-                width={80}
-                height={80}
-                className="object-contain"
-                priority
-              />
+              <Image src="/assets/images/logo.png" alt="Municipality Logo" width={80} height={80} className="object-contain" priority />
             </Link>
           </div>
 
@@ -37,10 +30,7 @@ export default function MainNavigation({ t }: MainNavigationProps) {
             <NavigationItems t={t} />
           </div>
 
-          <MobileMenuButoon
-            isMobileMenuOpen={isMobileMenuOpen}
-            setIsMobileMenuOpen={setIsMobileMenuOpen}
-          />
+          <MobileMenuButoon isMobileMenuOpen={isMobileMenuOpen} setIsMobileMenuOpen={setIsMobileMenuOpen} />
         </div>
       </div>
 
