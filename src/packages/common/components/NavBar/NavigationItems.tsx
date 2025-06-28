@@ -1,88 +1,26 @@
 import { TFunction } from "i18next";
 import NavLink from "./NavLink";
-import DropdownMenu from "./DropdownMenu";
-import { DropdownItem } from "./DropdownMenu";
 
 type NavigationItemsProps = {
   t: TFunction<"translation", undefined>;
-  isMobile?: boolean;
-  isMobileMunicipalityOpen?: boolean;
-  isMobileCouncilOpen?: boolean;
-  setIsMobileMunicipalityOpen?: (isOpen: boolean) => void;
-  setIsMobileCouncilOpen?: (isOpen: boolean) => void;
 };
 
-export default function NavigationItems({
-  t,
-  isMobile = false,
-  isMobileMunicipalityOpen = false,
-  isMobileCouncilOpen = false,
-  setIsMobileMunicipalityOpen,
-  setIsMobileCouncilOpen,
-}: NavigationItemsProps) {
-  const municipalityItems: DropdownItem[] = [
-    {
-      href: "/municipality/mission",
-      label: t("navigation.main.municipality.mission")
-    },
-    {
-      href: "/municipality/purchases",
-      label: t("navigation.main.municipality.purchases")
-    },
-    {
-      href: "/municipality/official-transactions",
-      label: t("navigation.main.municipality.officialTransactions")
-    }
-  ];
-
-  const councilItems: DropdownItem[] = [
-    {
-      href: "/council/members",
-      label: t("navigation.main.council.actualMembers")
-    },
-    {
-      href: "/council/membersCv",
-      label: t("navigation.main.council.cvMunicipalCouncilMembers")
-    },
-    {
-      href: "/council/previous",
-      label: t("navigation.main.council.previousCouncils")
-    }
-  ];
-
+export default function NavigationItems({ t }: NavigationItemsProps) {
   return (
     <>
-      <NavLink href="/">
-        {t("navigation.main.home")}
-      </NavLink>
+      <NavLink href="/">{t("navigation.main.home")}</NavLink>
 
-      <DropdownMenu
-        isOpen={isMobile ? isMobileMunicipalityOpen : false}
-        label={t("navigation.main.municipality.name")}
-        items={municipalityItems}
-        onToggle={() => setIsMobileMunicipalityOpen?.(!isMobileMunicipalityOpen)}
-        isMobile={isMobile}
-      />
+      <NavLink href="/about-us">{t("navigation.main.aboutUs")}</NavLink>
 
-      <NavLink href="/president-news">
-        {t("navigation.main.presidentNews")}
-      </NavLink>
+      <NavLink href="/services">{t("navigation.main.services")}</NavLink>
 
-      <NavLink href="/advertisements">
-        {t("navigation.main.advertisements")}
-      </NavLink>
+      <NavLink href="/news">{t("navigation.main.news")}</NavLink>
 
-      <DropdownMenu
-        isOpen={isMobile ? isMobileCouncilOpen : false}
-        label={t("navigation.main.council.name")}
-        items={councilItems}
-        onToggle={() => setIsMobileCouncilOpen?.(!isMobileCouncilOpen)}
-        isMobile={isMobile}
-      />
+      <NavLink href="/documents">{t("navigation.main.documents")}</NavLink>
 
-      <NavLink href="/development-projects">
-        {t("navigation.main.developmentProjects")}
-      </NavLink>
+      <NavLink href="/guide">{t("navigation.main.guide")}</NavLink>
+
+      <NavLink href="/contact-us">{t("navigation.main.contactUs")}</NavLink>
     </>
   );
-} 
+}

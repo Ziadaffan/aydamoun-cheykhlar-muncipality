@@ -24,8 +24,8 @@ export default function MainNavigation({ t }: MainNavigationProps) {
               <Image
                 src="/assets/images/logo.png"
                 alt="Municipality Logo"
-                width={85}
-                height={85}
+                width={80}
+                height={80}
                 className="object-contain"
                 priority
               />

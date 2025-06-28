@@ -7,6 +7,12 @@
     },
     "main": {
       "home": "الصفحة الرئيسية",
+      "aboutUs": "من نحن",
+      "services": "الخدمات",
+      "news": "الأخبار",
+      "documents": "المستندات",
+      "guide": "الدليل المنطقة",
+      "contactUs": "تواصل معنا",
       "municipality": {
         "name": "البلدية",
         "mission": "المهمة البلدية",
@@ -27,5 +33,74 @@
       "objectionToTheMunicipality": "إعتراض على البلدية",
       "jobs": "الوظائف"
     }
+  },
+  "home": {
+    "hero": {
+      "title": "اهلا بكم في الموقع الرسمي لبلدية عيدمون شيخلار",
+      "subtitle": "نعمل من أجلكم لتوفير أفضل الخدمات البلدية",
+      "ctaButton": "اكتشف خدماتنا"
+    },
+    "services": {
+      "title": "خدماتنا",
+      "subtitle": "نقدم مجموعة شاملة من الخدمات البلدية",
+      "cards": {
+        "submitRequest": {
+          "title": "تقديم طلب",
+          "description": "تقديم طلبات الخدمات البلدية المختلفة"
+        },
+        "payBills": {
+          "title": "دفع فواتير",
+          "description": "دفع الفواتير البلدية بسهولة وأمان"
+        },
+        "buildingLicense": {
+          "title": "رخصة بناء",
+          "description": "إصدار وتجديد رخص البناء والتشييد"
+        },
+        "submitComplaint": {
+          "title": "تقديم شكوى",
+          "description": "تقديم الشكاوى والاقتراحات للبلدية"
+        },
+        "bookAppointment": {
+          "title": "حجز موعد",
+          "description": "حجز مواعيد للخدمات البلدية"
+        },
+        "downloadForms": {
+          "title": "تحميل نماذج",
+          "description": "تحميل النماذج والوثائق المطلوبة"
+        }
+      }
+    },
+    "contact": {
+      "title": "معلومات التواصل",
+      "subtitle": "تواصل معنا في أي وقت",
+      "info": {
+        "timing": {
+          "title": "أوقات العمل",
+          "value": "الأحد - الخميس: 8:00 ص - 4:00 م"
+        },
+        "phone": {
+          "title": "رقم الهاتف",
+          "value": "+961 1 234 567"
+        },
+        "email": {
+          "title": "البريد الإلكتروني",
+          "value": "info@aydamoun-municipality.gov.lb"
+        },
+        "address": {
+          "title": "العنوان",
+          "value": "بلدية عيدمون شيخلار، لبنان"
+        }
+      },
+      "map": {
+        "title": "الخريطة",
+        "subtitle": "تفاعلية لموقع البلدية"
+      }
+    }
+  },
+  "footer": {
+    "title": "بلدية عيدمون شيخلار ٢٠٢٥",
+    "privacyPolicy": "سياسة الخصوصة",
+    "termsOfUse": "شروط الاستخدام",
+    "copyright": "© 2025 جميع الحقوق محفوظة"
   }
 }

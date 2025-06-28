@@ -5,6 +5,7 @@ import NavBar from "@/packages/common/components/NavBar/NavBar";
 import { useEffect, useState } from "react";
 import i18n from "@/i18n";
 import Spinner from "@/packages/common/components/Spinner";
+import Footer from "@/packages/common/components/Footer";
 
 type ClientLayoutProps = {
   children: React.ReactNode;
@@ -43,6 +44,7 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
         <NavBar />
       </header>
       <main>{children}</main>
+      <Footer />
     </BaseProvider>
   );
 }

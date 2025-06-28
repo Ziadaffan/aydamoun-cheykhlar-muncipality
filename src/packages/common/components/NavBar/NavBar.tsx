@@ -7,7 +7,7 @@ export default function NavBar() {
 
   return (
     <div>
-      <TopNavigation t={t} />
+      {/* <TopNavigation t={t} /> */}
       <MainNavigation t={t} />
     </div>
   );
