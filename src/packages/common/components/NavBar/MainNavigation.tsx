@@ -12,8 +12,6 @@ type MainNavigationProps = {
 
 export default function MainNavigation({ t }: MainNavigationProps) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isMobileMunicipalityOpen, setIsMobileMunicipalityOpen] = useState(false);
-  const [isMobileCouncilOpen, setIsMobileCouncilOpen] = useState(false);
 
   return (
     <nav className="sticky top-0 z-50 border-t-2 border-blue-100 bg-white bg-gradient-to-r from-blue-200 to-blue-300 shadow-md">
@@ -21,7 +19,14 @@ export default function MainNavigation({ t }: MainNavigationProps) {
         <div className="flex h-20 justify-between">
           <div className="flex items-center">
             <Link href="/" className="flex flex-shrink-0 items-center">
-              <Image src="/assets/images/logo.png" alt="Municipality Logo" width={80} height={80} className="object-contain" priority />
+              <Image
+                src="/assets/images/logo.png"
+                alt="Municipality Logo"
+                width={80}
+                height={80}
+                className="object-contain"
+                priority
+              />
             </Link>
           </div>
 
@@ -30,19 +35,15 @@ export default function MainNavigation({ t }: MainNavigationProps) {
             <NavigationItems t={t} />
           </div>
 
-          <MobileMenuButoon isMobileMenuOpen={isMobileMenuOpen} setIsMobileMenuOpen={setIsMobileMenuOpen} />
+          <MobileMenuButoon
+            isMobileMenuOpen={isMobileMenuOpen}
+            setIsMobileMenuOpen={setIsMobileMenuOpen}
+          />
         </div>
       </div>
 
       {/* Mobile menu */}
-      <MobileMenu
-        t={t}
-        isMobileMenuOpen={isMobileMenuOpen}
-        isMobileMunicipalityOpen={isMobileMunicipalityOpen}
-        setIsMobileMunicipalityOpen={setIsMobileMunicipalityOpen}
-        isMobileCouncilOpen={isMobileCouncilOpen}
-        setIsMobileCouncilOpen={setIsMobileCouncilOpen}
-      />
+      <MobileMenu t={t} isMobileMenuOpen={isMobileMenuOpen} />
     </nav>
   );
 }
