@@ -7,7 +7,7 @@ interface MobileMenuButoonProps {
 
 export default function MobileMenuButoon({ isMobileMenuOpen, setIsMobileMenuOpen }: MobileMenuButoonProps) {
   return (
-    <div className="flex items-center md:hidden">
+    <div className="flex items-center lg:hidden">
       <button
         onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
         className="inline-flex items-center justify-center rounded-md p-2 text-gray-700 hover:bg-gray-100 hover:text-blue-800 focus:ring-2 focus:ring-blue-800 focus:outline-none focus:ring-inset"

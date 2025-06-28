@@ -8,12 +8,9 @@ type HomeHeaderSectionProps = {
 export default function HomeHeaderSection({ t }: HomeHeaderSectionProps) {
   return (
     <div
-      className="relative flex h-100 items-center justify-center bg-cover bg-center bg-no-repeat"
+      className="relative flex h-[500px] w-full items-center justify-center bg-cover bg-center bg-no-repeat"
       style={{
-        backgroundImage: 'url("/assets/images/bg.jpg")',
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundRepeat: 'no-repeat',
+        backgroundImage: 'url("/assets/images/background.jpg")',
       }}
     >
       <div className="relative z-10 px-4 text-center text-white">

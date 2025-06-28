@@ -40,13 +40,13 @@ export default function HomeContactSection({ t }: HomeContactSectionProps) {
       <div className="mx-auto max-w-7xl">
         <div className="mb-12 text-center">
           <h2 className="mb-4 text-3xl font-bold text-gray-800 md:text-4xl">{t('home.contact.title')}</h2>
-          <p className="text-xl text-gray-600">{t('home.contact.subtitle')}</p>
+          {/* <p className="text-xl text-gray-600">{t('home.contact.subtitle')}</p> */}
         </div>
 
         <div className="grid grid-cols-1 items-start gap-8 lg:grid-cols-2">
           <div className="space-y-6">
             {contactInfo.map(info => (
-              <div key={info.id} className="flex items-start space-x-4 rounded-lg bg-gray-100 p-6">
+              <div key={info.id} className="flex items-start space-x-4 rounded-lg border-2 border-gray-200 bg-gray-100 p-6">
                 <div className="text-3xl">{info.icon}</div>
                 <div className="flex-1">
                   <h3 className="mb-2 text-lg font-semibold text-gray-800">{t(info.titleKey)}</h3>
@@ -56,7 +56,7 @@ export default function HomeContactSection({ t }: HomeContactSectionProps) {
             ))}
           </div>
 
-          <div className="overflow-hidden rounded-lg bg-gray-200 shadow-lg">
+          <div className="overflow-hidden rounded-lg border-2 border-gray-200 bg-gray-200 shadow-lg">
             <MapCard />
           </div>
         </div>

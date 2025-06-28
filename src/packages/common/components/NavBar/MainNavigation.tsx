@@ -31,7 +31,7 @@ export default function MainNavigation({ t }: MainNavigationProps) {
           </div>
 
           {/* Desktop Navigation */}
-          <div className="hidden items-center space-x-8 md:flex">
+          <div className="hidden items-center space-x-8 lg:flex">
             <NavigationItems t={t} />
           </div>
 
