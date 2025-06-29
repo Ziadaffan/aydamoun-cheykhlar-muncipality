@@ -31,20 +31,18 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
   }, []);
 
   if (!mounted || isLoading) {
-    return (
-      <div className="flex min-h-screen items-center justify-center">
-        <Spinner />
-      </div>
-    );
+    return <Spinner />;
   }
 
   return (
     <BaseProvider>
-      <header>
-        <NavBar />
-      </header>
-      <main>{children}</main>
-      <Footer />
+      <div className="flex min-h-screen flex-col">
+        <header>
+          <NavBar />
+        </header>
+        <main className="flex-1">{children}</main>
+        <Footer />
+      </div>
     </BaseProvider>
   );
 }

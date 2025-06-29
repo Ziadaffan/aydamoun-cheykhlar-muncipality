@@ -1,7 +1,15 @@
 import { TFunction } from 'i18next';
 import React from 'react';
-import { CouncilMember } from './AboutUsPage';
 import Image from 'next/image';
+import { Council } from '@prisma/client';
+
+export type CouncilMember = {
+  id: number;
+  name: string;
+  position: string;
+  image: string;
+  phone?: string | null;
+};
 
 const president: CouncilMember = {
   id: 1,
