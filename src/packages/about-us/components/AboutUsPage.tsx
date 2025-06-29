@@ -29,7 +29,7 @@ export default function AboutUsPage() {
   if (error) return <ErrorMessage />;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50">
+    <div className="min-h-screen">
       {/* Municipality Info Section */}
       <AboutUsMunicipalityInfoSection t={t} />
 
