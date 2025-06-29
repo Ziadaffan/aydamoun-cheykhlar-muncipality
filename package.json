@@ -4,12 +4,13 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
-    "build": "next build",
+    "build": "prisma generate && next build",
     "start": "next start",
     "lint": "next lint",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "migration:generate": "npx prisma migrate dev --name init"
+    "migration:generate": "npx prisma migrate dev --name init",
+    "postinstall": "prisma generate"
   },
   "dependencies": {
     "@prisma/client": "^6.10.1",
