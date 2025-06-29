@@ -1,6 +1,9 @@
 -- CreateEnum
 CREATE TYPE "Role" AS ENUM ('USER', 'ADMIN');
 
+-- CreateEnum
+CREATE TYPE "Position" AS ENUM ('PRESIDENT', 'VICE_PRESIDENT', 'COUNCIL_MEMBER');
+
 -- CreateTable
 CREATE TABLE "User" (
     "id" TEXT NOT NULL,
@@ -11,6 +14,20 @@ CREATE TABLE "User" (
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "Council" (
+    "id" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
+    "position" "Position" NOT NULL,
+    "phone" TEXT,
+    "email" TEXT,
+    "image" TEXT,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "Council_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateIndex

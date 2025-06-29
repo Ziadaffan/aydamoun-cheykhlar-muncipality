@@ -9,7 +9,7 @@ export default function HomePage() {
   const { t } = useTranslation();
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-gradient-to-r from-green-50 to-blue-50">
       <HomeHeaderSection t={t} />
 
       <HomeServicesSection t={t} />

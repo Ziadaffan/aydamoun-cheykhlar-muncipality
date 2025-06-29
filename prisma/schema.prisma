@@ -12,6 +12,12 @@ enum Role {
   ADMIN
 }
 
+enum Position {
+  PRESIDENT
+  VICE_PRESIDENT
+  COUNCIL_MEMBER
+}
+
 model User {
   id       String @id @default(uuid())
   email    String @unique
@@ -23,12 +29,12 @@ model User {
 }
 
 model Council {
-  id       String  @id @default(uuid())
-  name     String
-  position String
-  phone    String?
-  email    String?
-  image    String?
+  id         String    @id @default(uuid())
+  name       String
+  position   Position
+  phone      String?
+  email      String?
+  image      String?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

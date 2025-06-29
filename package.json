@@ -9,7 +9,13 @@
     "lint": "next lint",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "migration:generate": "npx prisma migrate dev --name init",
+    "migration:generate": "yarn prisma:local migrate dev --create-only --name",
+    "migration:run": "yarn prisma:local migrate dev",
+    "migration:deploy": "yarn prisma:local migrate deploy",
+    "prisma:local": "dotenv -e .env.local -- prisma",
+    "prisma:generate": "prisma generate",
+    "prisma:studio": "prisma studio",
+    "prisma:reset": "dotenv -e .env.local -- prisma migrate reset --force",
     "postinstall": "prisma generate"
   },
   "dependencies": {
@@ -35,6 +41,7 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "dotenv-cli": "^8.0.0",
     "eslint": "^9",
     "eslint-config-next": "15.3.3",
     "prettier": "^3.6.2",
