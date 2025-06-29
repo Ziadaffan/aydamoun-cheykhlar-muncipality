@@ -14,8 +14,7 @@ export default function AboutUsConcilMembersSection({ t, councilMembers }: About
     <section className="bg-gradient-to-br from-green-50 to-blue-50 py-16">
       <div className="container mx-auto px-4">
         <div className="mx-auto max-w-7xl">
-          <h2 className="mb-4 text-center text-3xl font-bold text-gray-800 md:text-4xl">{t('aboutUs.council.title')}</h2>
-          <p className="mb-12 text-center text-lg text-gray-600">{t('aboutUs.council.subtitle')}</p>
+          <h2 className="mb-14 text-center text-3xl font-bold text-gray-800 md:text-4xl">{t('aboutUs.council.title')}</h2>
 
           <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {councilMembers.map(member => (
