@@ -20,7 +20,7 @@ export default function AboutUsPresidentSection({ t, president }: AboutUsPreside
             <div className="flex-shrink-0">
               <div className="relative h-96 w-96 overflow-hidden rounded-full border-8 border-blue-600 shadow-2xl">
                 <Image
-                  src={`/assets/images/${president.image}` || '/assets/images/user-default-avatar.jpg'}
+                  src={`${president.image}` || '/assets/images/user-default-avatar.jpg'}
                   alt={t('aboutUs.president.name')}
                   className="h-full w-full object-cover"
                   width={384}

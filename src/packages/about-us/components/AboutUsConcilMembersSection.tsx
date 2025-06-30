@@ -22,7 +22,7 @@ export default function AboutUsConcilMembersSection({ t, councilMembers }: About
                 <div className="mb-6 flex justify-center">
                   <div className="relative h-48 w-48 overflow-hidden rounded-full border-4 border-gray-200 shadow-lg">
                     <Image
-                      src={`/assets/images/${member.image}` || '/assets/images/user-default-avatar.jpg'}
+                      src={`${member.image}` || '/assets/images/user-default-avatar.jpg'}
                       alt={member.name}
                       className="h-full w-full object-cover"
                       width={192}
