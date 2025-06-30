@@ -38,6 +38,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ar" dir="rtl">
+      <head>
+        <meta
+          name="keywords"
+          content="بلدية عيدمون شيخلار, عيدمون شيخلار, بلدية عيدمون, شيخلار, خدمات بلدية عيدمون, بلدية شيخلار الرسمية, خدمات المواطنين في عيدمون, بلدية عيدمون شيخلار الرسمية, خدمات بلدية عيدمون شيخلار, municipality services, Aydamoun Cheikh Lahr,  Aydamoun municipality, Cheikh Lahr municipality"
+        />
+      </head>
       <body className={`${geistSans.variable} ${geistMono.variable} ${amiri.variable} ${balooBhaijaan2.variable} antialiased`}>
         <ClientLayout>{children}</ClientLayout>
       </body>
