@@ -11,29 +11,54 @@ type AboutUsPresidentSectionProps = {
 
 export default function AboutUsPresidentSection({ t, president }: AboutUsPresidentSectionProps) {
   return (
-    <section className="border-b border-gray-300 bg-gradient-to-br from-green-50 to-blue-50 py-16">
-      <div className="container mx-auto px-4">
+    <section className="relative overflow-hidden border-b border-gray-300 py-20">
+      <div className="relative container mx-auto px-4">
         <div className="mx-auto max-w-6xl">
-          <h2 className="mb-12 text-center text-3xl font-bold text-gray-800 md:text-4xl">{t('aboutUs.president.title')}</h2>
+          <div className="mb-16 text-center">
+            <h2 className="mb-4 text-4xl font-bold text-gray-800 md:text-5xl lg:text-6xl">{t('aboutUs.president.title')}</h2>
+            <div className="mx-auto h-1 w-24 rounded-full bg-gradient-to-r from-blue-500 to-green-500"></div>
+          </div>
 
-          <div className="flex flex-col items-center gap-12 lg:flex-row">
-            <div className="flex-shrink-0">
-              <div className="relative h-96 w-96 overflow-hidden rounded-full border-8 border-blue-600 shadow-2xl">
-                <Image
-                  src={`${president.image}` || '/assets/images/user-default-avatar.jpg'}
-                  alt={t('aboutUs.president.name')}
-                  className="h-full w-full object-cover"
-                  width={384}
-                  height={384}
-                />
-                <div className="absolute inset-0 rounded-full bg-gradient-to-t from-blue-900/20 to-transparent"></div>
+          <div className="flex flex-col items-center gap-16 lg:flex-row lg:gap-20">
+            <div className="flex flex-shrink-0 flex-col items-center">
+              <div className="relative">
+                <div className="absolute -inset-4 rounded-full bg-gradient-to-r from-blue-600 to-green-600 opacity-30 blur-lg"></div>
+                <div className="relative h-80 w-80 overflow-hidden rounded-full border-8 border-white shadow-2xl ring-4 ring-blue-100">
+                  <Image
+                    src={`${president.image}` || '/assets/images/user-default-avatar.jpg'}
+                    alt={t('aboutUs.president.name')}
+                    className="h-full w-full object-cover"
+                    width={354}
+                    height={354}
+                  />
+                </div>
+              </div>
+
+              <div className="mt-8 w-full max-w-sm">
+                <div className="relative rounded-2xl border border-white/20 bg-white/80 p-6 shadow-lg backdrop-blur-sm">
+                  <div className="absolute -top-3 left-1/2 h-6 w-6 -translate-x-1/2 transform rounded-full bg-gradient-to-r from-blue-500 to-green-500"></div>
+                  <p className="text-center leading-relaxed font-medium text-gray-700">
+                    أهلي في عيدمون ، نعدكم بالعمل المتواصل من أجل تطوير الخدمات وتحقيق العدالة الإدارية، وأبواب البلدية مفتوحه للجميع
+                  </p>
+                </div>
               </div>
             </div>
 
             <div className="flex-1 text-center lg:text-right">
-              <h3 className="mb-6 text-4xl font-bold text-gray-800">{president.name}</h3>
-              <p className="mb-6 text-2xl font-semibold text-blue-600">{getPositionLabel(president.position)}</p>
-              <p className="text-lg leading-relaxed text-gray-600">{t('aboutUs.president.description')}</p>
+              <div className="space-y-6">
+                <div>
+                  <h3 className="mb-3 bg-gradient-to-r from-gray-800 to-gray-600 bg-clip-text text-5xl font-bold text-transparent">
+                    {president.name}
+                  </h3>
+                  <div className="inline-block rounded-full bg-gradient-to-r from-blue-600 to-green-600 px-6 py-2 text-xl font-semibold text-white shadow-lg">
+                    {getPositionLabel(president.position)}
+                  </div>
+                </div>
+
+                <div className="rounded-2xl border border-white/20 bg-white/60 p-8 shadow-lg backdrop-blur-sm">
+                  <p className="text-lg leading-relaxed font-medium text-gray-700">{t('aboutUs.president.description')}</p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
