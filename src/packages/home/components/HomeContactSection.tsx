@@ -50,8 +50,6 @@ export default function HomeContactSection({ t }: HomeContactSectionProps) {
                 <div key={info.id} className="relative">
                   <div className="absolute -inset-4 rounded-2xl bg-gradient-to-r from-blue-400 to-green-400 opacity-10 blur-sm"></div>
                   <div className="relative rounded-2xl border border-white/20 bg-white/80 p-6 shadow-xl backdrop-blur-sm">
-                    <div className="absolute -top-3 left-6 h-6 w-6 rounded-full bg-gradient-to-r from-blue-500 to-green-500"></div>
-
                     <div className="flex items-start space-x-4">
                       <div className="text-3xl">{info.icon}</div>
                       <div className="flex-1">

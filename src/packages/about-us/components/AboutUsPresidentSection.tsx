@@ -36,7 +36,6 @@ export default function AboutUsPresidentSection({ t, president }: AboutUsPreside
 
               <div className="mt-8 w-full max-w-sm">
                 <div className="relative rounded-2xl border border-white/20 bg-white/80 p-6 shadow-lg backdrop-blur-sm">
-                  <div className="absolute -top-3 left-1/2 h-6 w-6 -translate-x-1/2 transform rounded-full bg-gradient-to-r from-blue-500 to-green-500"></div>
                   <p className="text-center leading-relaxed font-medium text-gray-700">
                     أهلي في عيدمون ، نعدكم بالعمل المتواصل من أجل تطوير الخدمات وتحقيق العدالة الإدارية، وأبواب البلدية مفتوحه للجميع
                   </p>

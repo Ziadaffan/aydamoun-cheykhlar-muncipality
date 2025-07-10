@@ -24,8 +24,6 @@ export default function AboutUsConcilMembersSection({ t, councilMembers }: About
               <div key={member.id} className="relative mx-auto w-[300px]">
                 <div className="absolute -inset-4 rounded-2xl bg-gradient-to-r from-blue-400 to-green-400 opacity-10 blur-sm"></div>
                 <div className="relative rounded-2xl border border-white/20 bg-white/80 p-6 shadow-xl backdrop-blur-sm">
-                  <div className="absolute -top-3 left-6 h-6 w-6 rounded-full bg-gradient-to-r from-blue-500 to-green-500"></div>
-
                   <div className="mb-6 flex justify-center">
                     <div className="relative h-48 w-48 overflow-hidden rounded-full border-4 border-white shadow-lg">
                       <Image
