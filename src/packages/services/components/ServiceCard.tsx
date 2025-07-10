@@ -25,7 +25,10 @@ export default function ServiceCard({ service, bgColor }: ServiceCardProps) {
 
         {/* Action Button */}
         <div className="mt-6">
-          <button className={`w-full rounded-lg bg-gradient-to-r ${bgColor} cursor-pointer px-4 py-2 font-semibold text-white hover:opacity-80`}>
+          <button 
+            onClick={() => window.location.href = `/services/forms/${service.id}`}
+            className={`w-full rounded-lg bg-gradient-to-r ${bgColor} cursor-pointer px-4 py-2 font-semibold text-white hover:opacity-80`}
+          >
             تقديم الطلب
           </button>
         </div>
