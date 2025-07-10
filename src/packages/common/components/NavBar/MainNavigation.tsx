@@ -33,7 +33,7 @@ export default function MainNavigation({ t }: MainNavigationProps) {
       </div>
 
       {/* Mobile menu */}
-      <MobileMenu t={t} isMobileMenuOpen={isMobileMenuOpen} />
+      <MobileMenu t={t} isMobileMenuOpen={isMobileMenuOpen} setIsMobileMenuOpen={setIsMobileMenuOpen} />
     </nav>
   );
 }

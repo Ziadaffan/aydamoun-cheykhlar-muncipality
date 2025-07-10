@@ -17,7 +17,7 @@ export default function ServicesCategorySection({ t, categoryKey, icon, bgColor 
   }>;
 
   return (
-    <section className="py-12">
+    <section className="py-12" id={categoryKey}>
       <div className="container mx-auto px-6">
         <div className="mx-auto max-w-6xl">
           {/* Section Header */}

@@ -93,6 +93,18 @@
         "downloadForms": {
           "title": "تحميل نماذج",
           "description": "تحميل النماذج والوثائق المطلوبة"
+        },
+        "environmentalServices": {
+          "title": "خدمات النظافة والبيئة",
+          "description": "تقديم طلبات متعلقة بالنظافة، جمع النفايات، أو أي خدمة بيئية."
+        },
+        "administrativeTransactions": {
+          "title": "المعاملات الإدارية",
+          "description": "تقديم طلبات كشف الضرائب، التصاريح، أو أي معاملة إدارية."
+        },
+        "additionalServices": {
+          "title": "خدمات إضافية",
+          "description": "مجموعة من الخدمات البلدية الأخرى التي تهم المواطنين."
         }
       }
     },

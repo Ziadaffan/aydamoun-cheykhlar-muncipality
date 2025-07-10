@@ -3,24 +3,39 @@ import NavLink from './NavLink';
 
 type NavigationItemsProps = {
   t: TFunction<'translation', undefined>;
+  setIsMobileMenuOpen?: (isOpen: boolean) => void;
 };
 
-export default function NavigationItems({ t }: NavigationItemsProps) {
+export default function NavigationItems({ t, setIsMobileMenuOpen }: NavigationItemsProps) {
   return (
     <>
-      <NavLink href="/">{t('navigation.main.home')}</NavLink>
+      <NavLink href="/" setIsMobileMenuOpen={setIsMobileMenuOpen}>
+        {t('navigation.main.home')}
+      </NavLink>
 
-      <NavLink href="/about-us">{t('navigation.main.aboutUs')}</NavLink>
+      <NavLink href="/about-us" setIsMobileMenuOpen={setIsMobileMenuOpen}>
+        {t('navigation.main.aboutUs')}
+      </NavLink>
 
-      <NavLink href="/services">{t('navigation.main.services')}</NavLink>
+      <NavLink href="/services" setIsMobileMenuOpen={setIsMobileMenuOpen}>
+        {t('navigation.main.services')}
+      </NavLink>
 
-      <NavLink href="/news">{t('navigation.main.news')}</NavLink>
+      <NavLink href="/news" setIsMobileMenuOpen={setIsMobileMenuOpen}>
+        {t('navigation.main.news')}
+      </NavLink>
 
-      <NavLink href="/documents">{t('navigation.main.documents')}</NavLink>
+      <NavLink href="/documents" setIsMobileMenuOpen={setIsMobileMenuOpen}>
+        {t('navigation.main.documents')}
+      </NavLink>
 
-      <NavLink href="/guide">{t('navigation.main.guide')}</NavLink>
+      <NavLink href="/guide" setIsMobileMenuOpen={setIsMobileMenuOpen}>
+        {t('navigation.main.guide')}
+      </NavLink>
 
-      <NavLink href="/contact-us">{t('navigation.main.contactUs')}</NavLink>
+      <NavLink href="/contact-us" setIsMobileMenuOpen={setIsMobileMenuOpen}>
+        {t('navigation.main.contactUs')}
+      </NavLink>
     </>
   );
 }

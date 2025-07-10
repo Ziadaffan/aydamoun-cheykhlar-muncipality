@@ -13,7 +13,7 @@ export default function OfficialFormsSection({ t }: OfficialFormsSectionProps) {
   }>;
 
   return (
-    <section className="bg-gradient-to-r from-gray-50 to-blue-50 py-16">
+    <section className="bg-gradient-to-r from-gray-50 to-blue-50 py-16" id="officialForms">
       <div className="container mx-auto px-6">
         <div className="mx-auto max-w-6xl">
           {/* Section Header */}

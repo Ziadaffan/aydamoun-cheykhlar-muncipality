@@ -11,44 +11,51 @@ export interface ServiceCard {
   titleKey: string;
   descriptionKey: string;
   icon: string;
+  serviceUrl: string;
 }
 
 const services: ServiceCard[] = [
   {
     id: 1,
-    titleKey: 'home.services.cards.submitRequest.title',
-    descriptionKey: 'home.services.cards.submitRequest.description',
-    icon: '📝',
-  },
-  {
-    id: 2,
-    titleKey: 'home.services.cards.payBills.title',
-    descriptionKey: 'home.services.cards.payBills.description',
-    icon: '💳',
-  },
-  {
-    id: 3,
     titleKey: 'home.services.cards.buildingLicense.title',
     descriptionKey: 'home.services.cards.buildingLicense.description',
     icon: '🏗️',
+    serviceUrl: '/services#buildingLicenses',
+  },
+  {
+    id: 2,
+    titleKey: 'home.services.cards.environmentalServices.title',
+    descriptionKey: 'home.services.cards.environmentalServices.description',
+    icon: '🌱',
+    serviceUrl: '/services#environmentalServices',
+  },
+  {
+    id: 3,
+    titleKey: 'home.services.cards.administrativeTransactions.title',
+    descriptionKey: 'home.services.cards.administrativeTransactions.description',
+    icon: '📅',
+    serviceUrl: '/services#administrativeTransactions',
   },
   {
     id: 4,
-    titleKey: 'home.services.cards.submitComplaint.title',
-    descriptionKey: 'home.services.cards.submitComplaint.description',
-    icon: '📢',
-  },
-  {
-    id: 5,
-    titleKey: 'home.services.cards.bookAppointment.title',
-    descriptionKey: 'home.services.cards.bookAppointment.description',
-    icon: '📅',
-  },
-  {
-    id: 6,
     titleKey: 'home.services.cards.downloadForms.title',
     descriptionKey: 'home.services.cards.downloadForms.description',
     icon: '📄',
+    serviceUrl: '/services#officialForms',
+  },
+  {
+    id: 5,
+    titleKey: 'home.services.cards.submitComplaint.title',
+    descriptionKey: 'home.services.cards.submitComplaint.description',
+    icon: '📢',
+    serviceUrl: '/services#complaintsAndSuggestions',
+  },
+  {
+    id: 6,
+    titleKey: 'home.services.cards.additionalServices.title',
+    descriptionKey: 'home.services.cards.additionalServices.description',
+    icon: '⭐',
+    serviceUrl: '/services#additionalServices',
   },
 ];
 
