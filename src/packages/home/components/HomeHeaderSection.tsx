@@ -1,11 +1,14 @@
 import { TFunction } from 'i18next';
 import React from 'react';
+import { useRouter } from 'next/navigation';
 
 type HomeHeaderSectionProps = {
   t: TFunction<'translation', undefined>;
 };
 
 export default function HomeHeaderSection({ t }: HomeHeaderSectionProps) {
+  const router = useRouter();
+
   return (
     <div
       className="relative flex h-[500px] w-full items-center justify-center bg-cover bg-center bg-no-repeat"
@@ -18,7 +21,10 @@ export default function HomeHeaderSection({ t }: HomeHeaderSectionProps) {
           {t('home.hero.title')}
         </h1>
         <p className="mb-8 text-xl text-gray-100 md:text-2xl">{t('home.hero.subtitle')}</p>
-        <button className="transform rounded-lg bg-blue-400 px-8 py-4 text-lg font-bold text-white shadow-lg transition-all duration-300 hover:scale-105 hover:bg-blue-700">
+        <button
+          onClick={() => router.push('/services')}
+          className="transform cursor-pointer rounded-lg bg-blue-400 px-8 py-4 text-lg font-bold text-white shadow-lg hover:bg-blue-500"
+        >
           {t('home.hero.ctaButton')}
         </button>
       </div>
