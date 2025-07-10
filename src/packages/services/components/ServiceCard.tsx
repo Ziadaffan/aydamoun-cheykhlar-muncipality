@@ -1,3 +1,4 @@
+import { useRouter } from 'next/navigation';
 import React from 'react';
 
 type Service = {
@@ -12,6 +13,7 @@ type ServiceCardProps = {
 };
 
 export default function ServiceCard({ service, bgColor }: ServiceCardProps) {
+  const router = useRouter();
   return (
     <div className="relative h-70 w-100">
       <div className={`absolute -inset-4 rounded-2xl bg-gradient-to-r ${bgColor} opacity-10 blur-sm`}></div>
@@ -25,8 +27,8 @@ export default function ServiceCard({ service, bgColor }: ServiceCardProps) {
 
         {/* Action Button */}
         <div className="mt-6">
-          <button 
-            onClick={() => window.location.href = `/services/forms/${service.id}`}
+          <button
+            onClick={() => router.push(`/services/forms/${service.id}`)}
             className={`w-full rounded-lg bg-gradient-to-r ${bgColor} cursor-pointer px-4 py-2 font-semibold text-white hover:opacity-80`}
           >
             تقديم الطلب
