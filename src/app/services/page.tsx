@@ -2,9 +2,9 @@
 
 import { useTranslation } from 'react-i18next';
 import React from 'react';
-import ServicesHeroSection from './components/ServicesHeroSection';
-import ServicesCategorySection from './components/ServicesCategorySection';
-import OfficialFormsSection from './components/OfficialFormsSection';
+import ServicesHeroSection from '../../packages/services/components/ServicesHeroSection';
+import ServicesCategorySection from '../../packages/services/components/ServicesCategorySection';
+import OfficialFormsSection from '../../packages/services/components/OfficialFormsSection';
 
 export default function ServicesPage() {
   const { t } = useTranslation();
