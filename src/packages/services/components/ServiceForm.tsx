@@ -3,6 +3,7 @@
 import { useTranslation } from 'react-i18next';
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useForm, Controller } from 'react-hook-form';
 
 type ServiceFormProps = {
   category: string;
@@ -31,15 +32,25 @@ export default function ServiceForm({ category, serviceId }: ServiceFormProps) {
   const { t } = useTranslation();
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [formData, setFormData] = useState<FormData>({
-    fullName: '',
-    phone: '',
-    email: '',
-    address: '',
-    serviceType: serviceId ? serviceId.toString() : '',
-    description: '',
-    additionalInfo: {},
-    documents: [],
+
+  const {
+    register,
+    handleSubmit,
+    control,
+    formState: { errors },
+    setValue,
+    watch,
+  } = useForm<FormData>({
+    defaultValues: {
+      fullName: '',
+      phone: '',
+      email: '',
+      address: '',
+      serviceType: serviceId ? serviceId.toString() : '',
+      description: '',
+      additionalInfo: {},
+      documents: [],
+    },
   });
 
   // Obtenir les services de la catégorie
@@ -93,39 +104,27 @@ export default function ServiceForm({ category, serviceId }: ServiceFormProps) {
     }
   };
 
-  const handleInputChange = (field: string, value: any) => {
-    setFormData(prev => ({
-      ...prev,
-      [field]: value,
-    }));
-  };
-
-  const handleAdditionalInfoChange = (field: string, value: any) => {
-    setFormData(prev => ({
-      ...prev,
-      additionalInfo: {
-        ...prev.additionalInfo,
-        [field]: value,
-      },
-    }));
-  };
-
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(event.target.files || []);
-    setFormData(prev => ({
-      ...prev,
-      documents: [...prev.documents, ...files],
-    }));
+    setValue('documents', files);
   };
 
-  const handleSubmit = async (event: React.FormEvent) => {
-    console.log(formData);
+  const onSubmit = async (data: FormData) => {
+    setIsSubmitting(true);
+    try {
+      console.log(data);
+      // Handle form submission logic here
+    } catch (error) {
+      console.error('Error submitting form:', error);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const additionalFields = getAdditionalFields();
 
   return (
-    <form onSubmit={handleSubmit} className="rounded-2xl bg-white p-8 shadow-xl">
+    <form onSubmit={handleSubmit(onSubmit)} className="rounded-2xl bg-white p-8 shadow-xl">
       {/* Informations personnelles */}
       <div className="mb-8">
         <h3 className="mb-6 border-b pb-2 text-xl font-bold text-gray-800">المعلومات الشخصية</h3>
@@ -135,43 +134,59 @@ export default function ServiceForm({ category, serviceId }: ServiceFormProps) {
             <label className="mb-2 block text-sm font-medium text-gray-700">الاسم الكامل *</label>
             <input
               type="text"
-              required
-              value={formData.fullName}
-              onChange={e => handleInputChange('fullName', e.target.value)}
-              className="w-full rounded-lg border border-gray-300 px-4 py-3 focus:border-transparent focus:ring-2 focus:ring-blue-500"
+              {...register('fullName', { required: 'الاسم الكامل مطلوب' })}
+              className={`w-full rounded-lg border px-4 py-2 focus:border-transparent focus:ring-2 focus:ring-blue-500 ${
+                errors.fullName ? 'border-red-500' : 'border-gray-300'
+              }`}
             />
+            {errors.fullName && <p className="mt-1 text-sm text-red-500">{errors.fullName.message}</p>}
           </div>
 
           <div>
             <label className="mb-2 block text-sm font-medium text-gray-700">رقم الهاتف *</label>
             <input
               type="tel"
-              required
-              value={formData.phone}
-              onChange={e => handleInputChange('phone', e.target.value)}
-              className="w-full rounded-lg border border-gray-300 px-4 py-3 focus:border-transparent focus:ring-2 focus:ring-blue-500"
+              {...register('phone', {
+                required: 'رقم الهاتف مطلوب',
+                pattern: {
+                  value: /^[\+]?[0-9\s\-\(\)]+$/,
+                  message: 'يرجى إدخال رقم هاتف صحيح',
+                },
+              })}
+              className={`w-full rounded-lg border px-4 py-2 focus:border-transparent focus:ring-2 focus:ring-blue-500 ${
+                errors.phone ? 'border-red-500' : 'border-gray-300'
+              }`}
             />
+            {errors.phone && <p className="mt-1 text-sm text-red-500">{errors.phone.message}</p>}
           </div>
 
           <div>
             <label className="mb-2 block text-sm font-medium text-gray-700">البريد الإلكتروني</label>
             <input
               type="email"
-              value={formData.email}
-              onChange={e => handleInputChange('email', e.target.value)}
-              className="w-full rounded-lg border border-gray-300 px-4 py-3 focus:border-transparent focus:ring-2 focus:ring-blue-500"
+              {...register('email', {
+                pattern: {
+                  value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                  message: 'يرجى إدخال بريد إلكتروني صحيح',
+                },
+              })}
+              className={`w-full rounded-lg border px-4 py-2 focus:border-transparent focus:ring-2 focus:ring-blue-500 ${
+                errors.email ? 'border-red-500' : 'border-gray-300'
+              }`}
             />
+            {errors.email && <p className="mt-1 text-sm text-red-500">{errors.email.message}</p>}
           </div>
 
           <div>
             <label className="mb-2 block text-sm font-medium text-gray-700">العنوان *</label>
             <input
               type="text"
-              required
-              value={formData.address}
-              onChange={e => handleInputChange('address', e.target.value)}
-              className="w-full rounded-lg border border-gray-300 px-4 py-3 focus:border-transparent focus:ring-2 focus:ring-blue-500"
+              {...register('address', { required: 'العنوان مطلوب' })}
+              className={`w-full rounded-lg border px-4 py-2 focus:border-transparent focus:ring-2 focus:ring-blue-500 ${
+                errors.address ? 'border-red-500' : 'border-gray-300'
+              }`}
             />
+            {errors.address && <p className="mt-1 text-sm text-red-500">{errors.address.message}</p>}
           </div>
         </div>
       </div>
@@ -184,10 +199,10 @@ export default function ServiceForm({ category, serviceId }: ServiceFormProps) {
           <div>
             <label className="mb-2 block text-sm font-medium text-gray-700">اختر الخدمة المطلوبة *</label>
             <select
-              required
-              value={formData.serviceType}
-              onChange={e => handleInputChange('serviceType', e.target.value)}
-              className="w-full rounded-lg border border-gray-300 px-4 py-3 focus:border-transparent focus:ring-2 focus:ring-blue-500"
+              {...register('serviceType', { required: 'يرجى اختيار الخدمة' })}
+              className={`w-full rounded-lg border px-4 py-2 focus:border-transparent focus:ring-2 focus:ring-blue-500 ${
+                errors.serviceType ? 'border-red-500' : 'border-gray-300'
+              }`}
             >
               <option value="">اختر الخدمة</option>
               {services.map(service => (
@@ -196,6 +211,7 @@ export default function ServiceForm({ category, serviceId }: ServiceFormProps) {
                 </option>
               ))}
             </select>
+            {errors.serviceType && <p className="mt-1 text-sm text-red-500">{errors.serviceType.message}</p>}
           </div>
         </div>
       )}
@@ -213,43 +229,62 @@ export default function ServiceForm({ category, serviceId }: ServiceFormProps) {
                 </label>
 
                 {field.type === 'select' ? (
-                  <select
-                    required={field.required}
-                    value={formData.additionalInfo[field.name] || ''}
-                    onChange={e => handleAdditionalInfoChange(field.name, e.target.value)}
-                    className="w-full rounded-lg border border-gray-300 px-4 py-3 focus:border-transparent focus:ring-2 focus:ring-blue-500"
-                  >
-                    <option value="">اختر</option>
-                    {field.options?.map(option => (
-                      <option key={option} value={option}>
-                        {option}
-                      </option>
-                    ))}
-                  </select>
-                ) : field.type === 'radio' ? (
-                  <div className="space-y-2">
-                    {field.options?.map(option => (
-                      <label key={option} className="flex items-center">
-                        <input
-                          type="radio"
-                          name={field.name}
-                          value={option}
-                          required={field.required}
-                          onChange={e => handleAdditionalInfoChange(field.name, e.target.value)}
-                          className="mr-2"
-                        />
-                        {option}
-                      </label>
-                    ))}
-                  </div>
-                ) : (
-                  <input
-                    type={field.type}
-                    required={field.required}
-                    value={formData.additionalInfo[field.name] || ''}
-                    onChange={e => handleAdditionalInfoChange(field.name, e.target.value)}
-                    className="w-full rounded-lg border border-gray-300 px-4 py-3 focus:border-transparent focus:ring-2 focus:ring-blue-500"
+                  <Controller
+                    name={`additionalInfo.${field.name}`}
+                    control={control}
+                    rules={{ required: field.required ? `${field.label} مطلوب` : false }}
+                    render={({ field: { onChange, value } }) => (
+                      <select
+                        value={value || ''}
+                        onChange={onChange}
+                        className={`w-full rounded-lg border px-4 py-2 focus:border-transparent focus:ring-2 focus:ring-blue-500 ${
+                          errors.additionalInfo?.[field.name] ? 'border-red-500' : 'border-gray-300'
+                        }`}
+                      >
+                        <option value="">اختر</option>
+                        {field.options?.map(option => (
+                          <option key={option} value={option}>
+                            {option}
+                          </option>
+                        ))}
+                      </select>
+                    )}
                   />
+                ) : field.type === 'radio' ? (
+                  <Controller
+                    name={`additionalInfo.${field.name}`}
+                    control={control}
+                    rules={{ required: field.required ? `${field.label} مطلوب` : false }}
+                    render={({ field: { onChange, value } }) => (
+                      <div className="space-y-2">
+                        {field.options?.map(option => (
+                          <label key={option} className="flex items-center">
+                            <input type="radio" value={option} checked={value === option} onChange={onChange} className="mr-2" />
+                            {option}
+                          </label>
+                        ))}
+                      </div>
+                    )}
+                  />
+                ) : (
+                  <Controller
+                    name={`additionalInfo.${field.name}`}
+                    control={control}
+                    rules={{ required: field.required ? `${field.label} مطلوب` : false }}
+                    render={({ field: { onChange, value } }) => (
+                      <input
+                        type={field.type}
+                        value={value || ''}
+                        onChange={onChange}
+                        className={`w-full rounded-lg border px-4 py-2 focus:border-transparent focus:ring-2 focus:ring-blue-500 ${
+                          errors.additionalInfo?.[field.name] ? 'border-red-500' : 'border-gray-300'
+                        }`}
+                      />
+                    )}
+                  />
+                )}
+                {errors.additionalInfo?.[field.name] && (
+                  <p className="mt-1 text-sm text-red-500">{String(errors.additionalInfo[field.name]?.message || 'هذا الحقل مطلوب')}</p>
                 )}
               </div>
             ))}
@@ -264,13 +299,20 @@ export default function ServiceForm({ category, serviceId }: ServiceFormProps) {
         <div>
           <label className="mb-2 block text-sm font-medium text-gray-700">وصف مفصل للطلب *</label>
           <textarea
-            required
             rows={4}
-            value={formData.description}
-            onChange={e => handleInputChange('description', e.target.value)}
-            className="w-full rounded-lg border border-gray-300 px-4 py-3 focus:border-transparent focus:ring-2 focus:ring-blue-500"
+            {...register('description', {
+              required: 'الوصف مطلوب',
+              minLength: {
+                value: 10,
+                message: 'يجب أن يكون الوصف على الأقل 10 أحرف',
+              },
+            })}
+            className={`w-full rounded-lg border px-4 py-2 focus:border-transparent focus:ring-2 focus:ring-blue-500 ${
+              errors.description ? 'border-red-500' : 'border-gray-300'
+            }`}
             placeholder="يرجى تقديم وصف مفصل لطلبك..."
           />
+          {errors.description && <p className="mt-1 text-sm text-red-500">{errors.description.message}</p>}
         </div>
       </div>
 
