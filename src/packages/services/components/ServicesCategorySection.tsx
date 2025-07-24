@@ -1,21 +1,17 @@
 import { TFunction } from 'i18next';
 import React from 'react';
 import ServiceCard from './ServiceCard';
+import { Service } from '@prisma/client';
 
 type ServicesCategorySectionProps = {
   t: TFunction<'translation', undefined>;
   categoryKey: string;
   icon: string;
   bgColor: string;
+  services: Service[];
 };
 
-export default function ServicesCategorySection({ t, categoryKey, icon, bgColor }: ServicesCategorySectionProps) {
-  const services = t(`services.${categoryKey}.services`, { returnObjects: true }) as Array<{
-    id: number;
-    title: string;
-    description: string;
-  }>;
-
+export default function ServicesCategorySection({ t, categoryKey, icon, bgColor, services }: ServicesCategorySectionProps) {
   return (
     <section className="py-12" id={categoryKey}>
       <div className="container mx-auto px-6">
@@ -28,8 +24,8 @@ export default function ServicesCategorySection({ t, categoryKey, icon, bgColor 
 
           {/* Services Grid */}
           <div className="flex flex-wrap justify-center gap-6">
-            {services.map(service => (
-              <ServiceCard key={service.id} service={service} bgColor={bgColor} />
+            {services.map((service, index) => (
+              <ServiceCard key={service.id} num={index + 1} service={service} bgColor={bgColor} t={t} />
             ))}
           </div>
         </div>

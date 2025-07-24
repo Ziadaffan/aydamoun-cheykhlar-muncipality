@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useForm, Controller } from 'react-hook-form';
+import SubmittingButton from '@/packages/common/components/SubmittingButton';
 
 type ServiceFormProps = {
   category: string;
@@ -39,28 +40,19 @@ export default function ServiceForm({ category, serviceId }: ServiceFormProps) {
     control,
     formState: { errors },
     setValue,
-    watch,
   } = useForm<FormData>({
     defaultValues: {
-      fullName: '',
-      phone: '',
-      email: '',
-      address: '',
+      fullName: 'ziad affan',
+      phone: '4185736096',
+      email: 'ziad@gmail.com',
+      address: '123 Main St, Anytown, USA',
       serviceType: serviceId ? serviceId.toString() : '',
-      description: '',
+      description: 'I need a building license',
       additionalInfo: {},
       documents: [],
     },
   });
 
-  // Obtenir les services de la catégorie
-  const services = t(`services.${category}.services`, { returnObjects: true }) as Array<{
-    id: number;
-    title: string;
-    description: string;
-  }>;
-
-  // Champs supplémentaires selon la catégorie
   const getAdditionalFields = () => {
     switch (category) {
       case 'buildingLicenses':
@@ -191,31 +183,6 @@ export default function ServiceForm({ category, serviceId }: ServiceFormProps) {
         </div>
       </div>
 
-      {/* Sélection du service */}
-      {!serviceId && (
-        <div className="mb-8">
-          <h3 className="mb-6 border-b pb-2 text-xl font-bold text-gray-800">نوع الخدمة</h3>
-
-          <div>
-            <label className="mb-2 block text-sm font-medium text-gray-700">اختر الخدمة المطلوبة *</label>
-            <select
-              {...register('serviceType', { required: 'يرجى اختيار الخدمة' })}
-              className={`w-full rounded-lg border px-4 py-2 focus:border-transparent focus:ring-2 focus:ring-blue-500 ${
-                errors.serviceType ? 'border-red-500' : 'border-gray-300'
-              }`}
-            >
-              <option value="">اختر الخدمة</option>
-              {services.map(service => (
-                <option key={service.id} value={service.id}>
-                  {service.title}
-                </option>
-              ))}
-            </select>
-            {errors.serviceType && <p className="mt-1 text-sm text-red-500">{errors.serviceType.message}</p>}
-          </div>
-        </div>
-      )}
-
       {/* Champs supplémentaires selon la catégorie */}
       {additionalFields.length > 0 && (
         <div className="mb-8">
@@ -335,13 +302,7 @@ export default function ServiceForm({ category, serviceId }: ServiceFormProps) {
 
       {/* Bouton de soumission */}
       <div className="flex justify-end">
-        <button
-          type="submit"
-          disabled={isSubmitting}
-          className="rounded-lg bg-gradient-to-r from-blue-500 to-blue-600 px-8 py-3 font-semibold text-white hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
-        >
-          {isSubmitting ? 'جاري الإرسال...' : 'إرسال الطلب'}
-        </button>
+        <SubmittingButton isSubmitting={isSubmitting} text="إرسال الطلب" />
       </div>
     </form>
   );
