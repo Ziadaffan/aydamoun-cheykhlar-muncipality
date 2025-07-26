@@ -5,6 +5,7 @@ import Link from 'next/link';
 import MobileMenuButoon from './MobileMenuButoon';
 import MobileMenu from './MobileMenu';
 import NavigationItems from './NavigationItems';
+import UserMenu from './UserMenu';
 
 type MainNavigationProps = {
   t: TFunction<'translation', undefined>;
@@ -26,6 +27,7 @@ export default function MainNavigation({ t }: MainNavigationProps) {
           {/* Desktop Navigation */}
           <div className="hidden items-center space-x-8 lg:flex">
             <NavigationItems t={t} />
+            <UserMenu />
           </div>
 
           <MobileMenuButoon isMobileMenuOpen={isMobileMenuOpen} setIsMobileMenuOpen={setIsMobileMenuOpen} />
