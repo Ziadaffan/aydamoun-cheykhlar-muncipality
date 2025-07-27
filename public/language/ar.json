@@ -33,7 +33,10 @@
       },
       "submitComplaint": "تقديم شكوى",
       "objectionToTheMunicipality": "إعتراض على البلدية",
-      "jobs": "الوظائف"
+      "jobs": "الوظائف",
+      "profile": "الملف الشخصي",
+      "logout": "تسجيل الخروج",
+      "login": "تسجيل الدخول"
     }
   },
   "aboutUs": {

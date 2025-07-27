@@ -25,9 +25,8 @@ export default function MainNavigation({ t }: MainNavigationProps) {
           </div>
 
           {/* Desktop Navigation */}
-          <div className="hidden items-center space-x-8 lg:flex">
+          <div className="hidden items-center lg:flex">
             <NavigationItems t={t} />
-            <UserMenu />
           </div>
 
           <MobileMenuButoon isMobileMenuOpen={isMobileMenuOpen} setIsMobileMenuOpen={setIsMobileMenuOpen} />
