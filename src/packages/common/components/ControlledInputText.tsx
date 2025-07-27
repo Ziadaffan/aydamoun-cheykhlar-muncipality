@@ -40,7 +40,7 @@ export default function ControlledInputText({
           error ? 'border-red-300 focus:border-red-500' : 'border-gray-300 focus:border-blue-500'
         } ${disabled ? 'cursor-not-allowed bg-gray-100' : ''} ${className}`}
       />
-      {error && <span className="mt-1 block text-sm text-red-500">{error.message}</span>}
+      {error && <span className="mt-1 block text-sm text-red-500">{error.message as string}</span>}
     </div>
   );
 }

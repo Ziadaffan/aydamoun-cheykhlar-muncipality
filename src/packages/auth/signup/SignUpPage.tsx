@@ -53,6 +53,8 @@ export default function SignUpPage() {
       },
       onError: error => {
         notify(error.message || t('auth.signup.messages.signupError'), 'error');
+      },
+      onSettled: () => {
         setIsLoading(false);
       },
     });

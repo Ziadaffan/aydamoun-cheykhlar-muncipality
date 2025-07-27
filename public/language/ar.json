@@ -180,9 +180,23 @@
     "login": {
       "title": "تسجيل الدخول",
       "email": "البريد الإلكتروني",
+      "emailPlaceholder": "البريد الإلكتروني",
       "password": "كلمة المرور",
+      "passwordPlaceholder": "كلمة المرور",
       "submit": "دخول",
-      "required": "هذا الحقل مطلوب"
+      "loading": "جاري تسجيل الدخول...",
+      "forgotPassword": "نسيت كلمة المرور؟",
+      "noAccount": "ليس لديك حساب؟",
+      "createAccount": "إنشاء حساب جديد",
+      "validation": {
+        "emailRequired": "البريد الإلكتروني مطلوب",
+        "passwordRequired": "كلمة المرور مطلوبة"
+      },
+      "messages": {
+        "invalidCredentials": "البريد الإلكتروني أو كلمة المرور غير صحيحة",
+        "loginError": "حدث خطأ أثناء تسجيل الدخول",
+        "loginSuccess": "تم تسجيل الدخول بنجاح"
+      }
     },
     "signup": {
       "title": "إنشاء حساب جديد",
