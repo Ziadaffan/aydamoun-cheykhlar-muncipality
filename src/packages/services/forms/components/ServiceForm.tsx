@@ -5,13 +5,17 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useForm, Controller } from 'react-hook-form';
 import ControlledInputText from '@/packages/common/components/ControlledInputText';
+import ControlledSelect from '@/packages/common/components/ControlledSelect';
+import ControlledTextArea from '@/packages/common/components/ControlledTextArea';
+import ControlledRadio from '@/packages/common/components/ControlledRadio';
 import Button from '@/packages/common/components/Button';
 import Banner from '@/packages/common/components/Banner';
 import { getAdditionalFields } from '../utils/form.utils';
+import { useCreateServiceSubmission } from '@/packages/services/hooks/useCreateServiceSubmission';
 
 type ServiceFormProps = {
   category: string;
-  serviceId?: number;
+  serviceId: string;
 };
 
 type FormData = {
@@ -37,6 +41,7 @@ export default function ServiceForm({ category, serviceId }: ServiceFormProps) {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+  const { mutate: createServiceSubmission } = useCreateServiceSubmission(serviceId);
 
   const {
     register,
@@ -65,17 +70,19 @@ export default function ServiceForm({ category, serviceId }: ServiceFormProps) {
   const onSubmit = async (data: FormData) => {
     setIsSubmitting(true);
     setMessage(null);
-    try {
-      console.log(data);
-      // Handle form submission logic here
-      setMessage({ type: 'success', text: t('services.form.messages.submitSuccess') });
-      setTimeout(() => router.push('/services'), 1500);
-    } catch (error) {
-      console.error('Error submitting form:', error);
-      setMessage({ type: 'error', text: t('services.form.messages.submitError') });
-    } finally {
-      setIsSubmitting(false);
-    }
+
+    createServiceSubmission(data, {
+      onSuccess: () => {
+        setMessage({ type: 'success', text: t('services.form.messages.submitSuccess') });
+        setTimeout(() => router.push('/services'), 1500);
+      },
+      onError: () => {
+        setMessage({ type: 'error', text: t('services.form.messages.submitError') });
+      },
+      onSettled: () => {
+        setIsSubmitting(false);
+      },
+    });
   };
 
   const additionalFields = getAdditionalFields(category);
@@ -145,47 +152,26 @@ export default function ServiceForm({ category, serviceId }: ServiceFormProps) {
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
             {additionalFields.map(field => (
               <div key={field.name}>
-                <label className="mb-2 block text-sm font-medium text-gray-700">
-                  {field.label} {field.required && '*'}
-                </label>
-
                 {field.type === 'select' ? (
-                  <Controller
+                  <ControlledSelect
                     name={`additionalInfo.${field.name}`}
                     control={control}
+                    label={field.label}
+                    options={field.options?.map(option => ({ value: option, label: option })) || []}
+                    placeholder={t('services.form.buttons.choose')}
+                    required={field.required}
+                    error={errors.additionalInfo?.[field.name] as any}
                     rules={{ required: field.required ? `${field.label} مطلوب` : false }}
-                    render={({ field: { onChange, value } }) => (
-                      <select
-                        value={value || ''}
-                        onChange={onChange}
-                        className={`w-full rounded-lg border px-4 py-2 focus:border-transparent focus:ring-2 focus:ring-blue-500 ${
-                          errors.additionalInfo?.[field.name] ? 'border-red-500' : 'border-gray-300'
-                        }`}
-                      >
-                        <option value="">{t('services.form.buttons.choose')}</option>
-                        {field.options?.map(option => (
-                          <option key={option} value={option}>
-                            {option}
-                          </option>
-                        ))}
-                      </select>
-                    )}
                   />
                 ) : field.type === 'radio' ? (
-                  <Controller
+                  <ControlledRadio
                     name={`additionalInfo.${field.name}`}
                     control={control}
+                    label={field.label}
+                    options={field.options || []}
+                    required={field.required}
+                    error={errors.additionalInfo?.[field.name] as any}
                     rules={{ required: field.required ? `${field.label} مطلوب` : false }}
-                    render={({ field: { onChange, value } }) => (
-                      <div className="space-y-2">
-                        {field.options?.map(option => (
-                          <label key={option} className="flex items-center">
-                            <input type="radio" value={option} checked={value === option} onChange={onChange} className="mr-2" />
-                            {option}
-                          </label>
-                        ))}
-                      </div>
-                    )}
                   />
                 ) : (
                   <Controller
@@ -193,21 +179,26 @@ export default function ServiceForm({ category, serviceId }: ServiceFormProps) {
                     control={control}
                     rules={{ required: field.required ? `${field.label} مطلوب` : false }}
                     render={({ field: { onChange, value } }) => (
-                      <input
-                        type={field.type}
-                        value={value || ''}
-                        onChange={onChange}
-                        className={`w-full rounded-lg border px-4 py-2 focus:border-transparent focus:ring-2 focus:ring-blue-500 ${
-                          errors.additionalInfo?.[field.name] ? 'border-red-500' : 'border-gray-300'
-                        }`}
-                      />
+                      <div>
+                        <label className="mb-2 block text-sm font-medium text-gray-700">
+                          {field.label} {field.required && '*'}
+                        </label>
+                        <input
+                          type={field.type}
+                          value={value || ''}
+                          onChange={onChange}
+                          className={`w-full rounded-lg border px-4 py-2 focus:border-transparent focus:ring-2 focus:ring-blue-500 ${
+                            errors.additionalInfo?.[field.name] ? 'border-red-500' : 'border-gray-300'
+                          }`}
+                        />
+                        {errors.additionalInfo?.[field.name] && (
+                          <p className="mt-1 text-sm text-red-500">
+                            {String(errors.additionalInfo[field.name]?.message || t('services.form.messages.fieldRequired'))}
+                          </p>
+                        )}
+                      </div>
                     )}
                   />
-                )}
-                {errors.additionalInfo?.[field.name] && (
-                  <p className="mt-1 text-sm text-red-500">
-                    {String(errors.additionalInfo[field.name]?.message || t('services.form.messages.fieldRequired'))}
-                  </p>
                 )}
               </div>
             ))}
@@ -219,24 +210,23 @@ export default function ServiceForm({ category, serviceId }: ServiceFormProps) {
       <div className="mb-8">
         <h3 className="mb-6 border-b pb-2 text-xl font-bold text-gray-800">{t('services.form.requestDetails')}</h3>
 
-        <div>
-          <label className="mb-2 block text-sm font-medium text-gray-700">{t('services.form.fields.description')} *</label>
-          <textarea
-            rows={4}
-            {...register('description', {
-              required: t('services.form.fields.descriptionRequired'),
-              minLength: {
-                value: 10,
-                message: t('services.form.fields.descriptionMinLength'),
-              },
-            })}
-            className={`w-full rounded-lg border px-4 py-2 focus:border-transparent focus:ring-2 focus:ring-blue-500 ${
-              errors.description ? 'border-red-500' : 'border-gray-300'
-            }`}
-            placeholder={t('services.form.fields.descriptionPlaceholder')}
-          />
-          {errors.description && <p className="mt-1 text-sm text-red-500">{errors.description.message}</p>}
-        </div>
+        <ControlledTextArea
+          name="description"
+          control={control}
+          label={t('services.form.fields.description')}
+          placeholder={t('services.form.fields.descriptionPlaceholder')}
+          required
+          error={errors.description}
+          rows={4}
+          minLength={10}
+          rules={{
+            required: t('services.form.fields.descriptionRequired'),
+            minLength: {
+              value: 10,
+              message: t('services.form.fields.descriptionMinLength'),
+            },
+          }}
+        />
       </div>
 
       {/* Documents */}
@@ -258,7 +248,7 @@ export default function ServiceForm({ category, serviceId }: ServiceFormProps) {
 
       {/* Bouton de soumission */}
       <div className="flex justify-end">
-        <Button type="submit" variant="primary" size="lg" loading={isSubmitting} disabled={isSubmitting}>
+        <Button type="submit" variant="primary" size="lg" loading={isSubmitting} disabled={isSubmitting} className="w-full">
           {t('services.form.buttons.submit')}
         </Button>
       </div>

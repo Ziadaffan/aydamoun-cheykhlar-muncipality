@@ -4,6 +4,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { ServiceService } from '@/packages/services/services/services.service';
 
 export const dynamic = 'force-dynamic';
+
 const serviceService = ServiceService.instance();
 
 export const GET = ApiErrorHandler(async (request: NextRequest): Promise<NextResponse> => {
