@@ -7,13 +7,14 @@ import { getSession } from 'next-auth/react';
 import Image from 'next/image';
 import ControlledInputText from '@/packages/common/components/ControlledInputText';
 import Button from '@/packages/common/components/Button';
-import useSignUp, { SignUpData } from '../hooks/useSignUp';
-import { notify } from '@/packages/common/notify';
+import Banner from '@/packages/common/components/Banner';
+import useSignUp, { SignUpData } from '@/packages/auth/hooks/useSignUp';
 
 export default function SignUpPage() {
   const { t } = useTranslation();
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
+  const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
   const { mutate } = useSignUp();
 
   const {
@@ -37,22 +38,31 @@ export default function SignUpPage() {
 
   const onSubmit = async (data: SignUpData) => {
     setIsLoading(true);
+    setMessage(null);
     mutate(data as SignUpData, {
       onSuccess: async () => {
-        notify(t('auth.signup.messages.accountCreated'), 'success');
+        setMessage({ type: 'success', text: t('auth.signup.messages.accountCreated') });
         const signInResult = await signIn('credentials', {
           email: data.email,
           password: data.password,
           redirect: false,
         });
         if (signInResult?.error) {
-          notify(t('auth.signup.messages.loginAfterSignupError'), 'error');
+          setMessage({ type: 'error', text: t('auth.signup.messages.loginAfterSignupError') });
         } else {
-          router.push('/');
+          setTimeout(() => router.push('/'), 1000);
         }
       },
       onError: error => {
-        notify(error.message || t('auth.signup.messages.signupError'), 'error');
+        let errorMessage = t('auth.signup.messages.signupError');
+
+        if (error.message === 'USER_EXISTS') {
+          errorMessage = t('auth.signup.messages.userExists');
+        } else if (error.message && error.message !== 'Something went wrong') {
+          errorMessage = error.message;
+        }
+
+        setMessage({ type: 'error', text: errorMessage });
       },
       onSettled: () => {
         setIsLoading(false);
@@ -67,6 +77,8 @@ export default function SignUpPage() {
           <Image src="/assets/images/logo.png" alt="Logo" width={64} height={64} className="h-16 w-16 rounded-full shadow-md" priority />
         </div>
         <h2 className="mb-8 text-center text-xl font-extrabold text-blue-700 md:text-2xl">{t('auth.signup.title')}</h2>
+
+        {message && <Banner type={message.type} message={message.text} onClose={() => setMessage(null)} />}
 
         <ControlledInputText
           id="name"

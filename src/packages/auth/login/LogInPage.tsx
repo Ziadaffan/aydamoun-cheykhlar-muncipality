@@ -6,13 +6,14 @@ import { getSession } from 'next-auth/react';
 import Image from 'next/image';
 import ControlledInputText from '@/packages/common/components/ControlledInputText';
 import Button from '@/packages/common/components/Button';
+import Banner from '@/packages/common/components/Banner';
 import useLogin, { LoginData } from '@/packages/auth/hooks/useLogin';
-import { notify } from '@/packages/common/notify';
 
 export default function LogInPage() {
   const { t } = useTranslation();
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
+  const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
   const { mutate } = useLogin();
 
   const {
@@ -33,10 +34,11 @@ export default function LogInPage() {
 
   const onSubmit = async (data: LoginData) => {
     setIsLoading(true);
+    setMessage(null);
     mutate(data, {
       onSuccess: () => {
-        notify(t('auth.login.messages.loginSuccess'), 'success');
-        router.push('/');
+        setMessage({ type: 'success', text: t('auth.login.messages.loginSuccess') });
+        setTimeout(() => router.push('/'), 1000);
       },
       onError: error => {
         let errorMessage = t('auth.login.messages.loginError');
@@ -45,7 +47,7 @@ export default function LogInPage() {
           errorMessage = t('auth.login.messages.invalidCredentials');
         }
 
-        notify(errorMessage, 'error');
+        setMessage({ type: 'error', text: errorMessage });
       },
       onSettled: () => {
         setIsLoading(false);
@@ -60,6 +62,8 @@ export default function LogInPage() {
           <Image src="/assets/images/logo.png" alt="Logo" width={64} height={64} className="h-16 w-16 rounded-full shadow-md" priority />
         </div>
         <h2 className="mb-8 text-center text-xl font-extrabold text-blue-700 md:text-2xl">{t('auth.login.title')}</h2>
+
+        {message && <Banner type={message.type} message={message.text} onClose={() => setMessage(null)} />}
 
         <ControlledInputText
           id="email"
