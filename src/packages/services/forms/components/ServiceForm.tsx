@@ -4,7 +4,9 @@ import { useTranslation } from 'react-i18next';
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useForm, Controller } from 'react-hook-form';
-import SubmittingButton from '@/packages/common/components/SubmittingButton';
+import ControlledInputText from '@/packages/common/components/ControlledInputText';
+import Button from '@/packages/common/components/Button';
+import Banner from '@/packages/common/components/Banner';
 import { getAdditionalFields } from '../utils/form.utils';
 
 type ServiceFormProps = {
@@ -34,6 +36,7 @@ export default function ServiceForm({ category, serviceId }: ServiceFormProps) {
   const { t } = useTranslation();
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
   const {
     register,
@@ -61,11 +64,15 @@ export default function ServiceForm({ category, serviceId }: ServiceFormProps) {
 
   const onSubmit = async (data: FormData) => {
     setIsSubmitting(true);
+    setMessage(null);
     try {
       console.log(data);
       // Handle form submission logic here
+      setMessage({ type: 'success', text: t('services.form.messages.submitSuccess') });
+      setTimeout(() => router.push('/services'), 1500);
     } catch (error) {
       console.error('Error submitting form:', error);
+      setMessage({ type: 'error', text: t('services.form.messages.submitError') });
     } finally {
       setIsSubmitting(false);
     }
@@ -75,76 +82,65 @@ export default function ServiceForm({ category, serviceId }: ServiceFormProps) {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="rounded-2xl bg-white p-8 shadow-xl">
+      {message && <Banner type={message.type} message={message.text} onClose={() => setMessage(null)} />}
+
       {/* Informations personnelles */}
       <div className="mb-8">
-        <h3 className="mb-6 border-b pb-2 text-xl font-bold text-gray-800">المعلومات الشخصية</h3>
+        <h3 className="mb-6 border-b pb-2 text-xl font-bold text-gray-800">{t('services.form.personalInfo')}</h3>
 
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-          <div>
-            <label className="mb-2 block text-sm font-medium text-gray-700">الاسم الكامل *</label>
-            <input
-              type="text"
-              {...register('fullName', { required: 'الاسم الكامل مطلوب' })}
-              className={`w-full rounded-lg border px-4 py-2 focus:border-transparent focus:ring-2 focus:ring-blue-500 ${
-                errors.fullName ? 'border-red-500' : 'border-gray-300'
-              }`}
-            />
-            {errors.fullName && <p className="mt-1 text-sm text-red-500">{errors.fullName.message}</p>}
-          </div>
+          <ControlledInputText
+            id="fullName"
+            label={t('services.form.fields.fullName')}
+            type="text"
+            register={register('fullName', { required: t('services.form.fields.fullNameRequired') })}
+            error={errors.fullName}
+            required
+          />
 
-          <div>
-            <label className="mb-2 block text-sm font-medium text-gray-700">رقم الهاتف *</label>
-            <input
-              type="tel"
-              {...register('phone', {
-                required: 'رقم الهاتف مطلوب',
-                pattern: {
-                  value: /^[\+]?[0-9\s\-\(\)]+$/,
-                  message: 'يرجى إدخال رقم هاتف صحيح',
-                },
-              })}
-              className={`w-full rounded-lg border px-4 py-2 focus:border-transparent focus:ring-2 focus:ring-blue-500 ${
-                errors.phone ? 'border-red-500' : 'border-gray-300'
-              }`}
-            />
-            {errors.phone && <p className="mt-1 text-sm text-red-500">{errors.phone.message}</p>}
-          </div>
+          <ControlledInputText
+            id="phone"
+            label={t('services.form.fields.phone')}
+            type="tel"
+            register={register('phone', {
+              required: t('services.form.fields.phoneRequired'),
+              pattern: {
+                value: /^[\+]?[0-9\s\-\(\)]+$/,
+                message: t('services.form.fields.phoneInvalid'),
+              },
+            })}
+            error={errors.phone}
+            required
+          />
 
-          <div>
-            <label className="mb-2 block text-sm font-medium text-gray-700">البريد الإلكتروني</label>
-            <input
-              type="email"
-              {...register('email', {
-                pattern: {
-                  value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                  message: 'يرجى إدخال بريد إلكتروني صحيح',
-                },
-              })}
-              className={`w-full rounded-lg border px-4 py-2 focus:border-transparent focus:ring-2 focus:ring-blue-500 ${
-                errors.email ? 'border-red-500' : 'border-gray-300'
-              }`}
-            />
-            {errors.email && <p className="mt-1 text-sm text-red-500">{errors.email.message}</p>}
-          </div>
+          <ControlledInputText
+            id="email"
+            label={t('services.form.fields.email')}
+            type="email"
+            register={register('email', {
+              pattern: {
+                value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                message: t('services.form.fields.emailInvalid'),
+              },
+            })}
+            error={errors.email}
+          />
 
-          <div>
-            <label className="mb-2 block text-sm font-medium text-gray-700">العنوان *</label>
-            <input
-              type="text"
-              {...register('address', { required: 'العنوان مطلوب' })}
-              className={`w-full rounded-lg border px-4 py-2 focus:border-transparent focus:ring-2 focus:ring-blue-500 ${
-                errors.address ? 'border-red-500' : 'border-gray-300'
-              }`}
-            />
-            {errors.address && <p className="mt-1 text-sm text-red-500">{errors.address.message}</p>}
-          </div>
+          <ControlledInputText
+            id="address"
+            label={t('services.form.fields.address')}
+            type="text"
+            register={register('address', { required: t('services.form.fields.addressRequired') })}
+            error={errors.address}
+            required
+          />
         </div>
       </div>
 
       {/* Champs supplémentaires selon la catégorie */}
       {additionalFields.length > 0 && (
         <div className="mb-8">
-          <h3 className="mb-6 border-b pb-2 text-xl font-bold text-gray-800">معلومات إضافية</h3>
+          <h3 className="mb-6 border-b pb-2 text-xl font-bold text-gray-800">{t('services.form.additionalInfo')}</h3>
 
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
             {additionalFields.map(field => (
@@ -166,7 +162,7 @@ export default function ServiceForm({ category, serviceId }: ServiceFormProps) {
                           errors.additionalInfo?.[field.name] ? 'border-red-500' : 'border-gray-300'
                         }`}
                       >
-                        <option value="">اختر</option>
+                        <option value="">{t('services.form.buttons.choose')}</option>
                         {field.options?.map(option => (
                           <option key={option} value={option}>
                             {option}
@@ -209,7 +205,9 @@ export default function ServiceForm({ category, serviceId }: ServiceFormProps) {
                   />
                 )}
                 {errors.additionalInfo?.[field.name] && (
-                  <p className="mt-1 text-sm text-red-500">{String(errors.additionalInfo[field.name]?.message || 'هذا الحقل مطلوب')}</p>
+                  <p className="mt-1 text-sm text-red-500">
+                    {String(errors.additionalInfo[field.name]?.message || t('services.form.messages.fieldRequired'))}
+                  </p>
                 )}
               </div>
             ))}
@@ -219,23 +217,23 @@ export default function ServiceForm({ category, serviceId }: ServiceFormProps) {
 
       {/* Description */}
       <div className="mb-8">
-        <h3 className="mb-6 border-b pb-2 text-xl font-bold text-gray-800">تفاصيل الطلب</h3>
+        <h3 className="mb-6 border-b pb-2 text-xl font-bold text-gray-800">{t('services.form.requestDetails')}</h3>
 
         <div>
-          <label className="mb-2 block text-sm font-medium text-gray-700">وصف مفصل للطلب *</label>
+          <label className="mb-2 block text-sm font-medium text-gray-700">{t('services.form.fields.description')} *</label>
           <textarea
             rows={4}
             {...register('description', {
-              required: 'الوصف مطلوب',
+              required: t('services.form.fields.descriptionRequired'),
               minLength: {
                 value: 10,
-                message: 'يجب أن يكون الوصف على الأقل 10 أحرف',
+                message: t('services.form.fields.descriptionMinLength'),
               },
             })}
             className={`w-full rounded-lg border px-4 py-2 focus:border-transparent focus:ring-2 focus:ring-blue-500 ${
               errors.description ? 'border-red-500' : 'border-gray-300'
             }`}
-            placeholder="يرجى تقديم وصف مفصل لطلبك..."
+            placeholder={t('services.form.fields.descriptionPlaceholder')}
           />
           {errors.description && <p className="mt-1 text-sm text-red-500">{errors.description.message}</p>}
         </div>
@@ -260,7 +258,9 @@ export default function ServiceForm({ category, serviceId }: ServiceFormProps) {
 
       {/* Bouton de soumission */}
       <div className="flex justify-end">
-        <SubmittingButton isSubmitting={isSubmitting} text="إرسال الطلب" />
+        <Button type="submit" variant="primary" size="lg" loading={isSubmitting} disabled={isSubmitting}>
+          {t('services.form.buttons.submit')}
+        </Button>
       </div>
     </form>
   );

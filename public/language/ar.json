@@ -142,6 +142,38 @@
       "title": "الخدمات الإلكترونية",
       "subtitle": "بلدية عيدمون توفر مجموعة من الخدمات الإلكترونية التي تتيح للمواطنين تقديم طلباتهم، تحميل النماذج، وتتبع معاملاتهم بكل سهولة وراحة، دون الحاجة لزيارة مبنى البلدية."
     },
+    "form": {
+      "personalInfo": "المعلومات الشخصية",
+      "additionalInfo": "معلومات إضافية",
+      "requestDetails": "تفاصيل الطلب",
+      "attachments": "المرفقات (اختياري)",
+      "fields": {
+        "fullName": "الاسم الكامل",
+        "fullNameRequired": "الاسم الكامل مطلوب",
+        "phone": "رقم الهاتف",
+        "phoneRequired": "رقم الهاتف مطلوب",
+        "phoneInvalid": "يرجى إدخال رقم هاتف صحيح",
+        "email": "البريد الإلكتروني",
+        "emailInvalid": "يرجى إدخال بريد إلكتروني صحيح",
+        "address": "العنوان",
+        "addressRequired": "العنوان مطلوب",
+        "description": "وصف مفصل للطلب",
+        "descriptionRequired": "الوصف مطلوب",
+        "descriptionMinLength": "يجب أن يكون الوصف على الأقل 10 أحرف",
+        "descriptionPlaceholder": "يرجى تقديم وصف مفصل لطلبك...",
+        "documents": "إرفاق مستندات",
+        "documentsHelp": "يمكنك إرفاق ملفات PDF، Word، أو صور (الحد الأقصى: 5 ملفات)"
+      },
+      "buttons": {
+        "submit": "إرسال الطلب",
+        "choose": "اختر"
+      },
+      "messages": {
+        "submitSuccess": "تم إرسال الطلب بنجاح",
+        "submitError": "حدث خطأ أثناء إرسال الطلب",
+        "fieldRequired": "هذا الحقل مطلوب"
+      }
+    },
     "buildingLicenses": {
       "title": "خدمات الرخص والإنشاءات"
     },
