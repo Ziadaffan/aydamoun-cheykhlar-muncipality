@@ -14,9 +14,6 @@ export default function ServicesPage() {
   const { t } = useTranslation();
   const { data: services = [], isLoading, error } = useGetServices();
 
-  if (isLoading) return <Spinner />;
-  if (error) return <ErrorMessage />;
-
   const servicesByType = services.reduce(
     (acc: Record<ServiceType, Service[]>, service: Service) => {
       if (!acc[service.type]) acc[service.type] = [];
@@ -34,6 +31,9 @@ export default function ServicesPage() {
     'COMPLAINTS_AND_SUGGESTIONS_SERVICES',
     'OTHER',
   ];
+
+  if (isLoading) return <Spinner className="min-h-screen" />;
+  if (error) return <ErrorMessage />;
 
   return (
     <div className="min-h-screen bg-gradient-to-r from-blue-50 to-green-50">

@@ -31,7 +31,7 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
   }, []);
 
   if (!mounted || isLoading) {
-    return <Spinner />;
+    return <Spinner className="min-h-screen" />;
   }
 
   return (

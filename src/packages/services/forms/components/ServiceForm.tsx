@@ -71,10 +71,12 @@ export default function ServiceForm({ category, serviceId }: ServiceFormProps) {
     setIsSubmitting(true);
     setMessage(null);
 
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
     createServiceSubmission(data, {
       onSuccess: () => {
         setMessage({ type: 'success', text: t('services.form.messages.submitSuccess') });
-        setTimeout(() => router.push('/services'), 1500);
+        setTimeout(() => router.push('/services'), 1000);
       },
       onError: () => {
         setMessage({ type: 'error', text: t('services.form.messages.submitError') });

@@ -14,12 +14,13 @@ export default function ServiceFormPage() {
 
   const { data: service, isLoading, error } = useGetService(serviceId);
 
-  if (isLoading) return <Spinner />;
+  if (isLoading) return <Spinner className="min-h-screen" />;
 
   if (error || !service) return <ServiceNotFound />;
 
   const meta = getServiceCategoryMeta(service.type);
   const foundCategory = meta.categoryKey;
+
   return (
     <div className="min-h-screen bg-gradient-to-r from-blue-50 to-green-50">
       <div className="container mx-auto px-6 py-8">
