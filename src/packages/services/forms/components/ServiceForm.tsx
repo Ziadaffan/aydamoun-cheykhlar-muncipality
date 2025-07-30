@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useForm, Controller } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
 import ControlledInputText from '@/packages/common/components/ControlledInputText';
 import ControlledSelect from '@/packages/common/components/ControlledSelect';
 import ControlledTextArea from '@/packages/common/components/ControlledTextArea';
@@ -12,6 +13,7 @@ import Button from '@/packages/common/components/Button';
 import Banner from '@/packages/common/components/Banner';
 import { getAdditionalFields } from '../utils/form.utils';
 import { useCreateServiceSubmission } from '@/packages/services/hooks/useCreateServiceSubmission';
+import { createServiceSubmissionSchema } from '@/packages/common/utils/validationSchemas';
 
 type ServiceFormProps = {
   category: string;
@@ -33,7 +35,7 @@ type FormData = {
   additionalInfo: Record<string, any>;
 
   // Documents
-  documents: File[];
+  // documents: File[];
 };
 
 export default function ServiceForm({ category, serviceId }: ServiceFormProps) {
@@ -49,6 +51,7 @@ export default function ServiceForm({ category, serviceId }: ServiceFormProps) {
     formState: { errors },
     setValue,
   } = useForm<FormData>({
+    resolver: yupResolver(createServiceSubmissionSchema(category)),
     defaultValues: {
       fullName: 'ziad affan',
       phone: '4185736096',
@@ -57,14 +60,14 @@ export default function ServiceForm({ category, serviceId }: ServiceFormProps) {
       serviceType: serviceId ? serviceId.toString() : '',
       description: 'I need a building license',
       additionalInfo: {},
-      documents: [],
+      // documents: [],
     },
   });
 
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const files = Array.from(event.target.files || []);
-    setValue('documents', files);
-  };
+  // const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  //   const files = Array.from(event.target.files || []);
+  //   setValue('documents', files);
+  // };
 
   const onSubmit = async (data: FormData) => {
     setIsSubmitting(true);

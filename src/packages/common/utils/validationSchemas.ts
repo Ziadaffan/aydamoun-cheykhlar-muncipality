@@ -110,24 +110,24 @@ export const createServiceSubmissionSchema = (category: string) => {
     additionalInfo: createAdditionalInfoSchema(category),
 
     // Documents (optional)
-    documents: yup.array().of(
-      yup
-        .mixed()
-        .test('file-size', 'حجم الملف يجب أن يكون أقل من 5 ميجابايت', value => !value || (value as File)?.size <= 5 * 1024 * 1024)
-        .test(
-          'file-type',
-          'نوع الملف غير مدعوم. يرجى استخدام PDF، Word، أو صور',
-          value =>
-            !value ||
-            [
-              'application/pdf',
-              'application/msword',
-              'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-              'image/jpeg',
-              'image/png',
-            ].includes((value as File)?.type)
-        )
-    ),
+    // documents: yup.array().of(
+    //   yup
+    //     .mixed()
+    //     .test('file-size', 'حجم الملف يجب أن يكون أقل من 5 ميجابايت', value => !value || (value as File)?.size <= 5 * 1024 * 1024)
+    //     .test(
+    //       'file-type',
+    //       'نوع الملف غير مدعوم. يرجى استخدام PDF، Word، أو صور',
+    //       value =>
+    //         !value ||
+    //         [
+    //           'application/pdf',
+    //           'application/msword',
+    //           'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    //           'image/jpeg',
+    //           'image/png',
+    //         ].includes((value as File)?.type)
+    //     )
+    // ),
   });
 };
 
