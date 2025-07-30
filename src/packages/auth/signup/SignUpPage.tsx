@@ -2,13 +2,15 @@ import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
 import { useTranslation } from 'react-i18next';
 import { getSession } from 'next-auth/react';
 import Image from 'next/image';
 import ControlledInputText from '@/packages/common/components/ControlledInputText';
 import Button from '@/packages/common/components/Button';
 import Banner from '@/packages/common/components/Banner';
-import useSignUp, { SignUpData } from '@/packages/auth/hooks/useSignUp';
+import useSignUp from '@/packages/auth/hooks/useSignUp';
+import { signupSchema, SignupFormData } from '@/packages/common/utils/validationSchemas';
 
 export default function SignUpPage() {
   const { t } = useTranslation();
@@ -22,7 +24,8 @@ export default function SignUpPage() {
     handleSubmit,
     formState: { errors },
     watch,
-  } = useForm<SignUpData>({
+  } = useForm<SignupFormData>({
+    resolver: yupResolver(signupSchema),
     defaultValues: {
       name: '',
       email: '',
@@ -43,10 +46,10 @@ export default function SignUpPage() {
     checkSession();
   }, [router]);
 
-  const onSubmit = async (data: SignUpData) => {
+  const onSubmit = async (data: SignupFormData) => {
     setIsLoading(true);
     setMessage(null);
-    mutate(data as SignUpData, {
+    mutate(data, {
       onSuccess: async () => {
         setMessage({ type: 'success', text: t('auth.signup.messages.accountCreated') });
         const signInResult = await signIn('credentials', {
