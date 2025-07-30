@@ -203,7 +203,8 @@
     "formInstructions": "قم بتعبئة النموذج التالي لتقديم طلبك"
   },
   "common": {
-    "back": "العودة"
+    "back": "العودة",
+    "cancel": "إلغاء"
   },
   "footer": {
     "title": "بلدية عيدمون شيخلار ٢٠٢٥",
@@ -261,6 +262,69 @@
         "signupError": "حدث خطأ أثناء إنشاء الحساب",
         "loginAfterSignupError": "تم إنشاء الحساب ولكن فشل تسجيل الدخول. يرجى المحاولة يدوياً.",
         "userExists": "المستخدم موجود بالفعل"
+      }
+    }
+  },
+  "profile": {
+    "header": {
+      "memberSince": "عضو منذ",
+      "defaultUser": "المستخدم"
+    },
+    "accountInfo": {
+      "title": "معلومات الحساب",
+      "name": "الاسم",
+      "email": "البريد الإلكتروني"
+    },
+    "actions": {
+      "editProfile": "تعديل الملف الشخصي",
+      "changePassword": "تغيير كلمة المرور"
+    },
+    "submissions": {
+      "title": "طلباتي",
+      "noSubmissions": "لا توجد طلبات حتى الآن",
+      "newRequest": "تقديم طلب جديد",
+      "submissionDate": "تاريخ التقديم",
+      "status": {
+        "pending": "قيد الانتظار",
+        "inProgress": "قيد المعالجة",
+        "completed": "مكتمل",
+        "rejected": "مرفوض"
+      },
+      "deleteConfirmation": "هل أنت متأكد من حذف هذا الطلب؟",
+      "unknownService": "خدمة غير محددة"
+    },
+    "form": {
+      "messages": {
+        "updateSuccess": "تم تعديل الملف الشخصي بنجاح",
+        "updateError": "حدث خطأ أثناء تعديل الملف الشخصي"
+      }
+    },
+    "changePassword": {
+      "title": "تغيير كلمة المرور",
+      "description": "قم بتغيير كلمة المرور الخاصة بك للحفاظ على أمان حسابك",
+      "oldPassword": "كلمة المرور الحالية",
+      "oldPasswordPlaceholder": "أدخل كلمة المرور الحالية",
+      "newPassword": "كلمة المرور الجديدة",
+      "newPasswordPlaceholder": "أدخل كلمة المرور الجديدة",
+      "confirmPassword": "تأكيد كلمة المرور الجديدة",
+      "confirmPasswordPlaceholder": "أعد إدخال كلمة المرور الجديدة",
+      "passwordRequirements": "متطلبات كلمة المرور",
+      "requirements": {
+        "minLength": "8 أحرف على الأقل",
+        "uppercase": "حرف كبير واحد على الأقل",
+        "lowercase": "حرف صغير واحد على الأقل",
+        "number": "رقم واحد على الأقل",
+        "special": "رمز خاص واحد على الأقل"
+      },
+      "updateButton": "تحديث كلمة المرور",
+      "errors": {
+        "passwordMismatch": "كلمات المرور الجديدة غير متطابقة",
+        "passwordRequired": "كلمة المرور مطلوبة",
+        "samePassword": "كلمة المرور الجديدة لا يمكن أن تكون نفس كلمة المرور الحالية"
+      },
+      "messages": {
+        "success": "تم تغيير كلمة المرور بنجاح",
+        "error": "حدث خطأ أثناء تغيير كلمة المرور"
       }
     }
   }

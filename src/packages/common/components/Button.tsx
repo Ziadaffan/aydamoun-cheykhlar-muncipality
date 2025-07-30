@@ -2,7 +2,7 @@ import React from 'react';
 
 interface ButtonProps {
   type?: 'button' | 'submit' | 'reset';
-  variant?: 'primary' | 'secondary' | 'danger' | 'success';
+  variant?: 'primary' | 'secondary' | 'danger' | 'success' | 'warning';
   size?: 'sm' | 'md' | 'lg';
   disabled?: boolean;
   loading?: boolean;
@@ -29,6 +29,7 @@ export default function Button({
     secondary: 'bg-gray-600 text-white hover:bg-gray-700 active:bg-gray-800 focus:ring-gray-500',
     danger: 'bg-red-600 text-white hover:bg-red-700 active:bg-red-800 focus:ring-red-500',
     success: 'bg-green-600 text-white hover:bg-green-700 active:bg-green-800 focus:ring-green-500',
+    warning: 'bg-yellow-600 text-white hover:bg-yellow-700 active:bg-yellow-800 focus:ring-yellow-500',
   };
 
   const sizeClasses = {

@@ -18,11 +18,18 @@ export default function SignUpPage() {
   const { mutate } = useSignUp();
 
   const {
-    register,
+    control,
     handleSubmit,
     formState: { errors },
     watch,
-  } = useForm<SignUpData>();
+  } = useForm<SignUpData>({
+    defaultValues: {
+      name: '',
+      email: '',
+      password: '',
+      confirmPassword: '',
+    },
+  });
 
   const password = watch('password');
 
@@ -85,7 +92,8 @@ export default function SignUpPage() {
           label={t('auth.signup.fullName')}
           type="text"
           placeholder={t('auth.signup.fullNamePlaceholder')}
-          register={register('name', { required: t('auth.signup.validation.nameRequired') })}
+          control={control}
+          name="name"
           error={errors.name}
           required
         />
@@ -95,13 +103,8 @@ export default function SignUpPage() {
           label={t('auth.signup.email')}
           type="email"
           placeholder={t('auth.signup.emailPlaceholder')}
-          register={register('email', {
-            required: t('auth.signup.validation.emailRequired'),
-            pattern: {
-              value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-              message: t('auth.signup.validation.emailInvalid'),
-            },
-          })}
+          control={control}
+          name="email"
           error={errors.email}
           required
         />
@@ -111,13 +114,8 @@ export default function SignUpPage() {
           label={t('auth.signup.password')}
           type="password"
           placeholder={t('auth.signup.passwordPlaceholder')}
-          register={register('password', {
-            required: t('auth.signup.validation.passwordRequired'),
-            minLength: {
-              value: 6,
-              message: t('auth.signup.validation.passwordMinLength'),
-            },
-          })}
+          control={control}
+          name="password"
           error={errors.password}
           required
         />
@@ -127,10 +125,8 @@ export default function SignUpPage() {
           label={t('auth.signup.confirmPassword')}
           type="password"
           placeholder={t('auth.signup.confirmPasswordPlaceholder')}
-          register={register('confirmPassword', {
-            required: t('auth.signup.validation.confirmPasswordRequired'),
-            validate: value => value === password || t('auth.signup.validation.passwordsNotMatch'),
-          })}
+          control={control}
+          name="confirmPassword"
           error={errors.confirmPassword}
           required
         />

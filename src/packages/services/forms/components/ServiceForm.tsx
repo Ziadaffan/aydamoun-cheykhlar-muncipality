@@ -44,7 +44,6 @@ export default function ServiceForm({ category, serviceId }: ServiceFormProps) {
   const { mutate: createServiceSubmission } = useCreateServiceSubmission(serviceId);
 
   const {
-    register,
     handleSubmit,
     control,
     formState: { errors },
@@ -102,7 +101,8 @@ export default function ServiceForm({ category, serviceId }: ServiceFormProps) {
             id="fullName"
             label={t('services.form.fields.fullName')}
             type="text"
-            register={register('fullName', { required: t('services.form.fields.fullNameRequired') })}
+            control={control}
+            name="fullName"
             error={errors.fullName}
             required
           />
@@ -111,35 +111,20 @@ export default function ServiceForm({ category, serviceId }: ServiceFormProps) {
             id="phone"
             label={t('services.form.fields.phone')}
             type="tel"
-            register={register('phone', {
-              required: t('services.form.fields.phoneRequired'),
-              pattern: {
-                value: /^[\+]?[0-9\s\-\(\)]+$/,
-                message: t('services.form.fields.phoneInvalid'),
-              },
-            })}
+            control={control}
+            name="phone"
             error={errors.phone}
             required
           />
 
-          <ControlledInputText
-            id="email"
-            label={t('services.form.fields.email')}
-            type="email"
-            register={register('email', {
-              pattern: {
-                value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                message: t('services.form.fields.emailInvalid'),
-              },
-            })}
-            error={errors.email}
-          />
+          <ControlledInputText id="email" label={t('services.form.fields.email')} type="email" control={control} name="email" error={errors.email} />
 
           <ControlledInputText
             id="address"
             label={t('services.form.fields.address')}
             type="text"
-            register={register('address', { required: t('services.form.fields.addressRequired') })}
+            control={control}
+            name="address"
             error={errors.address}
             required
           />

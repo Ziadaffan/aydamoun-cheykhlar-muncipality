@@ -17,10 +17,15 @@ export default function LogInPage() {
   const { mutate } = useLogin();
 
   const {
-    register,
+    control,
     handleSubmit,
     formState: { errors },
-  } = useForm<LoginData>();
+  } = useForm<LoginData>({
+    defaultValues: {
+      email: '',
+      password: '',
+    },
+  });
 
   useEffect(() => {
     const checkSession = async () => {
@@ -70,7 +75,8 @@ export default function LogInPage() {
           label={t('auth.login.email')}
           type="email"
           placeholder={t('auth.login.emailPlaceholder')}
-          register={register('email', { required: t('auth.login.validation.emailRequired') })}
+          control={control}
+          name="email"
           error={errors.email}
           required
         />
@@ -80,7 +86,8 @@ export default function LogInPage() {
           label={t('auth.login.password')}
           type="password"
           placeholder={t('auth.login.passwordPlaceholder')}
-          register={register('password', { required: t('auth.login.validation.passwordRequired') })}
+          control={control}
+          name="password"
           error={errors.password}
           required
         />
