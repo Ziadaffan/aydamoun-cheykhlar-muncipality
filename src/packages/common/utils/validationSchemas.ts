@@ -186,13 +186,9 @@ export const profileUpdateSchema = yup.object({
 
 // Password change validation schema
 export const passwordChangeSchema = yup.object({
-  currentPassword: yup.string().required('كلمة المرور الحالية مطلوبة'),
-  newPassword: yup
-    .string()
-    .min(6, 'كلمة المرور الجديدة يجب أن تكون 6 أحرف على الأقل')
-    .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/, 'كلمة المرور الجديدة يجب أن تحتوي على حرف كبير وحرف صغير ورقم واحد على الأقل')
-    .required('كلمة المرور الجديدة مطلوبة'),
-  confirmNewPassword: yup
+  oldPassword: yup.string().required('كلمة المرور الحالية مطلوبة'),
+  newPassword: yup.string().min(6, 'كلمة المرور الجديدة يجب أن تكون 6 أحرف على الأقل').required('كلمة المرور الجديدة مطلوبة'),
+  confirmPassword: yup
     .string()
     .oneOf([yup.ref('newPassword')], 'كلمات المرور غير متطابقة')
     .required('تأكيد كلمة المرور الجديدة مطلوب'),

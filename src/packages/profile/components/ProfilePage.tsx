@@ -16,6 +16,8 @@ import Button from '@/packages/common/components/Button';
 import { useTranslation } from 'react-i18next';
 import { useUpdateProfile } from '@/packages/profile/hooks/useUpdateProfile';
 import Banner from '@/packages/common/components/Banner';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { profileUpdateSchema } from '@/packages/common/utils/validationSchemas';
 
 export type ProfileFormData = {
   name: string;
@@ -41,6 +43,7 @@ export default function ProfilePage() {
     reset,
     formState: { errors },
   } = useForm<ProfileFormData>({
+    resolver: yupResolver(profileUpdateSchema),
     defaultValues: {
       name: user?.name || '',
       email: user?.email || '',
