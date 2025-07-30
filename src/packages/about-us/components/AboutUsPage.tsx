@@ -24,7 +24,7 @@ export default function AboutUsPage() {
 
   const { t } = useTranslation();
 
-  if (isLoading) return <Spinner />;
+  if (isLoading) return <Spinner className="min-h-screen" />;
 
   if (error) return <ErrorMessage />;
 

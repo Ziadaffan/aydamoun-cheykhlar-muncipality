@@ -13,6 +13,8 @@
       "documents": "المستندات",
       "guide": "الدليل المنطقة",
       "contactUs": "تواصل معنا",
+      "auth": "تسجيل الدخول",
+      "signup": "إنشاء حساب",
       "municipality": {
         "name": "البلدية",
         "mission": "المهمة البلدية",
@@ -31,7 +33,10 @@
       },
       "submitComplaint": "تقديم شكوى",
       "objectionToTheMunicipality": "إعتراض على البلدية",
-      "jobs": "الوظائف"
+      "jobs": "الوظائف",
+      "profile": "الملف الشخصي",
+      "logout": "تسجيل الخروج",
+      "login": "تسجيل الدخول"
     }
   },
   "aboutUs": {
@@ -140,111 +145,187 @@
       "title": "الخدمات الإلكترونية",
       "subtitle": "بلدية عيدمون توفر مجموعة من الخدمات الإلكترونية التي تتيح للمواطنين تقديم طلباتهم، تحميل النماذج، وتتبع معاملاتهم بكل سهولة وراحة، دون الحاجة لزيارة مبنى البلدية."
     },
+    "form": {
+      "personalInfo": "المعلومات الشخصية",
+      "additionalInfo": "معلومات إضافية",
+      "requestDetails": "تفاصيل الطلب",
+      "attachments": "المرفقات (اختياري)",
+      "fields": {
+        "fullName": "الاسم الكامل",
+        "fullNameRequired": "الاسم الكامل مطلوب",
+        "phone": "رقم الهاتف",
+        "phoneRequired": "رقم الهاتف مطلوب",
+        "phoneInvalid": "يرجى إدخال رقم هاتف صحيح",
+        "email": "البريد الإلكتروني",
+        "emailInvalid": "يرجى إدخال بريد إلكتروني صحيح",
+        "address": "العنوان",
+        "addressRequired": "العنوان مطلوب",
+        "description": "وصف مفصل للطلب",
+        "descriptionRequired": "الوصف مطلوب",
+        "descriptionMinLength": "يجب أن يكون الوصف على الأقل 10 أحرف",
+        "descriptionPlaceholder": "يرجى تقديم وصف مفصل لطلبك...",
+        "documents": "إرفاق مستندات",
+        "documentsHelp": "يمكنك إرفاق ملفات PDF، Word، أو صور (الحد الأقصى: 5 ملفات)"
+      },
+      "buttons": {
+        "submit": "إرسال الطلب",
+        "choose": "اختر"
+      },
+      "messages": {
+        "submitSuccess": "تم إرسال الطلب بنجاح",
+        "submitError": "حدث خطأ أثناء إرسال الطلب",
+        "fieldRequired": "هذا الحقل مطلوب"
+      }
+    },
     "buildingLicenses": {
-      "title": "خدمات الرخص والإنشاءات",
-      "services": [
-        {
-          "id": 1,
-          "title": "طلب تعديل أو ترميم بناء",
-          "description": "ستستخدم هذا النموذج لطلب ترخيص بأعمال تعديل أو ترميم داخل البناء."
-        },
-        {
-          "id": 2,
-          "title": "طلب إشغال رصيف",
-          "description": "تقديم طلب مؤقت لاستخدام جزء من الرصيف العام أثناء الأعمال أو المناسبات."
-        }
-      ]
+      "title": "خدمات الرخص والإنشاءات"
     },
     "environmentalServices": {
-      "title": "خدمات النظافة والبيئة",
-      "services": [
-        {
-          "id": 3,
-          "title": "طلب حاوية نفايات منزلية أو تجارية",
-          "description": "ستستخدم هذا الطلب لتوفير حاوية نفايات إضافية أو بديلة."
-        },
-        {
-          "id": 4,
-          "title": "تبليغ عن تراكم نفايات أو مخالفات بيئية",
-          "description": "أرسل بلاغًا حول أي مشكلة متعلقة بالنظافة أو البيئة في الحي."
-        },
-        {
-          "id": 5,
-          "title": "طلب تنظيف شارع أو منطقة عامة",
-          "description": "تقديم طلب لتنظيف طريق، ساحة، مرفق عام ضمن نطاق البلدية."
-        }
-      ]
+      "title": "خدمات النظافة والبيئة"
     },
     "administrativeTransactions": {
-      "title": "المعاملات الإدارية",
-      "services": [
-        {
-          "id": 6,
-          "title": "طلب كشف ضرائب أو رسوم بلدية",
-          "description": "احصل على كشف مفصّل بالمبالغ المسددة أو المترتبة عليك."
-        },
-        {
-          "id": 7,
-          "title": "طلب تصريح مناسبة أو نشاط عام",
-          "description": "تقديم طلب لتنظيم احتفال، مهرجان، فعالية في منطقة عامة."
-        }
-      ]
+      "title": "المعاملات الإدارية"
     },
     "officialForms": {
-      "title": "تحميل النماذج الرسمية",
-      "forms": [
-        {
-          "id": 8,
-          "title": "نموذج شكوى رسمية",
-          "downloadText": "تحميل PDF"
-        },
-        {
-          "id": 9,
-          "title": "نموذج تصريح مناسبة",
-          "downloadText": "تحميل PDF"
-        }
-      ]
+      "title": "تحميل النماذج الرسمية"
     },
     "complaintsAndSuggestions": {
-      "title": "الشكاوى والاقتراحات",
-      "services": [
-        {
-          "id": 10,
-          "title": "تقديم شكوى إلكترونية",
-          "description": "أرسل شكوى بخصوص خدمات البلدية أو البيئة أو أي خلل إداري."
-        },
-        {
-          "id": 11,
-          "title": "تقديم اقتراح أو فكرة",
-          "description": "شارك أفكارك وملاحظاتك لتحسين خدمات البلدية وتطوير البلدة."
-        },
-        {
-          "id": 12,
-          "title": "متابعة حالة الطلب أو الشكوى",
-          "description": "أدخل رقم المعاملة لتتبع حالتها ومعرفة إذا تمت معالجتها."
-        }
-      ]
+      "title": "الشكاوى والاقتراحات"
     },
     "additionalServices": {
-      "title": "خدمات إضافية",
-      "services": [
-        {
-          "id": 13,
-          "title": "حجز موعد لزيارة البلدية",
-          "description": "احجز موعدًا لزيارة أحد أقسام البلدية لتفادي الازدحام."
-        },
-        {
-          "id": 14,
-          "title": "طلب مقابلة رئيس البلدية أو أحد أعضاء المجلس",
-          "description": "تقديم طلب رسمي لتحديد موعد مقابلة."
-        }
-      ]
-    }
+      "title": "خدمات إضافية"
+    },
+    "submitRequest": {
+      "title": "تقديم طلب"
+    },
+    "notFoundTitle": "الخدمة غير موجودة",
+    "notFoundMessage": "عذراً، هذه الخدمة غير متوفرة",
+    "formInstructions": "قم بتعبئة النموذج التالي لتقديم طلبك"
+  },
+  "common": {
+    "back": "العودة",
+    "cancel": "إلغاء"
   },
   "footer": {
     "title": "بلدية عيدمون شيخلار ٢٠٢٥",
     "privacyPolicy": "سياسة الخصوصية",
     "termsOfUse": "شروط الاستخدام",
     "copyright": "© 2025 جميع الحقوق محفوظة"
+  },
+  "auth": {
+    "login": {
+      "title": "تسجيل الدخول",
+      "email": "البريد الإلكتروني",
+      "emailPlaceholder": "البريد الإلكتروني",
+      "password": "كلمة المرور",
+      "passwordPlaceholder": "كلمة المرور",
+      "submit": "دخول",
+      "loading": "جاري تسجيل الدخول...",
+      "forgotPassword": "نسيت كلمة المرور؟",
+      "noAccount": "ليس لديك حساب؟",
+      "createAccount": "إنشاء حساب جديد",
+      "validation": {
+        "emailRequired": "البريد الإلكتروني مطلوب",
+        "passwordRequired": "كلمة المرور مطلوبة"
+      },
+      "messages": {
+        "invalidCredentials": "البريد الإلكتروني أو كلمة المرور غير صحيحة",
+        "loginError": "حدث خطأ أثناء تسجيل الدخول",
+        "loginSuccess": "تم تسجيل الدخول بنجاح"
+      }
+    },
+    "signup": {
+      "title": "إنشاء حساب جديد",
+      "fullName": "الاسم الكامل",
+      "fullNamePlaceholder": "الاسم الكامل",
+      "email": "البريد الإلكتروني",
+      "emailPlaceholder": "البريد الإلكتروني",
+      "password": "كلمة المرور",
+      "passwordPlaceholder": "كلمة المرور",
+      "confirmPassword": "تأكيد كلمة المرور",
+      "confirmPasswordPlaceholder": "تأكيد كلمة المرور",
+      "submit": "إنشاء حساب",
+      "loading": "جاري إنشاء الحساب...",
+      "alreadyHaveAccount": "لديك حساب بالفعل؟",
+      "loginLink": "تسجيل الدخول",
+      "validation": {
+        "nameRequired": "الاسم مطلوب",
+        "emailRequired": "البريد الإلكتروني مطلوب",
+        "emailInvalid": "بريد إلكتروني غير صحيح",
+        "passwordRequired": "كلمة المرور مطلوبة",
+        "passwordMinLength": "كلمة المرور يجب أن تكون 6 أحرف على الأقل",
+        "confirmPasswordRequired": "تأكيد كلمة المرور مطلوب",
+        "passwordsNotMatch": "كلمات المرور غير متطابقة"
+      },
+      "messages": {
+        "accountCreated": "تم إنشاء الحساب بنجاح! يمكنك الآن تسجيل الدخول.",
+        "signupError": "حدث خطأ أثناء إنشاء الحساب",
+        "loginAfterSignupError": "تم إنشاء الحساب ولكن فشل تسجيل الدخول. يرجى المحاولة يدوياً.",
+        "userExists": "المستخدم موجود بالفعل"
+      }
+    }
+  },
+  "profile": {
+    "header": {
+      "memberSince": "عضو منذ",
+      "defaultUser": "المستخدم"
+    },
+    "accountInfo": {
+      "title": "معلومات الحساب",
+      "name": "الاسم",
+      "email": "البريد الإلكتروني"
+    },
+    "actions": {
+      "editProfile": "تعديل الملف الشخصي",
+      "changePassword": "تغيير كلمة المرور"
+    },
+    "submissions": {
+      "title": "طلباتي",
+      "noSubmissions": "لا توجد طلبات حتى الآن",
+      "newRequest": "تقديم طلب جديد",
+      "submissionDate": "تاريخ التقديم",
+      "status": {
+        "pending": "قيد الانتظار",
+        "inProgress": "قيد المعالجة",
+        "completed": "مكتمل",
+        "rejected": "مرفوض"
+      },
+      "deleteConfirmation": "هل أنت متأكد من حذف هذا الطلب؟",
+      "unknownService": "خدمة غير محددة"
+    },
+    "form": {
+      "messages": {
+        "updateSuccess": "تم تعديل الملف الشخصي بنجاح",
+        "updateError": "حدث خطأ أثناء تعديل الملف الشخصي"
+      }
+    },
+    "changePassword": {
+      "title": "تغيير كلمة المرور",
+      "description": "قم بتغيير كلمة المرور الخاصة بك للحفاظ على أمان حسابك",
+      "oldPassword": "كلمة المرور الحالية",
+      "oldPasswordPlaceholder": "أدخل كلمة المرور الحالية",
+      "newPassword": "كلمة المرور الجديدة",
+      "newPasswordPlaceholder": "أدخل كلمة المرور الجديدة",
+      "confirmPassword": "تأكيد كلمة المرور الجديدة",
+      "confirmPasswordPlaceholder": "أعد إدخال كلمة المرور الجديدة",
+      "passwordRequirements": "متطلبات كلمة المرور",
+      "requirements": {
+        "minLength": "8 أحرف على الأقل",
+        "uppercase": "حرف كبير واحد على الأقل",
+        "lowercase": "حرف صغير واحد على الأقل",
+        "number": "رقم واحد على الأقل",
+        "special": "رمز خاص واحد على الأقل"
+      },
+      "updateButton": "تحديث كلمة المرور",
+      "errors": {
+        "passwordMismatch": "كلمات المرور الجديدة غير متطابقة",
+        "passwordRequired": "كلمة المرور مطلوبة",
+        "samePassword": "كلمة المرور الجديدة لا يمكن أن تكون نفس كلمة المرور الحالية"
+      },
+      "messages": {
+        "success": "تم تغيير كلمة المرور بنجاح",
+        "error": "حدث خطأ أثناء تغيير كلمة المرور"
+      }
+    }
   }
 }
