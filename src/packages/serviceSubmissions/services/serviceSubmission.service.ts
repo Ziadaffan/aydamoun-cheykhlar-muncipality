@@ -64,6 +64,26 @@ export class ServiceSubmissionService extends BasePrismaService<'serviceSubmissi
     });
   }
 
+  public async updateServiceSubmission(id: string, userId: string, data: any): Promise<ServiceSubmission> {
+    const serviceSubmission = await this.repository.findUnique({ where: { id, userId: userId } });
+
+    if (!serviceSubmission) {
+      throw new NotFoundError('Service Submission not found');
+    }
+
+    return this.repository.update({
+      where: { id },
+      data: {
+        fullName: data.fullName,
+        phone: data.phone,
+        email: data.email,
+        address: data.address,
+        description: data.description,
+        additionalInfo: data.additionalInfo,
+      },
+    });
+  }
+
   public async deleteServiceSubmission(id: string, userId: string): Promise<void> {
     const serviceSubmission = await this.repository.findUnique({ where: { id, userId: userId } });
 
