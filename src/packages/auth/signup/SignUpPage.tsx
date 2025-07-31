@@ -6,11 +6,11 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useTranslation } from 'react-i18next';
 import { getSession } from 'next-auth/react';
 import Image from 'next/image';
-import ControlledInputText from '@/packages/common/components/ControlledInputText';
+import ControlledInputText from '@/packages/common/components/form/ControlledInputText';
 import Button from '@/packages/common/components/Button';
 import Banner from '@/packages/common/components/Banner';
 import useSignUp from '@/packages/auth/hooks/useSignUp';
-import { signupSchema, SignupFormData } from '@/packages/common/utils/validationSchemas';
+import { signupSchema, SignupFormData } from '@/packages/auth/validation/auth.validation';
 
 export default function SignUpPage() {
   const { t } = useTranslation();

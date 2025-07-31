@@ -5,11 +5,11 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useTranslation } from 'react-i18next';
 import { getSession } from 'next-auth/react';
 import Image from 'next/image';
-import ControlledInputText from '@/packages/common/components/ControlledInputText';
+import ControlledInputText from '@/packages/common/components/form/ControlledInputText';
 import Button from '@/packages/common/components/Button';
 import Banner from '@/packages/common/components/Banner';
 import useLogin from '@/packages/auth/hooks/useLogin';
-import { loginSchema, LoginFormData } from '@/packages/common/utils/validationSchemas';
+import { loginSchema, LoginFormData } from '@/packages/auth/validation/auth.validation';
 
 export default function LogInPage() {
   const { t } = useTranslation();

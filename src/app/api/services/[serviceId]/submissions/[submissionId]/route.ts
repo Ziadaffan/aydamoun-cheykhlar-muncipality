@@ -12,7 +12,7 @@ export const GET = ApiErrorHandler(async (req: NextRequest, context) => {
     const { submissionId, serviceId } = await context.params;
 
     const submission = await serviceSubmissionService.getServiceSubmissionById(submissionId, serviceId);
-    
+
     return NextResponse.json(submission, { status: 200 });
   } catch (error) {
     return returnProperErrorMessage(error);

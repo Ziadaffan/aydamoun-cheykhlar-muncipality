@@ -4,13 +4,13 @@ import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '@/packages/common/hooks/useAuth';
 import { useUpdatePassword } from '@/packages/profile/hooks/useUpdatePassword';
-import ControlledInputText from '@/packages/common/components/ControlledInputText';
+import ControlledInputText from '@/packages/common/components/form/ControlledInputText';
 import Button from '@/packages/common/components/Button';
 import Banner from '@/packages/common/components/Banner';
 import Spinner from '@/packages/common/components/Spinner';
 import { BackButton } from '@/packages/common/components/BackBotton';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { passwordChangeSchema } from '@/packages/common/utils/validationSchemas';
+import { passwordChangeSchema } from '@/packages/profile/validation/profile.validation';
 
 export type ChangePasswordFormData = {
   oldPassword: string;
