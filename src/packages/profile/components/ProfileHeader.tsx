@@ -31,4 +31,4 @@ export default function ProfileHeader({ user }: ProfileHeaderProps) {
       </div>
     </div>
   );
-} 
+}

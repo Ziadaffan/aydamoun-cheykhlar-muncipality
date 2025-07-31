@@ -16,12 +16,7 @@ type SubmissionCardProps = {
   onDelete: (submissionId: string) => void;
 };
 
-export default function SubmissionCard({ 
-  submission, 
-  deletingId, 
-  onEdit, 
-  onDelete 
-}: SubmissionCardProps) {
+export default function SubmissionCard({ submission, deletingId, onEdit, onDelete }: SubmissionCardProps) {
   const { t } = useTranslation();
 
   const getStatusStyles = (status: string) => {
@@ -54,13 +49,9 @@ export default function SubmissionCard({
     <div className="rounded-lg border border-gray-200 p-4">
       <div className="flex items-center justify-between">
         <div className="flex-1">
-          <h3 className="font-medium text-gray-900">
-            {submission.service?.name || t('profile.submissions.unknownService')}
-          </h3>
+          <h3 className="font-medium text-gray-900">{submission.service?.name || t('profile.submissions.unknownService')}</h3>
           <p className="text-sm text-gray-600">
-            {submission.description && submission.description.length > 30
-              ? `${submission.description.substring(0, 30)}...`
-              : submission.description}
+            {submission.description && submission.description.length > 30 ? `${submission.description.substring(0, 30)}...` : submission.description}
           </p>
           <p className="mt-1 text-xs text-gray-500">
             {t('profile.submissions.submissionDate')}: {new Date(submission.createdAt).toLocaleDateString('ar-SA')}
@@ -75,14 +66,10 @@ export default function SubmissionCard({
 
           <div className="flex space-x-2 space-x-reverse">
             <EditButton onClick={() => onEdit(submission.id)} />
-            <DeleteButton
-              onClick={() => onDelete(submission.id)}
-              isDeleting={deletingId === submission.id}
-              className="mr-2"
-            />
+            <DeleteButton onClick={() => onDelete(submission.id)} isDeleting={deletingId === submission.id} className="mr-2" />
           </div>
         </div>
       </div>
     </div>
   );
-} 
+}

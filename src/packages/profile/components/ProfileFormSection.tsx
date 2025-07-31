@@ -17,25 +17,14 @@ type ProfileFormSectionProps = {
   onCloseMessage: () => void;
 };
 
-export default function ProfileFormSection({ 
-  control, 
-  errors, 
-  updateMessage, 
-  onCloseMessage 
-}: ProfileFormSectionProps) {
+export default function ProfileFormSection({ control, errors, updateMessage, onCloseMessage }: ProfileFormSectionProps) {
   const { t } = useTranslation();
 
   return (
     <div className="px-6 py-8">
       <h2 className="mb-6 text-lg font-semibold text-gray-900">{t('profile.accountInfo.title')}</h2>
-      
-      {updateMessage && (
-        <Banner 
-          type={updateMessage.type} 
-          message={updateMessage.text} 
-          onClose={onCloseMessage} 
-        />
-      )}
+
+      {updateMessage && <Banner type={updateMessage.type} message={updateMessage.text} onClose={onCloseMessage} />}
 
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
         <ControlledInputText
@@ -61,4 +50,4 @@ export default function ProfileFormSection({
       </div>
     </div>
   );
-} 
+}
