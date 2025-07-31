@@ -7,7 +7,7 @@ export interface CreateServiceSubmissionData {
   address: string;
   description: string;
   additionalInfo: any;
-  documents: File[];
+  // documents: File[];
 }
 export const useCreateServiceSubmission = (serviceId: string) => {
   return useMutation({

@@ -1,13 +1,15 @@
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
 import { useTranslation } from 'react-i18next';
 import { getSession } from 'next-auth/react';
 import Image from 'next/image';
-import ControlledInputText from '@/packages/common/components/ControlledInputText';
+import ControlledInputText from '@/packages/common/components/form/ControlledInputText';
 import Button from '@/packages/common/components/Button';
 import Banner from '@/packages/common/components/Banner';
-import useLogin, { LoginData } from '@/packages/auth/hooks/useLogin';
+import useLogin from '@/packages/auth/hooks/useLogin';
+import { loginSchema, LoginFormData } from '@/packages/auth/validation/auth.validation';
 
 export default function LogInPage() {
   const { t } = useTranslation();
@@ -20,7 +22,8 @@ export default function LogInPage() {
     control,
     handleSubmit,
     formState: { errors },
-  } = useForm<LoginData>({
+  } = useForm<LoginFormData>({
+    resolver: yupResolver(loginSchema),
     defaultValues: {
       email: '',
       password: '',
@@ -37,7 +40,7 @@ export default function LogInPage() {
     checkSession();
   }, [router]);
 
-  const onSubmit = async (data: LoginData) => {
+  const onSubmit = async (data: LoginFormData) => {
     setIsLoading(true);
     setMessage(null);
     mutate(data, {

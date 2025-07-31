@@ -1,5 +1,5 @@
 import { useMutation } from '@tanstack/react-query';
-import { ProfileFormData } from '../components/ProfilePage';
+import { ProfileFormData } from '@/packages/profile/hooks/useProfilePage';
 import { useSession } from 'next-auth/react';
 
 export const useUpdateProfile = () => {

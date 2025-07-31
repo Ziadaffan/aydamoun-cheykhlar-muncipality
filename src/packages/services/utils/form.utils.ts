@@ -1,4 +1,11 @@
-export const getAdditionalFields = (category: string) => {
+export const getAdditionalFields = (category: string, serviceId?: string) => {
+  if (serviceId) {
+    const serviceSpecificFields = getServiceSpecificFields(serviceId);
+    if (serviceSpecificFields.length > 0) {
+      return serviceSpecificFields;
+    }
+  }
+
   switch (category) {
     case 'buildingLicenses':
       return [
@@ -36,6 +43,20 @@ export const getAdditionalFields = (category: string) => {
         { name: 'preferredTime', label: 'الوقت المفضل', type: 'select', options: ['صباحاً', 'مساءً'], required: false },
       ];
 
+    default:
+      return [];
+  }
+};
+
+const getServiceSpecificFields = (serviceId: string) => {
+  switch (serviceId) {
+    case 'e0e69b72-4d3f-4a60-872e-fadb66ef590d':
+      return [
+        { name: 'complaintNumber', label: 'رقم الشكوى أو الطلب', type: 'text', required: true },
+        { name: 'type', label: 'النوع', type: 'select', options: ['شكوى', 'اقتراح', 'استفسار'], required: true },
+        { name: 'department', label: 'القسم المعني', type: 'select', options: ['الخدمات العامة', 'البيئة', 'الإدارة', 'أخرى'], required: true },
+        { name: 'priority', label: 'مستوى الأولوية', type: 'select', options: ['منخفض', 'متوسط', 'عالي'], required: true },
+      ];
     default:
       return [];
   }
