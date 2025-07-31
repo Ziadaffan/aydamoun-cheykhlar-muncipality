@@ -23,7 +23,7 @@ type EditSubmissionFormProps = {
   form: {
     handleSubmit: (onSubmit: (data: FormData) => void) => (e: React.FormEvent) => void;
     control: Control<FormData>;
-    formState: { errors: FieldErrors<FormData>; isDirty: boolean };
+    formState: { errors: FieldErrors<FormData>; isDirty: boolean; isValid: boolean };
   };
   isSubmitting: boolean;
   message: { type: 'success' | 'error'; text: string } | null;
@@ -37,7 +37,7 @@ export default function EditSubmissionForm({ form, isSubmitting, message, onSubm
   const {
     handleSubmit,
     control,
-    formState: { errors, isDirty },
+    formState: { errors, isDirty, isValid },
   } = form;
 
   const additionalFields = getAdditionalFields(category, serviceId);
@@ -52,7 +52,7 @@ export default function EditSubmissionForm({ form, isSubmitting, message, onSubm
 
       <RequestDetailsSection control={control} errors={errors} />
 
-      <FormSubmitButton isSubmitting={isSubmitting} isDirty={isDirty} />
+      <FormSubmitButton isSubmitting={isSubmitting} isDirty={isDirty} isValid={isValid} />
     </form>
   );
 }
