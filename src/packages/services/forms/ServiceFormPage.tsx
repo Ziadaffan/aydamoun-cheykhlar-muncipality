@@ -1,10 +1,10 @@
 import { BackButton } from '@/packages/common/components/BackBotton';
-import ServiceForm from './ServiceForm';
+import ServiceForm from '@/packages/services/forms/ServiceForm';
 import { useTranslation } from 'react-i18next';
 import { getServiceCategoryMeta } from '@/packages/services/utils/service.utils';
 import Spinner from '@/packages/common/components/Spinner';
 import ServiceNotFound from '@/packages/common/components/ServiceNotFound';
-import { useGetService } from '../../hooks/useGetService';
+import { useGetService } from '@/packages/services/hooks/useGetService';
 import { useParams } from 'next/navigation';
 
 export default function ServiceFormPage() {

@@ -1,8 +1,8 @@
 'use client';
 
 import React from 'react';
-import { getAdditionalFields } from '../../utils/form.utils';
-import { useServiceForm } from '../../hooks/useServiceForm';
+import { getAdditionalFields } from '../utils/form.utils';
+import { useServiceForm } from '../hooks/useServiceForm';
 import PersonalInfoSection from './PersonalInfoSection';
 import AdditionalFieldsSection from './AdditionalFieldsSection';
 import RequestDetailsSection from './RequestDetailsSection';
