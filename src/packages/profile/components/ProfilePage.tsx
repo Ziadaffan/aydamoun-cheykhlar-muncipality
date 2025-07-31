@@ -31,7 +31,7 @@ export default function ProfilePage() {
   const {
     handleSubmit,
     control,
-    formState: { errors, isDirty },
+    formState: { errors, isDirty, isValid },
   } = form;
 
   if (isLoading) {
@@ -53,6 +53,7 @@ export default function ProfilePage() {
           <ProfileActions
             isProfileUpdating={isProfileUpdating}
             isDirty={isDirty}
+            isValid={isValid}
             onEditProfile={handleSubmit(handleEditProfile)}
             onChangePassword={handleChangePassword}
           />

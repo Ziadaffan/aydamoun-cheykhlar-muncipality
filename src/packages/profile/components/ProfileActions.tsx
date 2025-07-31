@@ -6,11 +6,12 @@ import Button from '@/packages/common/components/Button';
 type ProfileActionsProps = {
   isProfileUpdating: boolean;
   isDirty: boolean;
+  isValid: boolean;
   onEditProfile: () => void;
   onChangePassword: () => void;
 };
 
-export default function ProfileActions({ isProfileUpdating, isDirty, onEditProfile, onChangePassword }: ProfileActionsProps) {
+export default function ProfileActions({ isProfileUpdating, isDirty, isValid, onEditProfile, onChangePassword }: ProfileActionsProps) {
   const { t } = useTranslation();
 
   return (
@@ -22,7 +23,7 @@ export default function ProfileActions({ isProfileUpdating, isDirty, onEditProfi
           size="md"
           className="w-full"
           onClick={onEditProfile}
-          disabled={isProfileUpdating || !isDirty}
+          disabled={isProfileUpdating || !isDirty || !isValid}
         >
           {t('profile.actions.editProfile')}
         </Button>

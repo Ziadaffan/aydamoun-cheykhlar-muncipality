@@ -21,7 +21,7 @@ export default function LogInPage() {
   const {
     control,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isValid },
   } = useForm<LoginFormData>({
     resolver: yupResolver(loginSchema),
     defaultValues: {
@@ -102,7 +102,7 @@ export default function LogInPage() {
           </a>
         </div>
 
-        <Button type="submit" variant="primary" size="lg" loading={isLoading} disabled={isLoading} className="w-full">
+        <Button type="submit" variant="primary" size="lg" loading={isLoading} disabled={isLoading || !isValid} className="w-full">
           {t('auth.login.submit')}
         </Button>
 

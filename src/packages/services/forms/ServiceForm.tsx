@@ -23,7 +23,7 @@ export default function ServiceForm({ category, serviceId }: ServiceFormProps) {
   const {
     handleSubmit,
     control,
-    formState: { errors, isDirty },
+    formState: { errors, isDirty, isValid },
   } = form;
   const additionalFields = getAdditionalFields(category, serviceId);
 
@@ -37,7 +37,7 @@ export default function ServiceForm({ category, serviceId }: ServiceFormProps) {
 
       <RequestDetailsSection control={control} errors={errors} />
 
-      <FormSubmitButton isSubmitting={isSubmitting} isDirty={isDirty} />
+      <FormSubmitButton isSubmitting={isSubmitting} isDirty={isDirty} isValid={isValid} />
     </form>
   );
 }
