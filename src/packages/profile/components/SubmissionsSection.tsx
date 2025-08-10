@@ -6,6 +6,7 @@ import { ServiceSubmission } from '@prisma/client';
 import Spinner from '@/packages/common/components/Spinner';
 import ErrorMessage from '@/packages/common/components/ErrorMessage';
 import SubmissionCard from './SubmissionCard';
+import Button from '@/packages/common/components/Button';
 
 type SubmissionsSectionProps = {
   submissions: ServiceSubmission[];
@@ -40,13 +41,10 @@ export default function SubmissionsSection({
 
         {!isLoading && !error && submissions && submissions.length === 0 && (
           <div className="py-8 text-center">
-            <p className="text-gray-600">{t('profile.submissions.noSubmissions')}</p>
-            <button
-              onClick={() => router.push('/services')}
-              className="mt-2 rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700"
-            >
+            <p className="text-gray-600 mb-3">{t('profile.submissions.noSubmissions')}</p>
+            <Button onClick={() => router.push('/services')} variant="primary">
               {t('profile.submissions.newRequest')}
-            </button>
+            </Button>
           </div>
         )}
 

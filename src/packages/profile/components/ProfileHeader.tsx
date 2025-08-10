@@ -24,7 +24,7 @@ export default function ProfileHeader({ user }: ProfileHeaderProps) {
           <div className="space-y-1">
             <p className="font-medium text-gray-700">{user?.email}</p>
             <p className="text-sm text-gray-500">
-              {t('profile.header.memberSince')} {new Date().toLocaleDateString('ar-SA')}
+              {t('profile.header.memberSince')} {user?.createdAt ? new Date(user.createdAt).toLocaleDateString('ar-SA') : ''}
             </p>
           </div>
         </div>
