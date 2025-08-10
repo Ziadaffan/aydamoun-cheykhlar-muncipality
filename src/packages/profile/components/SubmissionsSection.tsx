@@ -41,7 +41,7 @@ export default function SubmissionsSection({
 
         {!isLoading && !error && submissions && submissions.length === 0 && (
           <div className="py-8 text-center">
-            <p className="text-gray-600 mb-3">{t('profile.submissions.noSubmissions')}</p>
+            <p className="mb-3 text-gray-600">{t('profile.submissions.noSubmissions')}</p>
             <Button onClick={() => router.push('/services')} variant="primary">
               {t('profile.submissions.newRequest')}
             </Button>

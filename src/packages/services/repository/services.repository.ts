@@ -1,8 +1,8 @@
 import { PrismaRepository } from '@/packages/common/repository/prisma.repository';
-import { PrismaClient } from '@/packages/lib/db';
+import prisma from '@/packages/lib/db';
 
 export class ServicesRepository extends PrismaRepository<'service'> {
-  constructor(prismaClient?: PrismaClient) {
+  constructor(prismaClient?: typeof prisma) {
     super('service', prismaClient);
   }
 }
