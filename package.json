@@ -16,6 +16,8 @@
     "prisma:generate": "prisma generate",
     "prisma:studio": "prisma studio",
     "prisma:reset": "dotenv -e .env.local -- prisma migrate reset --force",
+    "export:data": "tsx scripts/export-data.ts",
+    "seed:db": "tsx prisma/seed.ts",
     "postinstall": "prisma generate"
   },
   "dependencies": {
@@ -26,6 +28,7 @@
     "@supabase/supabase-js": "^2.50.2",
     "@tanstack/react-query": "^5.81.5",
     "bcryptjs": "^3.0.2",
+    "date-fns": "^4.1.0",
     "dotenv": "^17.0.0",
     "i18next": "^25.2.1",
     "i18next-browser-languagedetector": "^8.2.0",
@@ -57,6 +60,7 @@
     "prettier": "^3.6.2",
     "prettier-plugin-tailwindcss": "^0.6.13",
     "tailwindcss": "^4",
+    "tsx": "^4.20.3",
     "typescript": "^5"
   }
 }

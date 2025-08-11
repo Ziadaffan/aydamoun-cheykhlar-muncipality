@@ -1,0 +1,152 @@
+[
+  {
+    "id": "cd80cbf1-99c0-40bf-9afd-ad44b43ec002",
+    "name": "السيد كمال نور الدين مقصود",
+    "position": "PRESIDENT",
+    "phone": null,
+    "email": null,
+    "image": "https://zcnjfbvosdgoptbujpzq.supabase.co/storage/v1/object/public/images//02e9a79d-f451-4990-8467-048315d9c26c.jpg",
+    "createdAt": "2025-08-10T01:49:02.178Z",
+    "updatedAt": "2025-08-10T01:48:33.555Z"
+  },
+  {
+    "id": "e493ad43-c726-40d9-b82c-b9ef6a79f290",
+    "name": "السيد ماريو حنا عبود",
+    "position": "VICE_PRESIDENT",
+    "phone": null,
+    "email": null,
+    "image": "https://zcnjfbvosdgoptbujpzq.supabase.co/storage/v1/object/public/images//09067335-59fc-4481-ad8f-1dcec0b1cbba.jpg",
+    "createdAt": "2025-08-10T01:49:31.923Z",
+    "updatedAt": "2025-08-10T01:49:08.021Z"
+  },
+  {
+    "id": "31911c6b-43a4-4abf-9e6c-74949be679a8",
+    "name": "السيد حسن أحمد الحاج",
+    "position": "COUNCIL_MEMBER",
+    "phone": null,
+    "email": null,
+    "image": "https://zcnjfbvosdgoptbujpzq.supabase.co/storage/v1/object/public/images//51eeab8d-a83d-4562-97e9-ea181f855550.jpg",
+    "createdAt": "2025-08-10T01:51:57.519Z",
+    "updatedAt": "2025-08-10T01:57:00.255Z"
+  },
+  {
+    "id": "40d77a11-b5f6-4f1c-a27d-a23ec325824c",
+    "name": "السيد طلال محمد محمد عبدو",
+    "position": "COUNCIL_MEMBER",
+    "phone": null,
+    "email": null,
+    "image": "https://zcnjfbvosdgoptbujpzq.supabase.co/storage/v1/object/public/images//4cf2a662-ac0c-49d0-8686-1a8909ed6fdc.jpg",
+    "createdAt": "2025-08-10T01:51:33.492Z",
+    "updatedAt": "2025-08-10T01:57:00.255Z"
+  },
+  {
+    "id": "52f18bf1-1ecb-4c8d-9084-8b8140b6e835",
+    "name": "السيد غازي ديب الخوري",
+    "position": "COUNCIL_MEMBER",
+    "phone": null,
+    "email": null,
+    "image": "https://zcnjfbvosdgoptbujpzq.supabase.co/storage/v1/object/public/images//ffcf3626-57d0-4e63-a4a3-2f4c93a56535.jpg",
+    "createdAt": "2025-08-10T01:56:25.721Z",
+    "updatedAt": "2025-08-10T01:57:00.255Z"
+  },
+  {
+    "id": "554dbc68-55fa-4e87-9044-d70640cdb0e3",
+    "name": "السيد سامو فيصل عباس",
+    "position": "COUNCIL_MEMBER",
+    "phone": null,
+    "email": null,
+    "image": "https://zcnjfbvosdgoptbujpzq.supabase.co/storage/v1/object/public/images//925eaf54-5d77-4a65-94a0-14e8dbd2b609.jpg",
+    "createdAt": "2025-08-10T01:52:21.648Z",
+    "updatedAt": "2025-08-10T01:57:00.255Z"
+  },
+  {
+    "id": "58c91578-ea8a-41ab-b9a9-1a1a07309cab",
+    "name": "السيد ياسر علي المقصود",
+    "position": "COUNCIL_MEMBER",
+    "phone": null,
+    "email": null,
+    "image": "https://zcnjfbvosdgoptbujpzq.supabase.co/storage/v1/object/public/images//456d442d-3271-4df3-ac48-93493ad30bb4.jpg",
+    "createdAt": "2025-08-10T01:51:11.241Z",
+    "updatedAt": "2025-08-10T01:57:00.255Z"
+  },
+  {
+    "id": "5a09b849-102b-4e64-a545-29d764d4a4d3",
+    "name": "السيد مروان مصطفى سعيد",
+    "position": "COUNCIL_MEMBER",
+    "phone": null,
+    "email": null,
+    "image": "https://zcnjfbvosdgoptbujpzq.supabase.co/storage/v1/object/public/images//d7b345fd-44ca-4356-a5c2-4653ad6cd894.jpg",
+    "createdAt": "2025-08-10T01:55:33.419Z",
+    "updatedAt": "2025-08-10T01:57:00.255Z"
+  },
+  {
+    "id": "5d7cc9bf-fef8-46e3-8b3c-9542a17987e3",
+    "name": "السيدة نبال محمود حامد",
+    "position": "COUNCIL_MEMBER",
+    "phone": null,
+    "email": null,
+    "image": "https://zcnjfbvosdgoptbujpzq.supabase.co/storage/v1/object/public/images//b11cbec9-f153-4e84-aa11-accc0ca1eba9.jpg",
+    "createdAt": "2025-08-10T01:53:11.515Z",
+    "updatedAt": "2025-08-10T01:57:00.255Z"
+  },
+  {
+    "id": "84ad50a0-83c6-4044-b77c-17514c1a3911",
+    "name": "السيد عصام محمد الزرزوري",
+    "position": "COUNCIL_MEMBER",
+    "phone": null,
+    "email": null,
+    "image": "https://zcnjfbvosdgoptbujpzq.supabase.co/storage/v1/object/public/images//c66f9d3f-fa8b-4d1a-a424-1ebbff26d181.jpg",
+    "createdAt": "2025-08-10T01:55:12.908Z",
+    "updatedAt": "2025-08-10T01:57:00.255Z"
+  },
+  {
+    "id": "dc8e786f-0555-47ba-a954-4653041d5e20",
+    "name": "السيد شادي أحمد ضاهر",
+    "position": "COUNCIL_MEMBER",
+    "phone": null,
+    "email": null,
+    "image": "https://zcnjfbvosdgoptbujpzq.supabase.co/storage/v1/object/public/images//0cb7e9ad-fa7e-430d-b294-98235690617d.jpg",
+    "createdAt": "2025-08-10T01:50:03.763Z",
+    "updatedAt": "2025-08-10T01:57:00.255Z"
+  },
+  {
+    "id": "ef0617bf-746a-4c3b-adae-e0930ceb6e7f",
+    "name": "السيد محمد ياسر ضاهر",
+    "position": "COUNCIL_MEMBER",
+    "phone": null,
+    "email": null,
+    "image": "https://zcnjfbvosdgoptbujpzq.supabase.co/storage/v1/object/public/images//b22f1ee5-d12d-4d5a-8573-96a495bc68ff.jpg",
+    "createdAt": "2025-08-10T01:54:40.950Z",
+    "updatedAt": "2025-08-10T01:57:00.255Z"
+  },
+  {
+    "id": "f7074d0d-931c-4e7d-bd9a-f19423dc70dc",
+    "name": "السيدة يسرا أحمد الخضر الزرزوري",
+    "position": "COUNCIL_MEMBER",
+    "phone": null,
+    "email": null,
+    "image": "https://zcnjfbvosdgoptbujpzq.supabase.co/storage/v1/object/public/images//ec312010-b7f7-4c0a-a220-37c9331151aa.jpg",
+    "createdAt": "2025-08-10T01:55:57.301Z",
+    "updatedAt": "2025-08-10T01:57:00.255Z"
+  },
+  {
+    "id": "f9cd0de8-84dc-4f61-9aef-be146b1086bc",
+    "name": "السيد خالد أحمد علي",
+    "position": "COUNCIL_MEMBER",
+    "phone": null,
+    "email": null,
+    "image": "https://zcnjfbvosdgoptbujpzq.supabase.co/storage/v1/object/public/images//2b4991fd-96d3-46c3-a532-c3ba03630109.jpg",
+    "createdAt": "2025-08-10T01:50:38.360Z",
+    "updatedAt": "2025-08-10T01:57:00.255Z"
+  },
+  {
+    "id": "fc80200d-55ce-4f87-8354-409ae23e4844",
+    "name": "السيد بلال حكمت الحاج",
+    "position": "VICE_PRESIDENT",
+    "phone": null,
+    "email": null,
+    "image": "https://zcnjfbvosdgoptbujpzq.supabase.co/storage/v1/object/public/images//9e42c8ab-d1cd-4c5c-b8aa-698ba595c7ce.jpg",
+    "createdAt": "2025-08-10T01:52:47.852Z",
+    "updatedAt": "2025-08-10T01:57:00.255Z"
+  }
+]

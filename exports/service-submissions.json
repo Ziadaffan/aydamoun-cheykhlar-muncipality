@@ -1,0 +1,21 @@
+[
+  {
+    "id": "91ea1273-70f2-439d-900a-3845fd28943a",
+    "fullName": "ziad affan",
+    "phone": "4185736096",
+    "email": "ziad@gmail.com",
+    "address": "123 Main St, Anytown, USA",
+    "description": "I need a building license",
+    "additionalInfo": {
+      "propertyType": "سكني",
+      "propertyAddress": "Aydamun",
+      "constructionArea": 120,
+      "existingBuilding": "نعم"
+    },
+    "status": "PENDING",
+    "userId": "cme51h8ek0000ywk0im3x932f",
+    "serviceId": "e481c400-a299-4925-a85f-49153440ff85",
+    "createdAt": "2025-08-10T02:30:03.816Z",
+    "updatedAt": "2025-08-10T02:30:03.816Z"
+  }
+]
