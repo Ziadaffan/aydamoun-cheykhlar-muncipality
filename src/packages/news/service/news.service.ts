@@ -9,7 +9,7 @@ export class NewsService extends BasePrismaService<'news'> {
     super(repository);
   }
 
-  public static getInstance(): NewsService {
+  public static instance(): NewsService {
     if (!NewsService.singlenton) {
       NewsService.singlenton = new NewsService();
     }
@@ -21,23 +21,39 @@ export class NewsService extends BasePrismaService<'news'> {
       where: {
         featured: true,
       },
+      include: {
+        tags: true,
+      },
     });
   }
 
-  public async getNewsByCategory(category: NewsCategory) {
+  public async getNewsByCategory(category: NewsCategory | 'ALL') {
+    if (category === 'ALL') {
+      return await this.repository.findMany({
+        include: {
+          tags: true,
+        },
+      });
+    }
+
     return await this.repository.findMany({
       where: {
         category: category,
+      },
+      include: {
+        tags: true,
       },
     });
   }
 
   public async getNewsCategories() {
-    return await this.repository.findMany({
+    const results = await this.repository.findMany({
       select: {
         category: true,
       },
       distinct: ['category'],
     });
+
+    return results.map(result => result.category);
   }
 }

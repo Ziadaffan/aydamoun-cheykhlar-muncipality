@@ -1,7 +1,8 @@
 'use client';
 
 import React from 'react';
-import { NewsCardProps } from '../types/news.types';
+import Image from 'next/image';
+import { NewsCardProps, News } from '../types/news.types';
 import { formatDistanceToNow } from 'date-fns';
 import { ar } from 'date-fns/locale';
 
@@ -43,10 +44,11 @@ export default function NewsCard({ news, variant = 'default', className = '' }: 
     <div className="group relative overflow-hidden rounded-xl bg-white shadow-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
       {/* Image */}
       <div className="relative h-48 overflow-hidden">
-        <img
-          src={news.imageUrl || '/assets/images/bg.jpg'}
+        <Image
+          src={news.imageUrl?.[0] || '/assets/images/bg.jpg'}
           alt={news.title}
-          className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+          fill
+          className="object-cover transition-transform duration-300 group-hover:scale-105"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
 
@@ -90,7 +92,7 @@ export default function NewsCard({ news, variant = 'default', className = '' }: 
           <div className="mb-4 flex flex-wrap gap-2">
             {news.tags.slice(0, 3).map((tag, index) => (
               <span key={index} className="inline-flex items-center rounded-md bg-gray-100 px-2 py-1 text-xs font-medium text-gray-700">
-                #{tag}
+                #{tag.name}
               </span>
             ))}
           </div>
@@ -116,10 +118,11 @@ export default function NewsCard({ news, variant = 'default', className = '' }: 
       <div className="grid grid-cols-1 gap-0 lg:grid-cols-2">
         {/* Image Section */}
         <div className="relative h-64 overflow-hidden lg:h-full">
-          <img
-            src={news.imageUrl || '/assets/images/bg.jpg'}
+          <Image
+            src={news.imageUrl?.[0] || '/assets/images/bg.jpg'}
             alt={news.title}
-            className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+            fill
+            className="object-cover transition-transform duration-300 group-hover:scale-105"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
 
@@ -156,7 +159,7 @@ export default function NewsCard({ news, variant = 'default', className = '' }: 
                   key={index}
                   className="inline-flex items-center rounded-md bg-gray-100 px-3 py-1 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-200"
                 >
-                  #{tag}
+                  #{tag.name}
                 </span>
               ))}
             </div>
@@ -182,7 +185,7 @@ export default function NewsCard({ news, variant = 'default', className = '' }: 
     <div className="group flex items-center space-x-4 rounded-lg bg-white p-4 shadow-md transition-all duration-200 hover:-translate-y-1 hover:shadow-lg">
       {/* Image */}
       <div className="relative h-20 w-20 flex-shrink-0 overflow-hidden rounded-lg">
-        <img src={news.imageUrl || '/assets/images/bg.jpg'} alt={news.title} className="h-full w-full object-cover" />
+        <Image src={news.imageUrl?.[0] || '/assets/images/bg.jpg'} alt={news.title} fill className="object-cover" />
       </div>
 
       {/* Content */}

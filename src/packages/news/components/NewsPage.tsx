@@ -1,25 +1,37 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { NewsHero, NewsFilters, NewsGrid } from './index';
-import { mockNews, getFeaturedNews, getNewsByCategory, getNewsCategories } from '../data/mockNews';
-import { NewsCategory } from '../types/news.types';
+import { News, NewsCategory } from '../types/news.types';
 import Button from '@/packages/common/components/Button';
 import { useGetFeaturedNews } from '../hooks/useGetFeaturedNews';
 import { useGetNewsCategories } from '../hooks/useGetNewsCategories';
 import { useGetNewsByCategory } from '../hooks/useGerNewsByCategory';
+import Spinner from '@/packages/common/components/Spinner';
 
 export default function NewsPage() {
   const [selectedCategory, setSelectedCategory] = useState<NewsCategory | 'ALL'>('ALL');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
 
+  const [featuredNews, setFeaturedNews] = useState<News | null>(null);
+  const [categories, setCategories] = useState<NewsCategory[]>([]);
+  const [filteredNews, setFilteredNews] = useState<News[]>([]);
+
   const { data: featuredNewsData } = useGetFeaturedNews();
   const { data: categoriesData } = useGetNewsCategories();
   const { data: filteredNewsData } = useGetNewsByCategory(selectedCategory);
 
-  const featuredNews = getFeaturedNews();
-  const categories = getNewsCategories();
-  const filteredNews = getNewsByCategory(selectedCategory);
+  useEffect(() => {
+    if (featuredNewsData) {
+      setFeaturedNews(featuredNewsData);
+    }
+    if (categoriesData) {
+      setCategories(categoriesData);
+    }
+    if (filteredNewsData) {
+      setFilteredNews(filteredNewsData);
+    }
+  }, [featuredNewsData, categoriesData, filteredNewsData]);
 
   const handleCategoryChange = (category: NewsCategory | 'ALL') => {
     setSelectedCategory(category);
@@ -28,6 +40,10 @@ export default function NewsPage() {
   const handleViewModeChange = (mode: 'grid' | 'list') => {
     setViewMode(mode);
   };
+
+  if (!featuredNews || !categories || !filteredNews) {
+    return <Spinner className="min-h-screen" />;
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">

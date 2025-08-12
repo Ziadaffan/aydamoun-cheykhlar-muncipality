@@ -1,15 +1,22 @@
+export interface NewsTag {
+  id: string;
+  name: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
 export interface News {
   id: string;
   title: string;
   content: string;
   excerpt: string;
-  imageUrl?: string;
+  imageUrl: string[];
   category: NewsCategory;
   author: string;
   publishedAt: Date;
   updatedAt: Date;
   isPublished: boolean;
-  tags: string[];
+  tags: NewsTag[];
   readTime: number; // in minutes
 }
 
