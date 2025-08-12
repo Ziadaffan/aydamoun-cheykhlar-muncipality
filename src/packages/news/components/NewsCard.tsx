@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { NewsCardProps, News } from '../types/news.types';
 import { formatDistanceToNow } from 'date-fns';
 import { ar } from 'date-fns/locale';
+import { CldImage } from 'next-cloudinary';
 
 const categoryColors = {
   MUNICIPAL_NEWS: 'bg-blue-100 text-blue-800 border-blue-200',
@@ -44,8 +45,8 @@ export default function NewsCard({ news, variant = 'default', className = '' }: 
     <div className="group relative overflow-hidden rounded-xl bg-white shadow-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
       {/* Image */}
       <div className="relative h-48 overflow-hidden">
-        <Image
-          src={news.imageUrl?.[0] || '/assets/images/bg.jpg'}
+        <CldImage
+          src={news.imageUrl?.[0] || 'bg-2_n5hq3e'}
           alt={news.title}
           fill
           className="object-cover transition-transform duration-300 group-hover:scale-105"
@@ -85,7 +86,7 @@ export default function NewsCard({ news, variant = 'default', className = '' }: 
 
         <h3 className="mb-3 line-clamp-2 text-xl font-bold text-gray-900 transition-colors group-hover:text-blue-600">{news.title}</h3>
 
-        <p className="mb-4 line-clamp-3 leading-relaxed text-gray-600">{news.excerpt}</p>
+        <p className="mb-4 line-clamp-3 leading-relaxed text-gray-600">{news.content}</p>
 
         {/* Tags */}
         {news.tags.length > 0 && (
@@ -118,8 +119,8 @@ export default function NewsCard({ news, variant = 'default', className = '' }: 
       <div className="grid grid-cols-1 gap-0 lg:grid-cols-2">
         {/* Image Section */}
         <div className="relative h-64 overflow-hidden lg:h-full">
-          <Image
-            src={news.imageUrl?.[0] || '/assets/images/bg.jpg'}
+          <CldImage
+            src={news.imageUrl?.[0] || 'photo1_floiyq'}
             alt={news.title}
             fill
             className="object-cover transition-transform duration-300 group-hover:scale-105"
@@ -149,7 +150,7 @@ export default function NewsCard({ news, variant = 'default', className = '' }: 
             {news.title}
           </h3>
 
-          <p className="mb-6 line-clamp-4 text-lg leading-relaxed text-gray-600">{news.excerpt}</p>
+          <p className="mb-6 line-clamp-4 text-lg leading-relaxed text-gray-600">{news.content}</p>
 
           {/* Tags */}
           {news.tags.length > 0 && (
@@ -185,7 +186,7 @@ export default function NewsCard({ news, variant = 'default', className = '' }: 
     <div className="group flex items-center space-x-4 rounded-lg bg-white p-4 shadow-md transition-all duration-200 hover:-translate-y-1 hover:shadow-lg">
       {/* Image */}
       <div className="relative h-20 w-20 flex-shrink-0 overflow-hidden rounded-lg">
-        <Image src={news.imageUrl?.[0] || '/assets/images/bg.jpg'} alt={news.title} fill className="object-cover" />
+        <CldImage src={news.imageUrl?.[0] || 'photo1_floiyq'} alt={news.title} fill className="object-cover" />
       </div>
 
       {/* Content */}
@@ -200,7 +201,7 @@ export default function NewsCard({ news, variant = 'default', className = '' }: 
 
         <h3 className="line-clamp-2 text-sm font-semibold text-gray-900 transition-colors group-hover:text-blue-600">{news.title}</h3>
 
-        <p className="mt-1 line-clamp-1 text-xs text-gray-600">{news.excerpt}</p>
+        <p className="mt-1 line-clamp-1 text-xs text-gray-600">{news.content}</p>
       </div>
 
       {/* Arrow */}
