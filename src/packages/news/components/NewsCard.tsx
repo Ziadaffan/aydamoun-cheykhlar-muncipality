@@ -30,9 +30,9 @@ const categoryLabels = {
 export default function NewsCard({ news, variant = 'default', className = '' }: NewsCardProps) {
   const formatDate = (date: Date) => {
     try {
-      return formatDistanceToNow(new Date(date), { 
-        addSuffix: true, 
-        locale: ar 
+      return formatDistanceToNow(new Date(date), {
+        addSuffix: true,
+        locale: ar,
       });
     } catch {
       return 'منذ فترة';
@@ -40,7 +40,7 @@ export default function NewsCard({ news, variant = 'default', className = '' }: 
   };
 
   const renderDefaultCard = () => (
-    <div className="group relative overflow-hidden rounded-xl bg-white shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+    <div className="group relative overflow-hidden rounded-xl bg-white shadow-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
       {/* Image */}
       <div className="relative h-48 overflow-hidden">
         <img
@@ -49,18 +49,22 @@ export default function NewsCard({ news, variant = 'default', className = '' }: 
           className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-        
+
         {/* Category Badge */}
         <div className="absolute top-4 right-4">
-          <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium border ${categoryColors[news.category]}`}>
+          <span className={`inline-flex items-center rounded-full border px-3 py-1 text-xs font-medium ${categoryColors[news.category]}`}>
             {categoryLabels[news.category]}
           </span>
         </div>
 
         {/* Read Time */}
-        <div className="absolute bottom-4 left-4 flex items-center text-white text-sm">
-          <svg className="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
-            <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clipRule="evenodd" />
+        <div className="absolute bottom-4 left-4 flex items-center text-sm text-white">
+          <svg className="mr-1 h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
+            <path
+              fillRule="evenodd"
+              d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"
+              clipRule="evenodd"
+            />
           </svg>
           {news.readTime} دقيقة
         </div>
@@ -69,7 +73,7 @@ export default function NewsCard({ news, variant = 'default', className = '' }: 
       {/* Content */}
       <div className="p-6">
         <div className="mb-3 flex items-center text-sm text-gray-500">
-          <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+          <svg className="mr-2 h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
             <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
           </svg>
           {news.author}
@@ -77,22 +81,15 @@ export default function NewsCard({ news, variant = 'default', className = '' }: 
           {formatDate(news.publishedAt)}
         </div>
 
-        <h3 className="mb-3 text-xl font-bold text-gray-900 line-clamp-2 group-hover:text-blue-600 transition-colors">
-          {news.title}
-        </h3>
+        <h3 className="mb-3 line-clamp-2 text-xl font-bold text-gray-900 transition-colors group-hover:text-blue-600">{news.title}</h3>
 
-        <p className="mb-4 text-gray-600 line-clamp-3 leading-relaxed">
-          {news.excerpt}
-        </p>
+        <p className="mb-4 line-clamp-3 leading-relaxed text-gray-600">{news.excerpt}</p>
 
         {/* Tags */}
         {news.tags.length > 0 && (
           <div className="mb-4 flex flex-wrap gap-2">
             {news.tags.slice(0, 3).map((tag, index) => (
-              <span
-                key={index}
-                className="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-gray-100 text-gray-700"
-              >
+              <span key={index} className="inline-flex items-center rounded-md bg-gray-100 px-2 py-1 text-xs font-medium text-gray-700">
                 #{tag}
               </span>
             ))}
@@ -100,10 +97,14 @@ export default function NewsCard({ news, variant = 'default', className = '' }: 
         )}
 
         {/* Read More Button */}
-        <button className="inline-flex items-center text-blue-600 hover:text-blue-700 font-medium transition-colors">
+        <button className="inline-flex items-center font-medium text-blue-600 transition-colors hover:text-blue-700">
           اقرأ المزيد
-          <svg className="w-4 h-4 mr-1 rtl:rotate-180" fill="currentColor" viewBox="0 0 20 20">
-            <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" />
+          <svg className="mr-1 h-4 w-4 rtl:rotate-180" fill="currentColor" viewBox="0 0 20 20">
+            <path
+              fillRule="evenodd"
+              d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+              clipRule="evenodd"
+            />
           </svg>
         </button>
       </div>
@@ -111,29 +112,29 @@ export default function NewsCard({ news, variant = 'default', className = '' }: 
   );
 
   const renderFeaturedCard = () => (
-    <div className="group relative overflow-hidden rounded-2xl bg-white shadow-xl transition-all duration-300 hover:shadow-2xl hover:-translate-y-2">
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-0">
+    <div className="group relative overflow-hidden rounded-2xl bg-white shadow-xl transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl">
+      <div className="grid grid-cols-1 gap-0 lg:grid-cols-2">
         {/* Image Section */}
-        <div className="relative h-64 lg:h-full overflow-hidden">
+        <div className="relative h-64 overflow-hidden lg:h-full">
           <img
             src={news.imageUrl || '/assets/images/bg.jpg'}
             alt={news.title}
             className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
-          
+
           {/* Category Badge */}
           <div className="absolute top-6 right-6">
-            <span className={`inline-flex items-center px-4 py-2 rounded-full text-sm font-medium border ${categoryColors[news.category]}`}>
+            <span className={`inline-flex items-center rounded-full border px-4 py-2 text-sm font-medium ${categoryColors[news.category]}`}>
               {categoryLabels[news.category]}
             </span>
           </div>
         </div>
 
         {/* Content Section */}
-        <div className="p-8 flex flex-col justify-center">
+        <div className="flex flex-col justify-center p-8">
           <div className="mb-4 flex items-center text-sm text-gray-500">
-            <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+            <svg className="mr-2 h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
               <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
             </svg>
             {news.author}
@@ -141,13 +142,11 @@ export default function NewsCard({ news, variant = 'default', className = '' }: 
             {formatDate(news.publishedAt)}
           </div>
 
-          <h3 className="mb-4 text-2xl font-bold text-gray-900 line-clamp-3 group-hover:text-blue-600 transition-colors leading-tight">
+          <h3 className="mb-4 line-clamp-3 text-2xl leading-tight font-bold text-gray-900 transition-colors group-hover:text-blue-600">
             {news.title}
           </h3>
 
-          <p className="mb-6 text-gray-600 line-clamp-4 leading-relaxed text-lg">
-            {news.excerpt}
-          </p>
+          <p className="mb-6 line-clamp-4 text-lg leading-relaxed text-gray-600">{news.excerpt}</p>
 
           {/* Tags */}
           {news.tags.length > 0 && (
@@ -155,7 +154,7 @@ export default function NewsCard({ news, variant = 'default', className = '' }: 
               {news.tags.slice(0, 4).map((tag, index) => (
                 <span
                   key={index}
-                  className="inline-flex items-center px-3 py-1 rounded-md text-sm font-medium bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors"
+                  className="inline-flex items-center rounded-md bg-gray-100 px-3 py-1 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-200"
                 >
                   #{tag}
                 </span>
@@ -164,10 +163,14 @@ export default function NewsCard({ news, variant = 'default', className = '' }: 
           )}
 
           {/* Read More Button */}
-          <button className="inline-flex items-center px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium">
+          <button className="inline-flex items-center rounded-lg bg-blue-600 px-6 py-3 font-medium text-white transition-colors hover:bg-blue-700">
             اقرأ المزيد
-            <svg className="w-5 h-5 mr-2 rtl:rotate-180" fill="currentColor" viewBox="0 0 20 20">
-              <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" />
+            <svg className="mr-2 h-5 w-5 rtl:rotate-180" fill="currentColor" viewBox="0 0 20 20">
+              <path
+                fillRule="evenodd"
+                d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                clipRule="evenodd"
+              />
             </svg>
           </button>
         </div>
@@ -176,39 +179,35 @@ export default function NewsCard({ news, variant = 'default', className = '' }: 
   );
 
   const renderCompactCard = () => (
-    <div className="group flex items-center space-x-4 p-4 rounded-lg bg-white shadow-md hover:shadow-lg transition-all duration-200 hover:-translate-y-1">
+    <div className="group flex items-center space-x-4 rounded-lg bg-white p-4 shadow-md transition-all duration-200 hover:-translate-y-1 hover:shadow-lg">
       {/* Image */}
-      <div className="relative flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden">
-        <img
-          src={news.imageUrl || '/assets/images/bg.jpg'}
-          alt={news.title}
-          className="w-full h-full object-cover"
-        />
+      <div className="relative h-20 w-20 flex-shrink-0 overflow-hidden rounded-lg">
+        <img src={news.imageUrl || '/assets/images/bg.jpg'} alt={news.title} className="h-full w-full object-cover" />
       </div>
 
       {/* Content */}
-      <div className="flex-1 min-w-0">
-        <div className="flex items-center text-xs text-gray-500 mb-1">
-          <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${categoryColors[news.category]}`}>
+      <div className="min-w-0 flex-1">
+        <div className="mb-1 flex items-center text-xs text-gray-500">
+          <span className={`inline-flex items-center rounded-full px-2 py-1 text-xs font-medium ${categoryColors[news.category]}`}>
             {categoryLabels[news.category]}
           </span>
           <span className="mx-2">•</span>
           {formatDate(news.publishedAt)}
         </div>
-        
-        <h3 className="text-sm font-semibold text-gray-900 line-clamp-2 group-hover:text-blue-600 transition-colors">
-          {news.title}
-        </h3>
-        
-        <p className="text-xs text-gray-600 line-clamp-1 mt-1">
-          {news.excerpt}
-        </p>
+
+        <h3 className="line-clamp-2 text-sm font-semibold text-gray-900 transition-colors group-hover:text-blue-600">{news.title}</h3>
+
+        <p className="mt-1 line-clamp-1 text-xs text-gray-600">{news.excerpt}</p>
       </div>
 
       {/* Arrow */}
-      <div className="flex-shrink-0 text-gray-400 group-hover:text-blue-600 transition-colors">
-        <svg className="w-5 h-5 rtl:rotate-180" fill="currentColor" viewBox="0 0 20 20">
-          <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" />
+      <div className="flex-shrink-0 text-gray-400 transition-colors group-hover:text-blue-600">
+        <svg className="h-5 w-5 rtl:rotate-180" fill="currentColor" viewBox="0 0 20 20">
+          <path
+            fillRule="evenodd"
+            d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+            clipRule="evenodd"
+          />
         </svg>
       </div>
     </div>

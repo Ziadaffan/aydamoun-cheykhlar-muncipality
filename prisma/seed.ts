@@ -7,9 +7,9 @@ const prisma = new PrismaClient();
 async function seedFromExports() {
   try {
     console.log('🌱 Starting database seeding from exports...');
-    
+
     const exportsDir = path.join(process.cwd(), 'exports');
-    
+
     // Check if exports directory exists
     if (!fs.existsSync(exportsDir)) {
       console.log('❌ Exports directory not found. Please run export:data first.');
@@ -33,9 +33,9 @@ async function seedFromExports() {
     const usersData = JSON.parse(fs.readFileSync(path.join(exportsDir, 'users.json'), 'utf8'));
     for (const userData of usersData) {
       const { accounts, sessions, submissions, news, ...userFields } = userData;
-      
+
       const user = await prisma.user.create({
-        data: userFields
+        data: userFields,
       });
       console.log(`✅ Created user: ${user.name || user.email}`);
     }
@@ -48,8 +48,8 @@ async function seedFromExports() {
       const tagName = typeof tagData === 'string' ? tagData : tagData.name;
       const tag = await prisma.newsTag.create({
         data: {
-          name: tagName
-        }
+          name: tagName,
+        },
       });
       console.log(`✅ Created tag: ${tag.name}`);
     }
@@ -59,9 +59,9 @@ async function seedFromExports() {
     const servicesData = JSON.parse(fs.readFileSync(path.join(exportsDir, 'services.json'), 'utf8'));
     for (const serviceData of servicesData) {
       const { submissions, ...serviceFields } = serviceData;
-      
+
       const service = await prisma.service.create({
-        data: serviceFields
+        data: serviceFields,
       });
       console.log(`✅ Created service: ${service.name}`);
     }
@@ -71,7 +71,7 @@ async function seedFromExports() {
     const councilData = JSON.parse(fs.readFileSync(path.join(exportsDir, 'council.json'), 'utf8'));
     for (const councilMember of councilData) {
       const council = await prisma.council.create({
-        data: councilMember
+        data: councilMember,
       });
       console.log(`✅ Created council member: ${council.name}`);
     }
@@ -81,7 +81,7 @@ async function seedFromExports() {
     const newsData = JSON.parse(fs.readFileSync(path.join(exportsDir, 'news.json'), 'utf8'));
     for (const newsItem of newsData) {
       const { tags, ...newsFields } = newsItem;
-      
+
       // Find the user who created this news
       const user = await prisma.user.findFirst();
       if (!user) {
@@ -93,7 +93,7 @@ async function seedFromExports() {
       const tagConnections = [];
       for (const tagName of tags) {
         const tag = await prisma.newsTag.findFirst({
-          where: { name: tagName }
+          where: { name: tagName },
         });
         if (tag) {
           tagConnections.push({ id: tag.id });
@@ -108,15 +108,15 @@ async function seedFromExports() {
           ...newsFields,
           createdBy: user.id,
           tags: {
-            connect: tagConnections
-          }
-        }
+            connect: tagConnections,
+          },
+        },
       });
       console.log(`✅ Created news: ${news.title}`);
     }
 
     console.log('🎉 Database seeding completed successfully!');
-    
+
     // Show summary
     const userCount = await prisma.user.count();
     const newsCount = await prisma.news.count();
@@ -130,7 +130,6 @@ async function seedFromExports() {
     console.log(`   Tags: ${tagCount}`);
     console.log(`   Services: ${serviceCount}`);
     console.log(`   Council: ${councilCount}`);
-
   } catch (error) {
     console.error('❌ Error during seeding:', error);
   } finally {
@@ -148,22 +147,45 @@ async function seedWithSampleData() {
       data: {
         name: 'مدير النظام',
         email: 'admin@aydamoun.com',
-        role: 'ADMIN'
-      }
+        role: 'ADMIN',
+      },
     });
     console.log(`✅ Created user: ${user.name}`);
 
     // Create sample tags from all the mock news data
     const tags = [
-      'تطوير', 'طرق', 'بنية تحتية', 'مشاريع', 'بيئة', 
-      'خدمات اجتماعية', 'إعلانات', 'أحداث مجتمعية', 'تنظيف',
-      'حملة', 'مساحات خضراء', 'شراكة', 'تنمية', 'تعاون',
-      'توظيف', 'وظائف', 'بلدية', 'ورشة عمل', 'تخطيط عمراني',
-      'تنمية مستدامة', 'خبراء', 'دعم', 'أسر محتاجة', 'مساعدات',
-      'حديقة', 'افتتاح', 'مناطق لعب', 'نفايات', 'إعادة تدوير',
-      'تقنيات حديثة'
+      'تطوير',
+      'طرق',
+      'بنية تحتية',
+      'مشاريع',
+      'بيئة',
+      'خدمات اجتماعية',
+      'إعلانات',
+      'أحداث مجتمعية',
+      'تنظيف',
+      'حملة',
+      'مساحات خضراء',
+      'شراكة',
+      'تنمية',
+      'تعاون',
+      'توظيف',
+      'وظائف',
+      'بلدية',
+      'ورشة عمل',
+      'تخطيط عمراني',
+      'تنمية مستدامة',
+      'خبراء',
+      'دعم',
+      'أسر محتاجة',
+      'مساعدات',
+      'حديقة',
+      'افتتاح',
+      'مناطق لعب',
+      'نفايات',
+      'إعادة تدوير',
+      'تقنيات حديثة',
     ];
-    
+
     const createdTags = [];
     for (const tagName of tags) {
       const tag = await prisma.newsTag.create({ data: { name: tagName } });
@@ -175,7 +197,8 @@ async function seedWithSampleData() {
     const sampleNews = [
       {
         title: 'افتتاح مشروع تطوير الطرق الرئيسية في بلدة عيدمون',
-        content: 'تم اليوم افتتاح مشروع تطوير الطرق الرئيسية في بلدة عيدمون شيخلار، والذي يهدف إلى تحسين البنية التحتية ورفع مستوى الخدمات المقدمة للمواطنين. المشروع يشمل تطوير 5 كيلومترات من الطرق مع إضافة أرصفة وإنارة حديثة.',
+        content:
+          'تم اليوم افتتاح مشروع تطوير الطرق الرئيسية في بلدة عيدمون شيخلار، والذي يهدف إلى تحسين البنية التحتية ورفع مستوى الخدمات المقدمة للمواطنين. المشروع يشمل تطوير 5 كيلومترات من الطرق مع إضافة أرصفة وإنارة حديثة.',
         excerpt: 'افتتاح مشروع تطوير الطرق الرئيسية في بلدة عيدمون شيخلار لتحسين البنية التحتية ورفع مستوى الخدمات',
         imageUrl: '/assets/images/bg.jpg',
         category: NewsCategory.INFRASTRUCTURE,
@@ -184,11 +207,12 @@ async function seedWithSampleData() {
         featured: true,
         readTime: 3,
         views: 0,
-        tagNames: ['تطوير', 'طرق', 'بنية تحتية', 'مشاريع']
+        tagNames: ['تطوير', 'طرق', 'بنية تحتية', 'مشاريع'],
       },
       {
         title: 'إطلاق حملة تنظيف شاملة للبلدة',
-        content: 'أطلقت بلدية عيدمون شيخلار حملة تنظيف شاملة للبلدة تهدف إلى الحفاظ على البيئة وجمالية المنطقة. الحملة تشمل تنظيف الشوارع والحدائق العامة وجمع النفايات وإعادة تأهيل المساحات الخضراء.',
+        content:
+          'أطلقت بلدية عيدمون شيخلار حملة تنظيف شاملة للبلدة تهدف إلى الحفاظ على البيئة وجمالية المنطقة. الحملة تشمل تنظيف الشوارع والحدائق العامة وجمع النفايات وإعادة تأهيل المساحات الخضراء.',
         excerpt: 'إطلاق حملة تنظيف شاملة للبلدة للحفاظ على البيئة وجمالية المنطقة',
         imageUrl: '/assets/images/bg-2.jpg',
         category: NewsCategory.ENVIRONMENTAL,
@@ -197,11 +221,12 @@ async function seedWithSampleData() {
         featured: false,
         readTime: 2,
         views: 0,
-        tagNames: ['تنظيف', 'بيئة', 'حملة', 'مساحات خضراء']
+        tagNames: ['تنظيف', 'بيئة', 'حملة', 'مساحات خضراء'],
       },
       {
         title: 'توقيع اتفاقية شراكة مع جمعية التنمية المحلية',
-        content: 'وقعت بلدية عيدمون شيخلار اتفاقية شراكة مع جمعية التنمية المحلية لتعزيز التعاون في مجال التنمية المجتمعية وتنفيذ مشاريع مشتركة تهدف إلى تحسين مستوى المعيشة للمواطنين.',
+        content:
+          'وقعت بلدية عيدمون شيخلار اتفاقية شراكة مع جمعية التنمية المحلية لتعزيز التعاون في مجال التنمية المجتمعية وتنفيذ مشاريع مشتركة تهدف إلى تحسين مستوى المعيشة للمواطنين.',
         excerpt: 'توقيع اتفاقية شراكة مع جمعية التنمية المحلية لتعزيز التعاون في مجال التنمية المجتمعية',
         imageUrl: '/assets/images/logo.png',
         category: NewsCategory.DEVELOPMENT_PROJECTS,
@@ -210,11 +235,12 @@ async function seedWithSampleData() {
         featured: false,
         readTime: 4,
         views: 0,
-        tagNames: ['شراكة', 'تنمية', 'تعاون', 'مشاريع']
+        tagNames: ['شراكة', 'تنمية', 'تعاون', 'مشاريع'],
       },
       {
         title: 'إعلان عن فتح باب التوظيف في البلدية',
-        content: 'تعلن بلدية عيدمون شيخلار عن فتح باب التوظيف لعدد من الوظائف الشاغرة في مختلف الأقسام. يمكن للمتقدمين التقديم عبر الموقع الإلكتروني أو في مقر البلدية.',
+        content:
+          'تعلن بلدية عيدمون شيخلار عن فتح باب التوظيف لعدد من الوظائف الشاغرة في مختلف الأقسام. يمكن للمتقدمين التقديم عبر الموقع الإلكتروني أو في مقر البلدية.',
         excerpt: 'إعلان عن فتح باب التوظيف في البلدية لعدد من الوظائف الشاغرة في مختلف الأقسام',
         imageUrl: '/assets/images/bg.jpg',
         category: NewsCategory.ANNOUNCEMENTS,
@@ -223,11 +249,12 @@ async function seedWithSampleData() {
         featured: false,
         readTime: 2,
         views: 0,
-        tagNames: ['توظيف', 'وظائف', 'إعلان', 'بلدية']
+        tagNames: ['توظيف', 'وظائف', 'إعلان', 'بلدية'],
       },
       {
         title: 'تنظيم ورشة عمل حول التخطيط العمراني',
-        content: 'نظمت بلدية عيدمون شيخلار ورشة عمل حول التخطيط العمراني المستدام بمشاركة خبراء محليين ودوليين. الورشة تهدف إلى تطوير رؤية مستقبلية للبلدة وتحديد أولويات التطوير.',
+        content:
+          'نظمت بلدية عيدمون شيخلار ورشة عمل حول التخطيط العمراني المستدام بمشاركة خبراء محليين ودوليين. الورشة تهدف إلى تطوير رؤية مستقبلية للبلدة وتحديد أولويات التطوير.',
         excerpt: 'تنظيم ورشة عمل حول التخطيط العمراني المستدام بمشاركة خبراء محليين ودوليين',
         imageUrl: '/assets/images/bg-2.jpg',
         category: NewsCategory.MUNICIPAL_NEWS,
@@ -236,11 +263,12 @@ async function seedWithSampleData() {
         featured: false,
         readTime: 5,
         views: 0,
-        tagNames: ['ورشة عمل', 'تخطيط عمراني', 'تنمية مستدامة', 'خبراء']
+        tagNames: ['ورشة عمل', 'تخطيط عمراني', 'تنمية مستدامة', 'خبراء'],
       },
       {
         title: 'إطلاق برنامج دعم الأسر المحتاجة',
-        content: 'أطلقت بلدية عيدمون شيخلار برنامج دعم الأسر المحتاجة بهدف مساعدتهم في تلبية احتياجاتهم الأساسية. البرنامج يشمل مساعدات مالية وعينية وتوفير فرص عمل.',
+        content:
+          'أطلقت بلدية عيدمون شيخلار برنامج دعم الأسر المحتاجة بهدف مساعدتهم في تلبية احتياجاتهم الأساسية. البرنامج يشمل مساعدات مالية وعينية وتوفير فرص عمل.',
         excerpt: 'إطلاق برنامج دعم الأسر المحتاجة لمساعدتهم في تلبية احتياجاتهم الأساسية',
         imageUrl: '/assets/images/bg.jpg',
         category: NewsCategory.SOCIAL_SERVICES,
@@ -249,11 +277,12 @@ async function seedWithSampleData() {
         featured: false,
         readTime: 3,
         views: 0,
-        tagNames: ['دعم', 'أسر محتاجة', 'مساعدات', 'خدمات اجتماعية']
+        tagNames: ['دعم', 'أسر محتاجة', 'مساعدات', 'خدمات اجتماعية'],
       },
       {
         title: 'افتتاح حديقة عامة جديدة في البلدة',
-        content: 'تم افتتاح حديقة عامة جديدة في بلدة عيدمون شيخلار، والتي تم تصميمها وفق أحدث المعايير العالمية. الحديقة تتضمن مناطق لعب للأطفال ومساحات خضراء وممرات للمشي.',
+        content:
+          'تم افتتاح حديقة عامة جديدة في بلدة عيدمون شيخلار، والتي تم تصميمها وفق أحدث المعايير العالمية. الحديقة تتضمن مناطق لعب للأطفال ومساحات خضراء وممرات للمشي.',
         excerpt: 'افتتاح حديقة عامة جديدة في البلدة مصممة وفق أحدث المعايير العالمية',
         imageUrl: '/assets/images/bg-2.jpg',
         category: NewsCategory.COMMUNITY_EVENTS,
@@ -262,11 +291,12 @@ async function seedWithSampleData() {
         featured: false,
         readTime: 3,
         views: 0,
-        tagNames: ['حديقة', 'افتتاح', 'مناطق لعب', 'مساحات خضراء']
+        tagNames: ['حديقة', 'افتتاح', 'مناطق لعب', 'مساحات خضراء'],
       },
       {
         title: 'تحديث نظام إدارة النفايات في البلدية',
-        content: 'أعلنت بلدية عيدمون شيخلار عن تحديث نظام إدارة النفايات بهدف تحسين كفاءة جمع النفايات وتطبيق مبادئ إعادة التدوير. النظام الجديد يتضمن تقنيات حديثة ومركبات صديقة للبيئة.',
+        content:
+          'أعلنت بلدية عيدمون شيخلار عن تحديث نظام إدارة النفايات بهدف تحسين كفاءة جمع النفايات وتطبيق مبادئ إعادة التدوير. النظام الجديد يتضمن تقنيات حديثة ومركبات صديقة للبيئة.',
         excerpt: 'تحديث نظام إدارة النفايات في البلدية لتحسين كفاءة جمع النفايات وتطبيق مبادئ إعادة التدوير',
         imageUrl: '/assets/images/bg.jpg',
         category: NewsCategory.ENVIRONMENTAL,
@@ -275,26 +305,25 @@ async function seedWithSampleData() {
         featured: false,
         readTime: 4,
         views: 0,
-        tagNames: ['نفايات', 'إعادة تدوير', 'بيئة', 'تقنيات حديثة']
-      }
+        tagNames: ['نفايات', 'إعادة تدوير', 'بيئة', 'تقنيات حديثة'],
+      },
     ];
 
     for (const newsData of sampleNews) {
       const { tagNames, ...newsFields } = newsData;
       const newsTags = createdTags.filter(tag => tagNames.includes(tag.name));
-      
+
       const news = await prisma.news.create({
         data: {
           ...newsFields,
           createdBy: user.id,
-          tags: { connect: newsTags.map(tag => ({ id: tag.id })) }
-        }
+          tags: { connect: newsTags.map(tag => ({ id: tag.id })) },
+        },
       });
       console.log(`✅ Created news: ${news.title}`);
     }
 
     console.log('🎉 Sample data seeding completed!');
-
   } catch (error) {
     console.error('❌ Error during sample seeding:', error);
   } finally {
@@ -305,7 +334,7 @@ async function seedWithSampleData() {
 // Main function - try to seed from exports, fallback to sample data
 async function main() {
   const exportsDir = path.join(process.cwd(), 'exports');
-  
+
   if (fs.existsSync(exportsDir) && fs.readdirSync(exportsDir).length > 0) {
     await seedFromExports();
   } else {

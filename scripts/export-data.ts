@@ -7,9 +7,9 @@ const prisma = new PrismaClient();
 async function exportData() {
   try {
     console.log('📤 Starting comprehensive data export...');
-    
+
     const exportDir = path.join(process.cwd(), 'exports');
-    
+
     // Create exports directory if it doesn't exist
     if (!fs.existsSync(exportDir)) {
       fs.mkdirSync(exportDir, { recursive: true });
@@ -26,14 +26,11 @@ async function exportData() {
         image: true,
         role: true,
         createdAt: true,
-        updatedAt: true
-      }
+        updatedAt: true,
+      },
     });
-    
-    fs.writeFileSync(
-      path.join(exportDir, 'users.json'),
-      JSON.stringify(users, null, 2)
-    );
+
+    fs.writeFileSync(path.join(exportDir, 'users.json'), JSON.stringify(users, null, 2));
     console.log(`✅ Exported ${users.length} users`);
 
     // Export Accounts
@@ -51,14 +48,11 @@ async function exportData() {
         token_type: true,
         scope: true,
         id_token: true,
-        session_state: true
-      }
+        session_state: true,
+      },
     });
-    
-    fs.writeFileSync(
-      path.join(exportDir, 'accounts.json'),
-      JSON.stringify(accounts, null, 2)
-    );
+
+    fs.writeFileSync(path.join(exportDir, 'accounts.json'), JSON.stringify(accounts, null, 2));
     console.log(`✅ Exported ${accounts.length} accounts`);
 
     // Export Sessions
@@ -68,14 +62,11 @@ async function exportData() {
         id: true,
         sessionToken: true,
         userId: true,
-        expires: true
-      }
+        expires: true,
+      },
     });
-    
-    fs.writeFileSync(
-      path.join(exportDir, 'sessions.json'),
-      JSON.stringify(sessions, null, 2)
-    );
+
+    fs.writeFileSync(path.join(exportDir, 'sessions.json'), JSON.stringify(sessions, null, 2));
     console.log(`✅ Exported ${sessions.length} sessions`);
 
     // Export Verification Tokens
@@ -84,14 +75,11 @@ async function exportData() {
       select: {
         identifier: true,
         token: true,
-        expires: true
-      }
+        expires: true,
+      },
     });
-    
-    fs.writeFileSync(
-      path.join(exportDir, 'verification-tokens.json'),
-      JSON.stringify(verificationTokens, null, 2)
-    );
+
+    fs.writeFileSync(path.join(exportDir, 'verification-tokens.json'), JSON.stringify(verificationTokens, null, 2));
     console.log(`✅ Exported ${verificationTokens.length} verification tokens`);
 
     // Export News Tags (export as simple array for easier seeding)
@@ -101,22 +89,16 @@ async function exportData() {
         id: true,
         name: true,
         createdAt: true,
-        updatedAt: true
-      }
+        updatedAt: true,
+      },
     });
-    
+
     // Export tags as simple array for easier seeding
     const tagNames = tags.map(tag => tag.name);
-    fs.writeFileSync(
-      path.join(exportDir, 'news-tags.json'),
-      JSON.stringify(tagNames, null, 2)
-    );
-    
+    fs.writeFileSync(path.join(exportDir, 'news-tags.json'), JSON.stringify(tagNames, null, 2));
+
     // Also export full tag data for reference
-    fs.writeFileSync(
-      path.join(exportDir, 'news-tags-full.json'),
-      JSON.stringify(tags, null, 2)
-    );
+    fs.writeFileSync(path.join(exportDir, 'news-tags-full.json'), JSON.stringify(tags, null, 2));
     console.log(`✅ Exported ${tags.length} tags`);
 
     // Export News
@@ -131,7 +113,6 @@ async function exportData() {
         category: true,
         author: true,
         isPublished: true,
-        readTime: true,
         views: true,
         featured: true,
         createdBy: true,
@@ -139,22 +120,19 @@ async function exportData() {
         updatedAt: true,
         tags: {
           select: {
-            name: true
-          }
-        }
-      }
+            name: true,
+          },
+        },
+      },
     });
-    
+
     // Transform news data for easier seeding (extract tag names)
     const newsForSeeding = news.map(article => ({
       ...article,
-      tags: article.tags.map(tag => tag.name)
+      tags: article.tags.map(tag => tag.name),
     }));
-    
-    fs.writeFileSync(
-      path.join(exportDir, 'news.json'),
-      JSON.stringify(newsForSeeding, null, 2)
-    );
+
+    fs.writeFileSync(path.join(exportDir, 'news.json'), JSON.stringify(newsForSeeding, null, 2));
     console.log(`✅ Exported ${news.length} news articles`);
 
     // Export Services
@@ -166,14 +144,11 @@ async function exportData() {
         description: true,
         type: true,
         createdAt: true,
-        updatedAt: true
-      }
+        updatedAt: true,
+      },
     });
-    
-    fs.writeFileSync(
-      path.join(exportDir, 'services.json'),
-      JSON.stringify(services, null, 2)
-    );
+
+    fs.writeFileSync(path.join(exportDir, 'services.json'), JSON.stringify(services, null, 2));
     console.log(`✅ Exported ${services.length} services`);
 
     // Export Service Submissions
@@ -191,14 +166,11 @@ async function exportData() {
         userId: true,
         serviceId: true,
         createdAt: true,
-        updatedAt: true
-      }
+        updatedAt: true,
+      },
     });
-    
-    fs.writeFileSync(
-      path.join(exportDir, 'service-submissions.json'),
-      JSON.stringify(submissions, null, 2)
-    );
+
+    fs.writeFileSync(path.join(exportDir, 'service-submissions.json'), JSON.stringify(submissions, null, 2));
     console.log(`✅ Exported ${submissions.length} service submissions`);
 
     // Export Council Members
@@ -212,14 +184,11 @@ async function exportData() {
         email: true,
         image: true,
         createdAt: true,
-        updatedAt: true
-      }
+        updatedAt: true,
+      },
     });
-    
-    fs.writeFileSync(
-      path.join(exportDir, 'council.json'),
-      JSON.stringify(council, null, 2)
-    );
+
+    fs.writeFileSync(path.join(exportDir, 'council.json'), JSON.stringify(council, null, 2));
     console.log(`✅ Exported ${council.length} council members`);
 
     // Create a comprehensive summary file
@@ -235,7 +204,7 @@ async function exportData() {
         totalTags: tags.length,
         totalServices: services.length,
         totalSubmissions: submissions.length,
-        totalCouncil: council.length
+        totalCouncil: council.length,
       },
       files: {
         users: 'users.json',
@@ -248,21 +217,18 @@ async function exportData() {
         services: 'services.json',
         serviceSubmissions: 'service-submissions.json',
         council: 'council.json',
-        summary: 'export-summary.json'
+        summary: 'export-summary.json',
       },
       notes: [
         'news-tags.json contains only tag names for easier seeding',
         'news-tags-full.json contains complete tag data with IDs for reference',
         'news.json has tags as array of names for easier seeding',
         'All timestamps are preserved in ISO format',
-        'User passwords are not exported for security'
-      ]
+        'User passwords are not exported for security',
+      ],
     };
 
-    fs.writeFileSync(
-      path.join(exportDir, 'export-summary.json'),
-      JSON.stringify(summary, null, 2)
-    );
+    fs.writeFileSync(path.join(exportDir, 'export-summary.json'), JSON.stringify(summary, null, 2));
 
     console.log('\n🎉 Comprehensive data export completed successfully!');
     console.log(`📁 Files saved in: ${exportDir}`);
@@ -278,7 +244,6 @@ async function exportData() {
     console.log(`   Council: ${summary.database.totalCouncil}`);
     console.log(`\n📝 Export Version: ${summary.exportVersion}`);
     console.log(`📅 Export Date: ${summary.exportDate}`);
-
   } catch (error) {
     console.error('❌ Error during export:', error);
     process.exit(1);

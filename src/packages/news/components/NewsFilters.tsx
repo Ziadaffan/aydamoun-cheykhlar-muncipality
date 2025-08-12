@@ -15,34 +15,27 @@ const categoryLabels = {
   OTHER: 'أخرى',
 };
 
-export default function NewsFilters({ 
-  categories, 
-  selectedCategory, 
-  onCategoryChange, 
-  className = '' 
-}: NewsFiltersProps) {
+export default function NewsFilters({ categories, selectedCategory, onCategoryChange, className = '' }: NewsFiltersProps) {
   return (
     <div className={`mb-8 ${className}`}>
-      <div className="flex flex-wrap gap-3 justify-center">
+      <div className="flex flex-wrap justify-center gap-3">
         <button
           onClick={() => onCategoryChange('ALL')}
-          className={`px-4 py-2 rounded-lg font-medium transition-all duration-200 ${
-            selectedCategory === 'ALL'
-              ? 'bg-blue-600 text-white shadow-lg scale-105'
-              : 'bg-gray-100 text-gray-700 hover:bg-gray-200 hover:scale-105'
+          className={`rounded-lg px-4 py-2 font-medium transition-all duration-200 ${
+            selectedCategory === 'ALL' ? 'scale-105 bg-blue-600 text-white shadow-lg' : 'bg-gray-100 text-gray-700 hover:scale-105 hover:bg-gray-200'
           }`}
         >
           {categoryLabels.ALL}
         </button>
-        
-        {categories.map((category) => (
+
+        {categories.map(category => (
           <button
             key={category}
             onClick={() => onCategoryChange(category)}
-            className={`px-4 py-2 rounded-lg font-medium transition-all duration-200 ${
+            className={`rounded-lg px-4 py-2 font-medium transition-all duration-200 ${
               selectedCategory === category
-                ? 'bg-blue-600 text-white shadow-lg scale-105'
-                : 'bg-gray-100 text-gray-700 hover:bg-gray-200 hover:scale-105'
+                ? 'scale-105 bg-blue-600 text-white shadow-lg'
+                : 'bg-gray-100 text-gray-700 hover:scale-105 hover:bg-gray-200'
             }`}
           >
             {categoryLabels[category]}

@@ -142,15 +142,13 @@ model News {
   title       String
   content     String       @db.Text
   excerpt     String
-  imageUrl    String?
+  imageUrl    String[]
   category    NewsCategory
   author      String
   isPublished Boolean      @default(false)
-  readTime    Int          @default(5) // in minutes
   views       Int          @default(0)
   featured    Boolean      @default(false)
 
-  // Relationships
   tags      NewsTag[]
   createdBy String
 
@@ -167,7 +165,6 @@ model NewsTag {
   id   String @id @default(uuid())
   name String @unique
 
-  // Many-to-many relationship with News
   news News[]
 
   createdAt DateTime @default(now())

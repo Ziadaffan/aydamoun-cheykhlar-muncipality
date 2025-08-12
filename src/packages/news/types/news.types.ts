@@ -13,7 +13,7 @@ export interface News {
   readTime: number; // in minutes
 }
 
-export type NewsCategory = 
+export type NewsCategory =
   | 'MUNICIPAL_NEWS'
   | 'DEVELOPMENT_PROJECTS'
   | 'ANNOUNCEMENTS'
