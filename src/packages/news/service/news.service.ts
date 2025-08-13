@@ -21,17 +21,14 @@ export class NewsService extends BasePrismaService<'news'> {
       where: {
         featured: true,
       },
-      include: {
-        tags: true,
-      },
     });
   }
 
   public async getNewsByCategory(category: NewsCategory | 'ALL') {
     if (category === 'ALL') {
       return await this.repository.findMany({
-        include: {
-          tags: true,
+        orderBy: {
+          createdAt: 'desc',
         },
       });
     }
@@ -40,8 +37,8 @@ export class NewsService extends BasePrismaService<'news'> {
       where: {
         category: category,
       },
-      include: {
-        tags: true,
+      orderBy: {
+        createdAt: 'desc',
       },
     });
   }

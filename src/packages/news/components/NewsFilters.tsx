@@ -12,6 +12,7 @@ const categoryLabels = {
   INFRASTRUCTURE: 'بنية تحتية',
   ENVIRONMENTAL: 'بيئي',
   SOCIAL_SERVICES: 'خدمات اجتماعية',
+  HEALTH_AND_SOCIAL_SERVICES: 'خدمات صحية واجتماعية',
   OTHER: 'أخرى',
 };
 

@@ -13,11 +13,10 @@ export interface News {
   imageUrl: string[];
   category: NewsCategory;
   author: string;
-  publishedAt: Date;
+  tags: string[];
+  featured: boolean;
+  createdAt: Date;
   updatedAt: Date;
-  isPublished: boolean;
-  tags: NewsTag[];
-  readTime: number; // in minutes
 }
 
 export type NewsCategory =
@@ -28,6 +27,7 @@ export type NewsCategory =
   | 'INFRASTRUCTURE'
   | 'ENVIRONMENTAL'
   | 'SOCIAL_SERVICES'
+  | 'HEALTH_AND_SOCIAL_SERVICES'
   | 'OTHER';
 
 export interface NewsCardProps {

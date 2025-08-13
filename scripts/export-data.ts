@@ -84,22 +84,15 @@ async function exportData() {
 
     // Export News Tags (export as simple array for easier seeding)
     console.log('🏷️ Exporting news tags...');
-    const tags = await prisma.newsTag.findMany({
+    const tags = await prisma.news.findMany({
       select: {
-        id: true,
-        name: true,
-        createdAt: true,
-        updatedAt: true,
+        tags: true,
       },
     });
 
     // Export tags as simple array for easier seeding
-    const tagNames = tags.map(tag => tag.name);
+    const tagNames = tags.map(tag => tag.tags);
     fs.writeFileSync(path.join(exportDir, 'news-tags.json'), JSON.stringify(tagNames, null, 2));
-
-    // Also export full tag data for reference
-    fs.writeFileSync(path.join(exportDir, 'news-tags-full.json'), JSON.stringify(tags, null, 2));
-    console.log(`✅ Exported ${tags.length} tags`);
 
     // Export News
     console.log('📰 Exporting news...');
@@ -112,24 +105,19 @@ async function exportData() {
         imageUrl: true,
         category: true,
         author: true,
-        isPublished: true,
         views: true,
         featured: true,
         createdBy: true,
         createdAt: true,
         updatedAt: true,
-        tags: {
-          select: {
-            name: true,
-          },
-        },
+        tags: true,
       },
     });
 
     // Transform news data for easier seeding (extract tag names)
     const newsForSeeding = news.map(article => ({
       ...article,
-      tags: article.tags.map(tag => tag.name),
+      tags: article.tags,
     }));
 
     fs.writeFileSync(path.join(exportDir, 'news.json'), JSON.stringify(newsForSeeding, null, 2));
@@ -213,7 +201,6 @@ async function exportData() {
         verificationTokens: 'verification-tokens.json',
         news: 'news.json',
         newsTags: 'news-tags.json',
-        newsTagsFull: 'news-tags-full.json',
         services: 'services.json',
         serviceSubmissions: 'service-submissions.json',
         council: 'council.json',
@@ -221,7 +208,6 @@ async function exportData() {
       },
       notes: [
         'news-tags.json contains only tag names for easier seeding',
-        'news-tags-full.json contains complete tag data with IDs for reference',
         'news.json has tags as array of names for easier seeding',
         'All timestamps are preserved in ISO format',
         'User passwords are not exported for security',
