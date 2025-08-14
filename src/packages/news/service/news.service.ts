@@ -53,4 +53,12 @@ export class NewsService extends BasePrismaService<'news'> {
 
     return results.map(result => result.category);
   }
+
+  public async getNewsById(id: string) {
+    return await this.repository.findUnique({
+      where: {
+        id: id,
+      },
+    });
+  }
 }

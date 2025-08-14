@@ -30,17 +30,9 @@ export type NewsCategory =
   | 'HEALTH_AND_SOCIAL_SERVICES'
   | 'OTHER';
 
-export interface NewsCardProps {
-  news: News;
-  variant?: 'default' | 'featured' | 'compact';
-  className?: string;
-}
 
-export interface NewsGridProps {
-  news: News[];
-  variant?: 'grid' | 'list';
-  className?: string;
-}
+
+
 
 export interface NewsFiltersProps {
   categories: NewsCategory[];

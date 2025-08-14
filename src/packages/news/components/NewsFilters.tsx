@@ -2,19 +2,7 @@
 
 import React from 'react';
 import { NewsFiltersProps } from '../types/news.types';
-
-const categoryLabels = {
-  ALL: 'جميع الأخبار',
-  MUNICIPAL_NEWS: 'أخبار بلدية',
-  DEVELOPMENT_PROJECTS: 'مشاريع تنموية',
-  ANNOUNCEMENTS: 'إعلانات',
-  COMMUNITY_EVENTS: 'فعاليات مجتمعية',
-  INFRASTRUCTURE: 'بنية تحتية',
-  ENVIRONMENTAL: 'بيئي',
-  SOCIAL_SERVICES: 'خدمات اجتماعية',
-  HEALTH_AND_SOCIAL_SERVICES: 'خدمات صحية واجتماعية',
-  OTHER: 'أخرى',
-};
+import { categoryLabels } from '.';
 
 export default function NewsFilters({ categories, selectedCategory, onCategoryChange, className = '' }: NewsFiltersProps) {
   return (

@@ -8,8 +8,11 @@ import { useGetFeaturedNews } from '../hooks/useGetFeaturedNews';
 import { useGetNewsCategories } from '../hooks/useGetNewsCategories';
 import { useGetNewsByCategory } from '../hooks/useGerNewsByCategory';
 import Spinner from '@/packages/common/components/Spinner';
+import NoNews from './NoNews';
+import { useTranslation } from 'react-i18next';
 
 export default function NewsPage() {
+  const { t } = useTranslation();
   const [selectedCategory, setSelectedCategory] = useState<NewsCategory | 'ALL'>('ALL');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
 
@@ -48,13 +51,15 @@ export default function NewsPage() {
   return (
     <div className="min-h-screen bg-gradient-to-r from-blue-50 to-green-50 py-20">
       {/* Hero Section */}
-      <NewsHero featuredNews={featuredNews} />
+      <NewsHero featuredNews={featuredNews} t={t} />
 
       {/* Main Content */}
       <div className="container mx-auto px-4 pb-12">
         {/* View Mode Toggle */}
         <div className="mb-6 flex items-center justify-between">
-          <h2 className="text-2xl font-bold text-gray-800">{selectedCategory === 'ALL' ? 'جميع الأخبار' : `أخبار ${selectedCategory}`}</h2>
+          <h2 className="text-2xl font-bold text-gray-800">
+            {selectedCategory === 'ALL' ? t('news.page.allNews') : t('news.page.newsInCategory', { category: selectedCategory })}
+          </h2>
 
           <div className="flex items-center space-x-2">
             <Button
@@ -95,38 +100,14 @@ export default function NewsPage() {
         {/* News Count */}
         <div className="mb-6 text-center">
           <p className="text-gray-600">
-            تم العثور على <span className="font-semibold text-blue-600">{filteredNews.length}</span> خبر
-            {selectedCategory !== 'ALL' && ` في فئة ${selectedCategory}`}
+            {selectedCategory === 'ALL'
+              ? t('news.page.newsCount', { count: filteredNews.length })
+              : t('news.page.newsCountInCategory', { count: filteredNews.length, category: selectedCategory })}
           </p>
         </div>
 
         {/* News Grid */}
-        {filteredNews.length > 0 ? (
-          <NewsGrid news={filteredNews} variant={viewMode} />
-        ) : (
-          <div className="py-12 text-center">
-            <div className="mb-4 text-gray-400">
-              <svg className="mx-auto h-16 w-16" fill="currentColor" viewBox="0 0 20 20">
-                <path
-                  fillRule="evenodd"
-                  d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
-                  clipRule="evenodd"
-                />
-              </svg>
-            </div>
-            <h3 className="mb-2 text-lg font-medium text-gray-900">لا توجد أخبار</h3>
-            <p className="text-gray-500">لم يتم العثور على أخبار في هذه الفئة حالياً</p>
-          </div>
-        )}
-
-        {/* Load More Button */}
-        {filteredNews.length > 0 && (
-          <div className="mt-12 text-center">
-            <button className="rounded-lg bg-blue-600 px-8 py-3 font-medium text-white transition-colors hover:bg-blue-700">
-              تحميل المزيد من الأخبار
-            </button>
-          </div>
-        )}
+        {filteredNews.length > 0 ? <NewsGrid news={filteredNews} variant={viewMode} t={t} /> : <NoNews t={t} />}
       </div>
     </div>
   );
