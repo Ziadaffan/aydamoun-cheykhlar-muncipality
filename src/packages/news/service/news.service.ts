@@ -5,7 +5,7 @@ import { NewsCategory } from '../types/news.types';
 export class NewsService extends BasePrismaService<'news'> {
   private static singlenton: NewsService;
 
-  constructor(repository: NewsRepository = new NewsRepository('news')) {
+  constructor(repository: NewsRepository = new NewsRepository()) {
     super(repository);
   }
 
