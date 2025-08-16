@@ -4,7 +4,9 @@ import { News } from '../types/news.types';
 import Button from '@/packages/common/components/Button';
 import { TFunction } from 'i18next';
 import { useRouter } from 'next/navigation';
-
+import { useState } from 'react';
+import { NewsFleshesImage } from '@/packages/common/components/NewsFleshImage'
+import { ImageIndicators } from '@/packages/common/components/ImageIndicators';
 type DefaultCardProps = {
   news: News;
   t: TFunction;
@@ -12,17 +14,43 @@ type DefaultCardProps = {
 
 export const DefaultCard = ({ news, t }: DefaultCardProps) => {
   const router = useRouter();
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  const hasMultipleImages = news.imageUrl && news.imageUrl.length > 1;
+  const currentImage = news.imageUrl?.[currentImageIndex] || 'elementor-placeholder-image-3610342416_bys2q8';
+
+  const nextImage = () => {
+    if (hasMultipleImages) {
+      setCurrentImageIndex((prev) => (prev + 1) % news.imageUrl!.length);
+    }
+  };
+
+  const prevImage = () => {
+    if (hasMultipleImages) {
+      setCurrentImageIndex((prev) => (prev - 1 + news.imageUrl!.length) % news.imageUrl!.length);
+    }
+  };
+
   return (
     <div className="group relative overflow-hidden rounded-xl bg-white shadow-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
       {/* Image */}
       <div className="relative h-48 overflow-hidden">
         <CldImage
-          src={news.imageUrl?.[0] || 'elementor-placeholder-image-3610342416_bys2q8'}
+          src={currentImage}
           alt={news.title}
           fill
           className="object-cover transition-transform duration-300 group-hover:scale-105"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+
+        {hasMultipleImages && (
+          <NewsFleshesImage nextImage={nextImage} prevImage={prevImage} />
+        )}
+
+        {/* Image Indicators - Only show if multiple images */}
+        {hasMultipleImages && (
+          <ImageIndicators currentImageIndex={currentImageIndex} news={news} setCurrentImageIndex={setCurrentImageIndex} />
+        )}
 
         {/* Category Badge */}
         <div className="absolute top-4 right-4">

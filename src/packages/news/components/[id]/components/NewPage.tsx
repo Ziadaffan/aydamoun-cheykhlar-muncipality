@@ -12,13 +12,17 @@ import { useEffect, useState } from 'react';
 import { NewHeader } from './NewHeader';
 import { useTranslation } from 'react-i18next';
 import { categoryColors, categoryLabels } from '../..';
+import { NewsFleshesImage } from '@/packages/common/components/NewsFleshImage';
+import { ImageIndicators } from '@/packages/common/components/ImageIndicators';
 
 export default function NewsPage() {
   const params = useParams();
   const id = params?.id as string;
   const [news, setNews] = useState<News | null>(null);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const { data: newsData, isLoading, error } = useGetNewsById(id);
   const { t } = useTranslation();
+  
   useEffect(() => {
     if (newsData) {
       setNews(newsData);
@@ -33,6 +37,21 @@ export default function NewsPage() {
     return <ErrorMessage />;
   }
 
+  const hasMultipleImages = news.imageUrl && news.imageUrl.length > 1;
+  const currentImage = news.imageUrl?.[currentImageIndex] || 'elementor-placeholder-image-3610342416_bys2q8';
+
+  const nextImage = () => {
+    if (hasMultipleImages) {
+      setCurrentImageIndex((prev) => (prev + 1) % news.imageUrl!.length);
+    }
+  };
+
+  const prevImage = () => {
+    if (hasMultipleImages) {
+      setCurrentImageIndex((prev) => (prev - 1 + news.imageUrl!.length) % news.imageUrl!.length);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-r from-blue-50 to-green-50 py-8">
       <div className="container mx-auto px-4">
@@ -46,8 +65,26 @@ export default function NewsPage() {
         <div className="overflow-hidden rounded-lg bg-white shadow-lg">
           {/* News Images */}
           {news.imageUrl && news.imageUrl.length > 0 && (
-            <div className="relative h-96 overflow-hidden">
-              <CldImage src={news.imageUrl[0]} alt={news.title} className="h-full w-full object-cover" fill />
+            <div className="relative h-[300px] sm:h-[400px] lg:h-[500px] overflow-hidden">
+              <CldImage 
+                src={currentImage} 
+                alt={news.title} 
+                className="h-full w-full object-cover"
+                width={1200}
+                height={500}
+                quality={90}
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1200px"
+              />
+              
+              {/* Image Navigation Arrows - Only show if multiple images */}
+              {hasMultipleImages && (
+                <NewsFleshesImage nextImage={nextImage} prevImage={prevImage} />
+              )}
+
+              {/* Image Indicators - Only show if multiple images */}
+              {hasMultipleImages && (
+                <ImageIndicators currentImageIndex={currentImageIndex} setCurrentImageIndex={setCurrentImageIndex} news={news} />
+              )}
             </div>
           )}
 

@@ -4,6 +4,10 @@ import { News } from '../types/news.types';
 import Button from '@/packages/common/components/Button';
 import { TFunction } from 'i18next';
 import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import { NewsFleshesImage } from '@/packages/common/components/NewsFleshImage';
+import { ImageIndicators } from '@/packages/common/components/ImageIndicators';
+
 
 type FeaturedCardProps = {
   news: News;
@@ -12,18 +16,43 @@ type FeaturedCardProps = {
 
 export const FeaturedCard = ({ news, t }: FeaturedCardProps) => {
   const router = useRouter();
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  const hasMultipleImages = news.imageUrl && news.imageUrl.length > 1;
+  const currentImage = news.imageUrl?.[currentImageIndex] || 'elementor-placeholder-image-3610342416_bys2q8';
+
+  const nextImage = () => {
+    if (hasMultipleImages) {
+      setCurrentImageIndex((prev) => (prev + 1) % news.imageUrl!.length);
+    }
+  };
+
+  const prevImage = () => {
+    if (hasMultipleImages) {
+      setCurrentImageIndex((prev) => (prev - 1 + news.imageUrl!.length) % news.imageUrl!.length);
+    }
+  };
+
   return (
     <div className="group relative overflow-hidden rounded-2xl bg-white shadow-xl transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl">
       <div className="grid grid-cols-1 gap-0 lg:grid-cols-2">
         {/* Image Section */}
         <div className="relative h-64 overflow-hidden lg:h-full">
           <CldImage
-            src={news.imageUrl?.[0] || 'elementor-placeholder-image-3610342416_bys2q8'}
+            src={currentImage}
             alt={news.title}
             fill
             className="object-cover transition-transform duration-300 group-hover:scale-105"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
+
+          {hasMultipleImages && (
+            <NewsFleshesImage nextImage={nextImage} prevImage={prevImage} />
+          )}
+
+          {hasMultipleImages && (
+            <ImageIndicators currentImageIndex={currentImageIndex} setCurrentImageIndex={setCurrentImageIndex} news={news} />
+          )}
 
           {/* Category Badge */}
           <div className="absolute top-6 right-6">
