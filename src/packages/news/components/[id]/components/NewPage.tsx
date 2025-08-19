@@ -22,7 +22,7 @@ export default function NewsPage() {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const { data: newsData, isLoading, error } = useGetNewsById(id);
   const { t } = useTranslation();
-  
+
   useEffect(() => {
     if (newsData) {
       setNews(newsData);
@@ -42,13 +42,13 @@ export default function NewsPage() {
 
   const nextImage = () => {
     if (hasMultipleImages) {
-      setCurrentImageIndex((prev) => (prev + 1) % news.imageUrl!.length);
+      setCurrentImageIndex(prev => (prev + 1) % news.imageUrl!.length);
     }
   };
 
   const prevImage = () => {
     if (hasMultipleImages) {
-      setCurrentImageIndex((prev) => (prev - 1 + news.imageUrl!.length) % news.imageUrl!.length);
+      setCurrentImageIndex(prev => (prev - 1 + news.imageUrl!.length) % news.imageUrl!.length);
     }
   };
 
@@ -65,26 +65,22 @@ export default function NewsPage() {
         <div className="overflow-hidden rounded-lg bg-white shadow-lg">
           {/* News Images */}
           {news.imageUrl && news.imageUrl.length > 0 && (
-            <div className="relative h-[300px] sm:h-[400px] lg:h-[500px] overflow-hidden">
-              <CldImage 
-                src={currentImage} 
-                alt={news.title} 
+            <div className="relative h-[300px] overflow-hidden sm:h-[400px] lg:h-[500px]">
+              <CldImage
+                src={currentImage}
+                alt={news.title}
                 className="h-full w-full object-cover"
                 width={1200}
                 height={500}
                 quality={90}
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1200px"
               />
-              
+
               {/* Image Navigation Arrows - Only show if multiple images */}
-              {hasMultipleImages && (
-                <NewsFleshesImage nextImage={nextImage} prevImage={prevImage} />
-              )}
+              {hasMultipleImages && <NewsFleshesImage nextImage={nextImage} prevImage={prevImage} />}
 
               {/* Image Indicators - Only show if multiple images */}
-              {hasMultipleImages && (
-                <ImageIndicators currentImageIndex={currentImageIndex} setCurrentImageIndex={setCurrentImageIndex} news={news} />
-              )}
+              {hasMultipleImages && <ImageIndicators currentImageIndex={currentImageIndex} setCurrentImageIndex={setCurrentImageIndex} news={news} />}
             </div>
           )}
 
