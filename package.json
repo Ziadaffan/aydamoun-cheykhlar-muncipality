@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
-    "build": "next build",
+    "build": "rm -rf .next && next build",
     "start": "next start",
     "lint": "next lint",
     "format": "prettier --write .",
@@ -16,15 +16,19 @@
     "prisma:generate": "prisma generate",
     "prisma:studio": "prisma studio",
     "prisma:reset": "dotenv -e .env.local -- prisma migrate reset --force",
+    "export:data": "tsx scripts/export-data.ts",
+    "seed:db": "tsx prisma/seed.ts",
     "postinstall": "prisma generate"
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.10.0",
     "@hookform/resolvers": "^5.2.1",
-    "@prisma/client": "^6.10.1",
+    "@prisma/client": "^6.13.0",
+    "@prisma/extension-accelerate": "^2.0.2",
     "@supabase/supabase-js": "^2.50.2",
     "@tanstack/react-query": "^5.81.5",
     "bcryptjs": "^3.0.2",
+    "date-fns": "^4.1.0",
     "dotenv": "^17.0.0",
     "i18next": "^25.2.1",
     "i18next-browser-languagedetector": "^8.2.0",
@@ -32,8 +36,9 @@
     "leaflet": "^1.9.4",
     "next": "15.3.3",
     "next-auth": "^4.24.11",
+    "next-cloudinary": "^6.16.0",
     "next-intl": "^4.1.0",
-    "prisma": "^6.10.1",
+    "prisma": "^6.13.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-hook-form": "^7.60.0",
@@ -56,6 +61,7 @@
     "prettier": "^3.6.2",
     "prettier-plugin-tailwindcss": "^0.6.13",
     "tailwindcss": "^4",
+    "tsx": "^4.20.3",
     "typescript": "^5"
   }
 }

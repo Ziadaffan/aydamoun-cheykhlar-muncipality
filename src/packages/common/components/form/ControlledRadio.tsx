@@ -32,7 +32,7 @@ export default function ControlledRadio({ name, control, label, options, require
                   value={option}
                   checked={value === option}
                   onChange={onChange}
-                  className="mr-2 h-4 w-4 border-gray-300 text-blue-600 focus:ring-blue-500"
+                  className="mr-2 ml-2 h-4 w-4 border-gray-300 text-blue-600 focus:ring-blue-500"
                 />
                 <span className="text-sm text-gray-700">{option}</span>
               </label>

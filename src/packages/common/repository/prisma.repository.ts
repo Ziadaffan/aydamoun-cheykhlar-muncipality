@@ -3,7 +3,7 @@ import prisma, { PrismaClient } from '@/packages/lib/db';
 export class PrismaRepository<K extends Exclude<keyof PrismaClient, symbol | `$${string}`>> {
   constructor(
     protected readonly model: K,
-    protected readonly client: PrismaClient = prisma
+    protected readonly client: typeof prisma = prisma
   ) {}
 
   aggregate(...args: Parameters<PrismaClient[K]['aggregate']>): ReturnType<PrismaClient[K]['aggregate']> {

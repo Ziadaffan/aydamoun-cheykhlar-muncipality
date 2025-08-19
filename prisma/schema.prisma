@@ -34,6 +34,18 @@ enum ServiceStatus {
   REJECTED
 }
 
+enum NewsCategory {
+  MUNICIPAL_NEWS
+  DEVELOPMENT_PROJECTS
+  ANNOUNCEMENTS
+  COMMUNITY_EVENTS
+  INFRASTRUCTURE
+  ENVIRONMENTAL
+  SOCIAL_SERVICES
+  HEALTH_AND_SOCIAL_SERVICES
+  OTHER
+}
+
 model User {
   id            String              @id @default(cuid())
   name          String?
@@ -125,3 +137,27 @@ model ServiceSubmission {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
+model News {
+  id          String       @id @default(uuid())
+  title       String
+  content     String       @db.Text
+  excerpt     String
+  imageUrl    String[]
+  category    NewsCategory
+  author      String
+  views       Int          @default(0)
+  featured    Boolean      @default(false)
+
+  tags      String[]
+  createdBy String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([category])
+  @@index([featured])
+  @@index([createdAt])
+}
+
+

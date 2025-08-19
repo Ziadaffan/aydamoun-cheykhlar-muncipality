@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { Service, ServiceSubmission } from '@prisma/client';
 
 type EditSubmissionHeaderProps = {
-  submission: ServiceSubmission & { service: Service } | null;
+  submission: (ServiceSubmission & { service: Service }) | null;
 };
 
 export default function EditSubmissionHeader({ submission }: EditSubmissionHeaderProps) {

@@ -1,0 +1,35 @@
+{
+  "exportDate": "2025-08-11T02:20:55.289Z",
+  "exportVersion": "2.0.0",
+  "database": {
+    "totalUsers": 1,
+    "totalAccounts": 0,
+    "totalSessions": 0,
+    "totalVerificationTokens": 0,
+    "totalNews": 12,
+    "totalTags": 53,
+    "totalServices": 14,
+    "totalSubmissions": 1,
+    "totalCouncil": 15
+  },
+  "files": {
+    "users": "users.json",
+    "accounts": "accounts.json",
+    "sessions": "sessions.json",
+    "verificationTokens": "verification-tokens.json",
+    "news": "news.json",
+    "newsTags": "news-tags.json",
+    "newsTagsFull": "news-tags-full.json",
+    "services": "services.json",
+    "serviceSubmissions": "service-submissions.json",
+    "council": "council.json",
+    "summary": "export-summary.json"
+  },
+  "notes": [
+    "news-tags.json contains only tag names for easier seeding",
+    "news-tags-full.json contains complete tag data with IDs",
+    "news.json has tags as array of names for easier seeding",
+    "All timestamps are preserved in ISO format",
+    "User passwords are not exported for security"
+  ]
+}

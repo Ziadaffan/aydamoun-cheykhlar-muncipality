@@ -5,7 +5,7 @@ import Link from 'next/link';
 import MobileMenuButoon from './MobileMenuButoon';
 import MobileMenu from './MobileMenu';
 import NavigationItems from './NavigationItems';
-import UserMenu from './UserMenu';
+import { CldImage } from 'next-cloudinary';
 
 type MainNavigationProps = {
   t: TFunction<'translation', undefined>;
@@ -20,7 +20,8 @@ export default function MainNavigation({ t }: MainNavigationProps) {
         <div className="flex h-20 justify-between">
           <div className="flex items-center">
             <Link href="/" className="flex flex-shrink-0 items-center">
-              <Image src="/assets/images/logo.png" alt="Municipality Logo" width={80} height={80} className="object-contain" priority />
+              {/* <Image src="/assets/images/logo.png" alt="Municipality Logo" width={80} height={80} className="object-contain" priority /> */}
+              <CldImage src="logo_smzpb2" alt="Municipality Logo" width={80} height={80} className="object-contain" priority />
             </Link>
           </div>
 

@@ -7,12 +7,10 @@ export default function SignUpFooter() {
 
   return (
     <div className="mt-4 text-center">
-      <span className="text-sm text-gray-600">
-        {t('auth.signup.alreadyHaveAccount')}{' '}
-      </span>
+      <span className="text-sm text-gray-600">{t('auth.signup.alreadyHaveAccount')} </span>
       <a href="/auth/login" className="text-sm text-blue-600 hover:underline">
         {t('auth.signup.loginLink')}
       </a>
     </div>
   );
-} 
+}

@@ -42,12 +42,12 @@ export function useServiceForm({ category, serviceId }: UseServiceFormProps) {
   const form = useForm<FormData>({
     resolver: yupResolver(createServiceSubmissionSchema(category, serviceId)),
     defaultValues: {
-      fullName: 'ziad affan',
-      phone: '4185736096',
-      email: 'ziad@gmail.com',
-      address: '123 Main St, Anytown, USA',
+      fullName: '',
+      phone: '',
+      email: '',
+      address: '',
       serviceType: serviceId ? serviceId.toString() : '',
-      description: 'I need a building license',
+      description: '',
       additionalInfo: {},
       // documents: [],
     },
