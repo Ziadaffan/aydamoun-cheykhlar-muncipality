@@ -1,8 +1,8 @@
 import { TFunction } from 'i18next';
 import React from 'react';
-import Image from 'next/image';
 import { Council } from '@prisma/client';
 import { getPositionLabel } from '@/packages/common/utils/position.utils';
+import { CldImage } from 'next-cloudinary';
 
 type AboutUsConcilMembersSectionProps = {
   t: TFunction;
@@ -26,13 +26,14 @@ export default function AboutUsConcilMembersSection({ t, councilMembers }: About
                 <div className="relative rounded-2xl border border-white/20 bg-white/80 p-6 shadow-xl backdrop-blur-sm">
                   <div className="mb-6 flex justify-center">
                     <div className="relative h-48 w-48 overflow-hidden rounded-full border-4 border-white shadow-lg">
-                      <Image
-                        src={`${member.image}` || '/assets/images/user-default-avatar.jpg'}
-                        alt={member.name}
-                        className="h-full w-full object-cover"
-                        width={192}
-                        height={192}
-                      />
+                      {member.image && (
+                        <CldImage
+                          src={member.image}
+                          alt={member.id}
+                          fill
+                          className="object-cover transition-transform duration-300 group-hover:scale-105"
+                        />
+                      )}
                       <div className="absolute inset-0 rounded-full bg-gradient-to-t from-black/20 to-transparent opacity-0 transition-opacity group-hover:opacity-100"></div>
                     </div>
                   </div>

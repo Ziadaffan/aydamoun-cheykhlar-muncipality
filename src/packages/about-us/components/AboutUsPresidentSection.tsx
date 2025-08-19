@@ -3,6 +3,7 @@ import React from 'react';
 import Image from 'next/image';
 import { Council } from '@prisma/client';
 import { getPositionLabel } from '@/packages/common/utils/position.utils';
+import { CldImage } from 'next-cloudinary';
 
 type AboutUsPresidentSectionProps = {
   t: TFunction;
@@ -24,13 +25,14 @@ export default function AboutUsPresidentSection({ t, president }: AboutUsPreside
               <div className="relative">
                 <div className="absolute -inset-4 rounded-full bg-gradient-to-r from-blue-600 to-green-600 opacity-30 blur-lg"></div>
                 <div className="relative h-80 w-80 overflow-hidden rounded-full border-8 border-white shadow-2xl ring-4 ring-blue-100">
-                  <Image
-                    src={`${president.image}` || '/assets/images/user-default-avatar.jpg'}
-                    alt={t('aboutUs.president.name')}
-                    className="h-full w-full object-cover"
-                    width={354}
-                    height={354}
-                  />
+                  {president.image && (
+                    <CldImage
+                      src={president.image}
+                      alt={president.id}
+                      fill
+                      className="object-cover transition-transform duration-300 group-hover:scale-105"
+                    />
+                  )}
                 </div>
               </div>
 
