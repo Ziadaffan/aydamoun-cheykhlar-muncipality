@@ -30,10 +30,6 @@ export type NewsCategory =
   | 'HEALTH_AND_SOCIAL_SERVICES'
   | 'OTHER';
 
-
-
-
-
 export interface NewsFiltersProps {
   categories: NewsCategory[];
   selectedCategory: NewsCategory | 'ALL';
