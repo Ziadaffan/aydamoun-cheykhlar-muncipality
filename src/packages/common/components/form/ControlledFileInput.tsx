@@ -1,11 +1,10 @@
 import React from 'react';
 import { Control, Controller, FieldError, FieldErrorsImpl, Merge } from 'react-hook-form';
 
-interface ControlledTextAreaProps {
+interface ControlledFileInputProps {
   id: string;
   label: string;
-  placeholder?: string;
-  rows?: number;
+  accept?: string;
   control: Control<any>;
   name: string;
   error?: FieldError | Merge<FieldError, FieldErrorsImpl<any>> | undefined;
@@ -14,18 +13,17 @@ interface ControlledTextAreaProps {
   required?: boolean;
 }
 
-export default function ControlledTextArea({
+export default function ControlledFileInput({
   id,
   label,
-  placeholder,
-  rows = 3,
+  accept,
   control,
   name,
   error,
   className = '',
   disabled = false,
   required = false,
-}: ControlledTextAreaProps) {
+}: ControlledFileInputProps) {
   return (
     <div className="mb-5">
       <label className="mb-1 block text-right text-sm font-medium text-gray-700 md:text-base" htmlFor={id}>
@@ -35,12 +33,16 @@ export default function ControlledTextArea({
       <Controller
         name={name}
         control={control}
-        render={({ field }) => (
-          <textarea
+        render={({ field: { onChange, value, ...field } }) => (
+          <input
             id={id}
-            rows={rows}
-            placeholder={placeholder}
+            type="file"
+            accept={accept}
             disabled={disabled}
+            onChange={e => {
+              const file = e.target.files?.[0];
+              onChange(file);
+            }}
             {...field}
             className={`w-full rounded-lg border px-3 py-2 text-right text-sm transition focus:ring-2 focus:ring-blue-200 md:text-base ${
               error ? 'border-red-300 focus:border-red-500' : 'border-gray-300 focus:border-blue-500'

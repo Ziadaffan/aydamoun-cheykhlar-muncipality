@@ -1,5 +1,5 @@
 import React from 'react';
-import { Control, Controller, FieldError, RegisterOptions } from 'react-hook-form';
+import { Control, Controller, FieldError, FieldErrorsImpl, Merge } from 'react-hook-form';
 
 interface Option {
   value: string;
@@ -7,47 +7,53 @@ interface Option {
 }
 
 interface ControlledSelectProps {
-  name: string;
-  control: Control<any>;
+  id: string;
   label: string;
   options: Option[];
-  placeholder?: string;
-  required?: boolean;
-  error?: FieldError;
+  control: Control<any>;
+  name: string;
+  error?: FieldError | Merge<FieldError, FieldErrorsImpl<any>> | undefined;
   className?: string;
-  rules?: RegisterOptions;
+  disabled?: boolean;
+  required?: boolean;
+  placeholder?: string;
 }
 
 export default function ControlledSelect({
-  name,
-  control,
+  id,
   label,
   options,
-  placeholder,
-  required = false,
+  control,
+  name,
   error,
   className = '',
-  rules,
+  disabled = false,
+  required = false,
+  placeholder,
 }: ControlledSelectProps) {
   return (
-    <div className={className}>
-      <label className="mb-2 block text-sm font-medium text-gray-700">
-        {label} {required && <span className="text-red-500">*</span>}
+    <div className="mb-5">
+      <label className="mb-1 block text-right text-sm font-medium text-gray-700 md:text-base" htmlFor={id}>
+        {label}
+        {required && <span className="mr-1 text-red-500">*</span>}
       </label>
-
       <Controller
         name={name}
         control={control}
-        rules={rules}
-        render={({ field: { onChange, value } }) => (
+        render={({ field }) => (
           <select
-            value={value || ''}
-            onChange={onChange}
-            className={`w-full rounded-lg border px-4 py-2.5 focus:border-transparent focus:ring-2 focus:ring-blue-500 ${
-              error ? 'border-red-500' : 'border-gray-300'
-            }`}
+            id={id}
+            disabled={disabled}
+            {...field}
+            className={`w-full rounded-lg border px-3 py-2 text-right text-sm transition focus:ring-2 focus:ring-blue-200 md:text-base ${
+              error ? 'border-red-300 focus:border-red-500' : 'border-gray-300 focus:border-blue-500'
+            } ${disabled ? 'cursor-not-allowed bg-gray-100' : ''} ${className}`}
           >
-            <option value="">{placeholder || 'اختر...'}</option>
+            {placeholder && (
+              <option value="" disabled>
+                {placeholder}
+              </option>
+            )}
             {options.map(option => (
               <option key={option.value} value={option.value}>
                 {option.label}
@@ -56,8 +62,7 @@ export default function ControlledSelect({
           </select>
         )}
       />
-
-      {error && <p className="mt-1 text-sm text-red-500">{error.message}</p>}
+      {error && <span className="mt-1 block text-sm text-red-500">{error.message as string}</span>}
     </div>
   );
 }

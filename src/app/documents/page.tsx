@@ -1,6 +1,7 @@
-import ComingSoon from '@/packages/common/components/ComingSoon';
-import React from 'react';
+'use client';
+
+import DocumentsPage from '@/packages/document/components/DoncumentsPage';
 
 export default function page() {
-  return <ComingSoon />;
+  return <DocumentsPage />;
 }
