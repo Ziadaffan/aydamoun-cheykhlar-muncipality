@@ -164,17 +164,9 @@ model Document {
   id          String       @id @default(uuid())
   title       String
   description String?
-  type        DocumentType
+  type        String
   fileUrl     String
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-}
-
-enum DocumentType {
-  PDF
-  WORD
-  IMAGE
-  VIDEO
-  OTHER
 }

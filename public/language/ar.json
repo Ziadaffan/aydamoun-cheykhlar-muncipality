@@ -363,5 +363,31 @@
       "title": "تفاصيل الخبر",
       "description": "اقرأ التفاصيل الكاملة للخبر وتعرف على آخر التطورات والأحداث المهمة في بلدية عيدمون شيخلار"
     }
+  },
+  "documents": {
+    "title": "المستندات",
+    "description": "استعرض وتحميل المستندات الرسمية المنشورة من قبل بلدية عيدمون شيخلار",
+    "added": "أضيف في",
+    "download": "تحميل المستند",
+    "noDocuments": "لا توجد مستندات",
+    "noDocumentsDescription": "لا توجد مستندات منشورة من قبل بلدية عيدمون شيخلار",
+    "createAdminDocument": "رفع مستند جديد",
+    "deleteDocument": "حذف المستند",
+    "form": {
+      "title": "رفع مستند جديد",
+      "titlePlaceholder": "أدخل عنوان المستند",
+      "description": "وصف المستند",
+      "descriptionPlaceholder": "أدخل وصف المستند",
+      "type": "نوع المستند",
+      "typePlaceholder": "اختر نوع المستند",
+      "file": "الملف",
+      "fileAccept": ".pdf,.doc,.docx,.jpg,.jpeg,.png,.gif,.mp4,.avi,.mov",
+      "uploading": "جاري الرفع...",
+      "upload": "رفع المستند",
+      "messages": {
+        "uploadSuccess": "تم رفع المستند بنجاح",
+        "uploadError": "حدث خطأ أثناء رفع المستند"
+      }
+    }
   }
 }

@@ -1,7 +1,6 @@
 import * as yup from 'yup';
 import { validationMessages } from '../../common/validation/common.validation';
 
-// Document upload validation schema
 export const documentUploadSchema = yup.object({
   title: yup
     .string()
@@ -14,11 +13,6 @@ export const documentUploadSchema = yup.object({
     .min(10, validationMessages.minLength('وصف المستند', 10))
     .max(500, validationMessages.maxLength('وصف المستند', 500))
     .required(validationMessages.required('وصف المستند')),
-
-  type: yup
-    .string()
-    .oneOf(['PDF', 'WORD', 'OTHER', 'IMAGE', 'VIDEO'], 'يرجى اختيار نوع مستند صحيح')
-    .required(validationMessages.required('نوع المستند')),
 
   file: yup
     .mixed()
@@ -48,5 +42,4 @@ export const documentUploadSchema = yup.object({
     .required(validationMessages.required('الملف')),
 });
 
-// Export types for TypeScript
 export type DocumentUploadFormData = yup.InferType<typeof documentUploadSchema>;

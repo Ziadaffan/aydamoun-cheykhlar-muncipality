@@ -38,7 +38,11 @@ export class DocumentService extends BasePrismaService<'document'> {
     return 'raw';
   };
 
-  public async createDocument(filePath: string, document: Omit<Document, 'id' | 'fileUrl'>) {
+  public async getAllDocuments(): Promise<Document[]> {
+    return this.repository.findMany({ orderBy: { createdAt: 'desc' } });
+  }
+
+  public async createDocument(filePath: string, document: Omit<Document, 'id' | 'fileUrl' | 'createdAt' | 'updatedAt'>) {
     const id = uuidv4();
     const resource_type = this.resolveResourceType(filePath);
 
@@ -76,8 +80,11 @@ export class DocumentService extends BasePrismaService<'document'> {
       const isPdfOrRaw = ext === '.pdf' || !ext;
       const resource_type = isPdfOrRaw ? 'raw' : 'image';
 
+      console.log(resource_type);
+
       const publicId = `documents/${id}`;
-      await cloudinary.uploader.destroy(publicId, { resource_type });
+      const result = await cloudinary.uploader.destroy(publicId, { resource_type });
+      console.log('result', result);
 
       await this.repository.delete({ where: { id } });
       return true;
