@@ -5,6 +5,7 @@ import { v2 as cloudinary } from 'cloudinary';
 import { v4 as uuidv4 } from 'uuid';
 import path from 'path';
 import mime from 'mime-types';
+import { raw } from '@prisma/client/runtime/library';
 
 export class DocumentService extends BasePrismaService<'document'> {
   private static singleton: DocumentService;
@@ -31,26 +32,18 @@ export class DocumentService extends BasePrismaService<'document'> {
     return DocumentService.singleton;
   }
 
-  private resolveResourceType = (filePath: string): 'image' | 'video' | 'raw' => {
-    const mt = mime.lookup(filePath) || '';
-    if (mt.startsWith('image/')) return 'image';
-    if (mt.startsWith('video/')) return 'video';
-    return 'raw';
-  };
-
   public async getAllDocuments(): Promise<Document[]> {
     return this.repository.findMany({ orderBy: { createdAt: 'desc' } });
   }
 
   public async createDocument(filePath: string, document: Omit<Document, 'id' | 'fileUrl' | 'createdAt' | 'updatedAt'>) {
     const id = uuidv4();
-    const resource_type = this.resolveResourceType(filePath);
 
     try {
       const uploadResult = await cloudinary.uploader.upload(filePath, {
         public_id: id,
         folder: 'documents',
-        resource_type,
+        resource_type: 'auto',
         format: document.type,
         access_mode: 'public',
         invalidate: true,
@@ -73,18 +66,22 @@ export class DocumentService extends BasePrismaService<'document'> {
 
   public async deleteDocument(id: string): Promise<boolean> {
     try {
+      const res = await cloudinary.search.expression('folder="documents"').max_results(500).execute();
+      console.log('res', res);
       const doc = await this.repository.findUnique({ where: { id } });
       if (!doc) throw new Error('Document not found');
 
       const ext = path.extname(new URL(doc.fileUrl).pathname).toLowerCase();
-      const isPdfOrRaw = ext === '.pdf' || !ext;
-      const resource_type = isPdfOrRaw ? 'raw' : 'image';
+      const isPdfOrDocOrRaw = ext === '.pdf' || ext === '.docx' || !ext;
+      const resource_type = isPdfOrDocOrRaw ? 'raw' : 'image';
 
-      console.log(resource_type);
-
-      const publicId = `documents/${id}`;
+      const publicId = `documents/${id}${isPdfOrDocOrRaw ? '.pdf' : ''}`;
+      console.log('publicId', publicId);
       const result = await cloudinary.uploader.destroy(publicId, { resource_type });
-      console.log('result', result);
+
+      if (result.result === 'not found') {
+        throw new Error('Document not found in cloudinary');
+      }
 
       await this.repository.delete({ where: { id } });
       return true;

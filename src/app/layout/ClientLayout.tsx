@@ -37,7 +37,7 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
   return (
     <BaseProvider>
       <div className="flex min-h-screen flex-col">
-        <header>
+        <header className="sticky top-0 z-50">
           <NavBar />
         </header>
         <main className="flex-1">{children}</main>
