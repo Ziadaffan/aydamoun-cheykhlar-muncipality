@@ -1,8 +1,8 @@
 'use client';
 
 import React from 'react';
-import { NewsFiltersProps } from '../types/news.types';
-import { categoryLabels } from '.';
+import { NewsFiltersProps } from '@/packages/news/types/news.types';
+import { categoryLabels } from '@/packages/news/utils/news.utils';
 
 export default function NewsFilters({ categories, selectedCategory, onCategoryChange, className = '' }: NewsFiltersProps) {
   return (

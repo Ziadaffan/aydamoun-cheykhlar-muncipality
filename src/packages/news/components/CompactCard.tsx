@@ -1,6 +1,6 @@
 import { CldImage } from 'next-cloudinary';
-import { categoryColors, categoryLabels, formatDate } from '.';
-import { News } from '../types/news.types';
+import { categoryColors, categoryLabels, formatDate } from '@/packages/news/utils/news.utils';
+import { News } from '@/packages/news/types/news.types';
 import Link from 'next/link';
 
 type CompactCardProps = {

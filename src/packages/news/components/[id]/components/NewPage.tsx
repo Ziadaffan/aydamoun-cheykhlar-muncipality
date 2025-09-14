@@ -11,7 +11,7 @@ import { CldImage } from 'next-cloudinary';
 import { useEffect, useState } from 'react';
 import { NewHeader } from './NewHeader';
 import { useTranslation } from 'react-i18next';
-import { categoryColors, categoryLabels } from '../..';
+import { categoryColors, categoryLabels } from '@/packages/news/utils/news.utils';
 import { NewsFleshesImage } from '@/packages/common/components/NewsFleshImage';
 import { ImageIndicators } from '@/packages/common/components/ImageIndicators';
 

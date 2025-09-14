@@ -1,20 +1,24 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { NewsHero, NewsFilters, NewsGrid } from './index';
-import { News, NewsCategory } from '../types/news.types';
+import NewsHero from '@/packages/news/components/NewsHero';
+import NewsFilters from '@/packages/news/components/NewsFilters';
+import NewsGrid from '@/packages/news/components/NewsGrid';
+import { News, NewsCategory } from '@/packages/news/types/news.types';
 import Button from '@/packages/common/components/Button';
-import { useGetFeaturedNews } from '../hooks/useGetFeaturedNews';
-import { useGetNewsCategories } from '../hooks/useGetNewsCategories';
-import { useGetNewsByCategory } from '../hooks/useGerNewsByCategory';
+import { useGetFeaturedNews } from '@/packages/news/hooks/useGetFeaturedNews';
+import { useGetNewsCategories } from '@/packages/news/hooks/useGetNewsCategories';
+import { useGetNewsByCategory } from '@/packages/news/hooks/useGerNewsByCategory';
 import Spinner from '@/packages/common/components/Spinner';
-import NoNews from './NoNews';
+import NoNews from '@/packages/news/components/NoNews';
 import { useTranslation } from 'react-i18next';
+import { useAuth } from '@/packages/common/hooks/useAuth';
 
 export default function NewsPage() {
   const { t } = useTranslation();
   const [selectedCategory, setSelectedCategory] = useState<NewsCategory | 'ALL'>('ALL');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+  const { role } = useAuth();
 
   const [featuredNews, setFeaturedNews] = useState<News | null>(null);
   const [categories, setCategories] = useState<NewsCategory[]>([]);
@@ -51,7 +55,7 @@ export default function NewsPage() {
   return (
     <div className="min-h-screen bg-gradient-to-r from-blue-50 to-green-50 py-20">
       {/* Hero Section */}
-      <NewsHero featuredNews={featuredNews} t={t} />
+      <NewsHero featuredNews={featuredNews} t={t} role={role} />
 
       {/* Main Content */}
       <div className="container mx-auto px-4 pb-12">

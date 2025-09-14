@@ -1,10 +1,10 @@
 'use client';
 
 import { TFunction } from 'i18next';
-import { News } from '../types/news.types';
-import { CompactCard } from './CompactCard';
-import { DefaultCard } from './DefaultCard';
-import { FeaturedCard } from './FeaturedCard';
+import { News } from '@/packages/news/types/news.types';
+import { CompactCard } from '@/packages/news/components/CompactCard';
+import { DefaultCard } from '@/packages/news/components/DefaultCard';
+import { FeaturedCard } from '@/packages/news/components/FeaturedCard';
 
 export interface NewsCardProps {
   news: News;

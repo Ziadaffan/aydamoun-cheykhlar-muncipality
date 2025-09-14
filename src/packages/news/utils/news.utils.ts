@@ -1,11 +1,6 @@
 import { formatDistanceToNow } from 'date-fns';
 import { ar } from 'date-fns/locale';
 
-export { default as NewsCard } from './NewsCard';
-export { default as NewsGrid } from './NewsGrid';
-export { default as NewsFilters } from './NewsFilters';
-export { default as NewsHero } from './NewsHero';
-
 export const categoryColors = {
   MUNICIPAL_NEWS: 'bg-blue-100 text-blue-800 border-blue-200',
   DEVELOPMENT_PROJECTS: 'bg-green-100 text-green-800 border-green-200',

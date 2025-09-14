@@ -1,12 +1,13 @@
 import { CldImage } from 'next-cloudinary';
-import { categoryColors, categoryLabels, formatDate } from '.';
-import { News } from '../types/news.types';
+import { categoryColors, categoryLabels, formatDate } from '@/packages/news/utils/news.utils';
+import { News } from '@/packages/news/types/news.types';
 import Button from '@/packages/common/components/Button';
 import { TFunction } from 'i18next';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { NewsFleshesImage } from '@/packages/common/components/NewsFleshImage';
 import { ImageIndicators } from '@/packages/common/components/ImageIndicators';
+import { useAuth } from '@/packages/common/hooks/useAuth';
 type DefaultCardProps = {
   news: News;
   t: TFunction;
@@ -15,7 +16,7 @@ type DefaultCardProps = {
 export const DefaultCard = ({ news, t }: DefaultCardProps) => {
   const router = useRouter();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-
+  const { role } = useAuth();
   const hasMultipleImages = news.imageUrl && news.imageUrl.length > 1;
   const currentImage = news.imageUrl?.[currentImageIndex] || 'elementor-placeholder-image-3610342416_bys2q8';
 
@@ -78,9 +79,27 @@ export const DefaultCard = ({ news, t }: DefaultCardProps) => {
         )}
 
         {/* Read More Button */}
-        <Button variant="primary" size="lg" className="w-full" onClick={() => router.push(`/news/${news.id}`)}>
-          {t('news.page.readMore')}
-        </Button>
+        <div className="flex justify-center gap-3">
+          <div>
+            <Button variant="primary" size="md" onClick={() => router.push(`/news/${news.id}`)}>
+              {t('news.page.readMore')}
+            </Button>
+          </div>
+          {role == 'ADMIN' && (
+            <>
+              <div>
+                <Button variant="warning" size="md" onClick={() => router.push(`/news/${news.id}/edit`)}>
+                  {t('news.page.updateNews')}
+                </Button>
+              </div>
+              <div>
+                <Button variant="danger" size="md" onClick={() => router.push(`/news/${news.id}/delete`)}>
+                  {t('news.page.deleteNews')}
+                </Button>
+              </div>
+            </>
+          )}
+        </div>
       </div>
     </div>
   );

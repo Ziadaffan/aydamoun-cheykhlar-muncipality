@@ -1,8 +1,8 @@
 'use client';
 
 import React from 'react';
-import { News } from '../types/news.types';
-import NewsCard from './NewsCard';
+import { News } from '@/packages/news/types/news.types';
+import NewsCard from '@/packages/news/components/NewsCard';
 import { TFunction } from 'i18next';
 
 export interface NewsGridProps {
