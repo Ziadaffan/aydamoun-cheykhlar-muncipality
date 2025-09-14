@@ -4,14 +4,30 @@ import { Document } from '@prisma/client';
 import { v2 as cloudinary } from 'cloudinary';
 import { v4 as uuidv4 } from 'uuid';
 import path from 'path';
-import mime from 'mime-types';
-import { raw } from '@prisma/client/runtime/library';
 
 export class DocumentService extends BasePrismaService<'document'> {
   private static singleton: DocumentService;
 
   private constructor(repository: DocumentRepository = new DocumentRepository()) {
     super(repository);
+  }
+
+  private getResourceType(fileExtension: string): 'raw' | 'image' | 'video' {
+    const ext = fileExtension.toLowerCase();
+
+    if (['pdf', 'doc', 'docx', 'txt', 'rtf', 'odt', 'xls', 'xlsx', 'ppt', 'pptx', 'zip', 'rar', '7z'].includes(ext)) {
+      return 'raw';
+    }
+
+    if (['mp4', 'avi', 'mov', 'wmv', 'flv', 'webm', 'mkv'].includes(ext)) {
+      return 'video';
+    }
+
+    if (['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp', 'svg'].includes(ext)) {
+      return 'image';
+    }
+
+    return 'raw';
   }
 
   public static instance(): DocumentService {
@@ -39,55 +55,44 @@ export class DocumentService extends BasePrismaService<'document'> {
   public async createDocument(filePath: string, document: Omit<Document, 'id' | 'fileUrl' | 'createdAt' | 'updatedAt'>) {
     const id = uuidv4();
 
-    try {
-      const uploadResult = await cloudinary.uploader.upload(filePath, {
-        public_id: id,
-        folder: 'documents',
-        resource_type: 'auto',
-        format: document.type,
-        access_mode: 'public',
-        invalidate: true,
-      });
+    const resourceType = this.getResourceType(document.type);
 
-      const savedDoc = await this.repository.create({
-        data: {
-          ...document,
-          id,
-          fileUrl: uploadResult.secure_url,
-        },
-      });
+    const uploadResult = await cloudinary.uploader.upload(filePath, {
+      public_id: id,
+      folder: 'documents',
+      resource_type: resourceType,
+      format: document.type,
+      access_mode: 'public',
+      invalidate: true,
+    });
 
-      return { document: savedDoc, url: uploadResult.secure_url };
-    } catch (error) {
-      console.error('Cloudinary upload error:', error);
-      throw new Error(`Failed to upload document: ${error instanceof Error ? error.message : 'Unknown error'}`);
-    }
+    const savedDoc = await this.repository.create({
+      data: {
+        ...document,
+        id,
+        fileUrl: uploadResult.secure_url,
+      },
+    });
+
+    return { document: savedDoc, url: uploadResult.secure_url };
   }
 
   public async deleteDocument(id: string): Promise<boolean> {
-    try {
-      const res = await cloudinary.search.expression('folder="documents"').max_results(500).execute();
-      console.log('res', res);
-      const doc = await this.repository.findUnique({ where: { id } });
-      if (!doc) throw new Error('Document not found');
+    const doc = await this.repository.findUnique({ where: { id } });
+    if (!doc) throw new Error('Document not found');
 
-      const ext = path.extname(new URL(doc.fileUrl).pathname).toLowerCase();
-      const isPdfOrDocOrRaw = ext === '.pdf' || ext === '.docx' || !ext;
-      const resource_type = isPdfOrDocOrRaw ? 'raw' : 'image';
+    const ext = path.extname(new URL(doc.fileUrl).pathname).toLowerCase().replace('.', '');
+    const resource_type = this.getResourceType(ext);
 
-      const publicId = `documents/${id}${isPdfOrDocOrRaw ? '.pdf' : ''}`;
-      console.log('publicId', publicId);
-      const result = await cloudinary.uploader.destroy(publicId, { resource_type });
+    const publicId = resource_type === 'raw' ? `documents/${id}.${ext}` : `documents/${id}`;
 
-      if (result.result === 'not found') {
-        throw new Error('Document not found in cloudinary');
-      }
+    const result = await cloudinary.uploader.destroy(publicId, { resource_type });
 
-      await this.repository.delete({ where: { id } });
-      return true;
-    } catch (error) {
-      console.error('Error deleting document:', error);
-      throw new Error(`Failed to delete document: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    if (result.result === 'not found') {
+      throw new Error('Document not found in cloudinary');
     }
+
+    await this.repository.delete({ where: { id } });
+    return true;
   }
 }
