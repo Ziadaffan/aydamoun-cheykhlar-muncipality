@@ -26,7 +26,7 @@ export default function NewsHero({ featuredNews, className = '', t, role }: News
         {role === 'ADMIN' && (
           <div className="mb-8 flex justify-center">
             <Button variant="primary" size="lg" onClick={() => router.push('/news/create')}>
-              {t('news.page.createNews')}
+              {t('news.page.createNews.title')}
             </Button>
           </div>
         )}

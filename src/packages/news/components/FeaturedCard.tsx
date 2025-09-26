@@ -8,6 +8,7 @@ import { useState } from 'react';
 import { NewsFleshesImage } from '@/packages/common/components/NewsFleshImage';
 import { ImageIndicators } from '@/packages/common/components/ImageIndicators';
 import { useAuth } from '@/packages/common/hooks/useAuth';
+import { useDeleteNews } from '@/packages/news/hooks/useDeteleNews';
 
 type FeaturedCardProps = {
   news: News;
@@ -18,6 +19,7 @@ export const FeaturedCard = ({ news, t }: FeaturedCardProps) => {
   const router = useRouter();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const { role } = useAuth();
+  const { mutate: deleteNews, isPending } = useDeleteNews();
 
   const hasMultipleImages = news.imageUrl && news.imageUrl.length > 1;
   const currentImage = news.imageUrl?.[currentImageIndex] || 'elementor-placeholder-image-3610342416_bys2q8';
@@ -99,7 +101,7 @@ export const FeaturedCard = ({ news, t }: FeaturedCardProps) => {
                   </Button>
                 </div>
                 <div>
-                  <Button variant="danger" size="lg" onClick={() => router.push(`/news/${news.id}/delete`)}>
+                  <Button variant="danger" size="lg" onClick={() => deleteNews(news.id)} loading={isPending}>
                     {t('news.page.deleteNews')}
                   </Button>
                 </div>

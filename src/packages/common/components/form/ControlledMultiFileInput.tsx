@@ -3,31 +3,31 @@
 import React from 'react';
 import { Control, Controller, FieldError, FieldErrorsImpl, Merge } from 'react-hook-form';
 
-interface ControlledInputTextProps {
+interface ControlledMultiFileInputProps {
   id: string;
   label: string;
-  type?: 'text' | 'email' | 'password' | 'tel' | 'number';
-  placeholder?: string;
+  accept?: string;
   control: Control<any>;
   name: string;
   error?: FieldError | Merge<FieldError, FieldErrorsImpl<any>> | undefined;
   className?: string;
   disabled?: boolean;
   required?: boolean;
+  multiple?: boolean;
 }
 
-export default function ControlledInputText({
+export default function ControlledMultiFileInput({
   id,
   label,
-  type = 'text',
-  placeholder,
+  accept,
   control,
   name,
   error,
   className = '',
   disabled = false,
   required = false,
-}: ControlledInputTextProps) {
+  multiple = true,
+}: ControlledMultiFileInputProps) {
   return (
     <div className="mb-5">
       <label className="mb-1 block text-right text-sm font-medium text-gray-700 md:text-base" htmlFor={id}>
@@ -37,12 +37,17 @@ export default function ControlledInputText({
       <Controller
         name={name}
         control={control}
-        render={({ field }) => (
+        render={({ field: { onChange, value, ...field } }) => (
           <input
             id={id}
-            type={type}
-            placeholder={placeholder}
+            type="file"
+            accept={accept}
+            multiple={multiple}
             disabled={disabled}
+            onChange={e => {
+              const files = Array.from(e.target.files || []);
+              onChange(files);
+            }}
             {...field}
             className={`w-full rounded-lg border px-3 py-2 text-right text-sm transition focus:ring-2 focus:ring-blue-200 md:text-base ${
               error ? 'border-red-300 focus:border-red-500' : 'border-gray-300 focus:border-blue-500'
