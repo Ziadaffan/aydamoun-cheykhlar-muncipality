@@ -44,18 +44,23 @@ export const authOptions: NextAuthOptions = {
   ],
   session: {
     strategy: 'jwt',
+    maxAge: 24 * 60 * 60, // 24 heures
+    updateAge: 60 * 60, // 1 heure - met à jour la session toutes les heures
+  },
+  jwt: {
+    maxAge: 24 * 60 * 60, // 24 heures
   },
   callbacks: {
-    async jwt({ token, user }) {
+    async jwt({ token, user, trigger }) {
       if (user) {
         token.role = user.role;
         token.createdAt = user.createdAt;
+        token.lastUpdated = Date.now();
       }
-      return token;
-    },
-    async session({ session, token }) {
-      if (token) {
-        // Récupérer les données utilisateur les plus récentes depuis la DB
+
+      // Vérifier si la session doit être mise à jour
+      if (trigger === 'update' || (token.lastUpdated && Date.now() - (token.lastUpdated as number) > 60 * 60 * 1000)) {
+        // Mettre à jour les données utilisateur depuis la DB
         const user = await prisma.user.findUnique({
           where: { id: token.sub! },
           select: {
@@ -68,12 +73,24 @@ export const authOptions: NextAuthOptions = {
         });
 
         if (user) {
-          session.user.id = user.id;
-          session.user.name = user.name;
-          session.user.email = user.email;
-          session.user.role = user.role;
-          session.user.createdAt = user.createdAt;
+          token.role = user.role;
+          token.name = user.name;
+          token.email = user.email;
+          token.createdAt = user.createdAt;
+          token.lastUpdated = Date.now();
         }
+      }
+
+      return token;
+    },
+    async session({ session, token }) {
+      if (token) {
+        session.user.id = token.sub!;
+        session.user.name = token.name;
+        session.user.email = token.email;
+        session.user.role = token.role;
+        session.user.createdAt = token.createdAt;
+        session.expires = new Date((token.exp as number) * 1000).toISOString();
       }
       return session;
     },

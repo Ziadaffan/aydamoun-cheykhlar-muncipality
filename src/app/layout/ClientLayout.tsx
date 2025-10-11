@@ -2,6 +2,7 @@
 
 import BaseProvider from '@/app/providers/BaseProvider';
 import NavBar from '@/packages/common/components/NavBar/NavBar';
+import SessionManager from '@/packages/common/components/SessionManager';
 import { useEffect, useState } from 'react';
 import i18n from '@/i18n';
 import Spinner from '@/packages/common/components/Spinner';
@@ -36,6 +37,7 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
 
   return (
     <BaseProvider>
+      <SessionManager />
       <div className="flex min-h-screen flex-col">
         <header className="sticky top-0 z-50">
           <NavBar />

@@ -11,7 +11,6 @@ type NavigationItemsProps = {
 
 export default function NavigationItems({ t, setIsMobileMenuOpen, isMobile = false }: NavigationItemsProps) {
   const { role, isAuthenticated } = useAuth();
-  console.log(isAuthenticated);
 
   const isAdmin = role === 'ADMIN';
 
