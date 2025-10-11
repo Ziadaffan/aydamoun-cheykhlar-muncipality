@@ -33,8 +33,14 @@ export default function LogInPage() {
   useEffect(() => {
     const checkSession = async () => {
       const session = await getSession();
-      if (session) {
-        router.push('/');
+      if (session?.user && session.expires) {
+        const expirationTime = new Date(session.expires).getTime();
+        const currentTime = Date.now();
+
+        // Vérifier si la session est encore valide
+        if (currentTime < expirationTime) {
+          router.push('/');
+        }
       }
     };
     checkSession();
