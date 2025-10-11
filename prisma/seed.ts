@@ -18,7 +18,7 @@ async function seedFromExports() {
 
     // Clear existing data (optional - be careful with this!)
     console.log('🧹 Clearing existing data...');
-    await prisma.news.deleteMany();
+    // await prisma.news.deleteMany();
     await prisma.serviceSubmission.deleteMany();
     await prisma.service.deleteMany();
     await prisma.council.deleteMany();
@@ -31,7 +31,7 @@ async function seedFromExports() {
     console.log('👥 Seeding users...');
     const usersData = JSON.parse(fs.readFileSync(path.join(exportsDir, 'users.json'), 'utf8'));
     for (const userData of usersData) {
-      const { accounts, sessions, submissions, news, ...userFields } = userData;
+      const { accounts, sessions, submissions, ...userFields } = userData;
 
       const user = await prisma.user.create({
         data: userFields,
@@ -75,27 +75,27 @@ async function seedFromExports() {
       }
 
       // Create news with tags
-      const news = await prisma.news.create({
-        data: {
-          ...newsFields,
-          createdBy: user.id,
-          tags: tags || [],
-        },
-      });
-      console.log(`✅ Created news: ${news.title}`);
+      // const news = await prisma.news.create({
+      //   data: {
+      //     ...newsFields,
+      //     createdBy: user.id,
+      //     tags: tags || [],
+      //   },
+      // });
+      // console.log(`✅ Created news: ${news.title}`);
     }
 
     console.log('🎉 Database seeding completed successfully!');
 
     // Show summary
     const userCount = await prisma.user.count();
-    const newsCount = await prisma.news.count();
+    // const newsCount = await prisma.news.count();
     const serviceCount = await prisma.service.count();
     const councilCount = await prisma.council.count();
 
     console.log('\n📊 Seeding Summary:');
     console.log(`   Users: ${userCount}`);
-    console.log(`   News: ${newsCount}`);
+    // console.log(`   News: ${newsCount}`);
     console.log(`   Services: ${serviceCount}`);
     console.log(`   Council: ${councilCount}`);
   } catch (error) {

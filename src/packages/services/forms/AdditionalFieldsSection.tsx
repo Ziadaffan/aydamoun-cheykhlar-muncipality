@@ -55,6 +55,7 @@ function AdditionalFieldRenderer({ field, control, errors }: AdditionalFieldRend
   if (field.type === 'select') {
     return (
       <ControlledSelect
+        id={field.name}
         name={`additionalInfo.${field.name}`}
         control={control}
         label={field.label}
@@ -62,7 +63,6 @@ function AdditionalFieldRenderer({ field, control, errors }: AdditionalFieldRend
         placeholder={t('services.form.buttons.choose')}
         required={field.required}
         error={errors.additionalInfo?.[field.name] as any}
-        rules={{ required: field.required ? `${field.label} مطلوب` : false }}
       />
     );
   }

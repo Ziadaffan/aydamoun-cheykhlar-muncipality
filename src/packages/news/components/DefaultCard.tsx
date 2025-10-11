@@ -1,12 +1,14 @@
-import { CldImage } from 'next-cloudinary';
-import { categoryColors, categoryLabels, formatDate } from '.';
-import { News } from '../types/news.types';
+import Image from 'next/image';
+import { categoryColors, categoryLabels, formatDate } from '@/packages/news/utils/news.utils';
+import { News } from '@/packages/news/types/news.types';
 import Button from '@/packages/common/components/Button';
 import { TFunction } from 'i18next';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { NewsFleshesImage } from '@/packages/common/components/NewsFleshImage';
 import { ImageIndicators } from '@/packages/common/components/ImageIndicators';
+import { useAuth } from '@/packages/common/hooks/useAuth';
+import { useDeleteNews } from '@/packages/news/hooks/useDeteleNews';
 type DefaultCardProps = {
   news: News;
   t: TFunction;
@@ -15,9 +17,12 @@ type DefaultCardProps = {
 export const DefaultCard = ({ news, t }: DefaultCardProps) => {
   const router = useRouter();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-
+  const { role } = useAuth();
+  const { mutate: deleteNews, isPending } = useDeleteNews();
   const hasMultipleImages = news.imageUrl && news.imageUrl.length > 1;
-  const currentImage = news.imageUrl?.[currentImageIndex] || 'elementor-placeholder-image-3610342416_bys2q8';
+  const currentImage = news.imageUrl?.[currentImageIndex]
+    ? `data:image/jpeg;base64,${news.imageUrl[currentImageIndex]}`
+    : 'elementor-placeholder-image-3610342416_bys2q8';
 
   const nextImage = () => {
     if (hasMultipleImages) {
@@ -32,10 +37,10 @@ export const DefaultCard = ({ news, t }: DefaultCardProps) => {
   };
 
   return (
-    <div className="group relative overflow-hidden rounded-xl bg-white shadow-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
+    <div className="group relative flex h-full flex-col overflow-hidden rounded-xl bg-white shadow-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
       {/* Image */}
       <div className="relative h-48 overflow-hidden">
-        <CldImage src={currentImage} alt={news.title} fill className="object-cover transition-transform duration-300 group-hover:scale-105" />
+        <Image src={currentImage} alt={news.title} fill className="object-cover transition-transform duration-300 group-hover:scale-105" />
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
 
         {hasMultipleImages && <NewsFleshesImage nextImage={nextImage} prevImage={prevImage} />}
@@ -52,7 +57,7 @@ export const DefaultCard = ({ news, t }: DefaultCardProps) => {
       </div>
 
       {/* Content */}
-      <div className="p-6">
+      <div className="flex flex-1 flex-col p-6">
         <div className="mb-3 flex items-center text-sm text-gray-500">
           <svg className="ml-2 h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
             <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
@@ -77,10 +82,31 @@ export const DefaultCard = ({ news, t }: DefaultCardProps) => {
           </div>
         )}
 
+        {/* Spacer to push buttons to bottom */}
+        <div className="flex-1"></div>
+
         {/* Read More Button */}
-        <Button variant="primary" size="lg" className="w-full" onClick={() => router.push(`/news/${news.id}`)}>
-          {t('news.page.readMore')}
-        </Button>
+        <div className="flex justify-center gap-3">
+          <div>
+            <Button variant="primary" size="md" onClick={() => router.push(`/news/${news.id}`)}>
+              {t('news.page.readMore')}
+            </Button>
+          </div>
+          {role == 'ADMIN' && (
+            <>
+              <div>
+                <Button variant="warning" size="md" onClick={() => router.push(`/news/${news.id}/edit`)}>
+                  {t('news.page.updateNews')}
+                </Button>
+              </div>
+              <div>
+                <Button variant="danger" size="md" onClick={() => deleteNews(news.id)} loading={isPending}>
+                  {t('news.page.deleteNews')}
+                </Button>
+              </div>
+            </>
+          )}
+        </div>
       </div>
     </div>
   );

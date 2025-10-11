@@ -2,12 +2,12 @@
 
 import Banner from '@/packages/common/components/Banner';
 
-type FormMessageProps = {
+type InfoMessageProps = {
   message: { type: 'success' | 'error'; text: string } | null;
   onClose: () => void;
 };
 
-export default function FormMessage({ message, onClose }: FormMessageProps) {
+export default function InfoMessage({ message, onClose }: InfoMessageProps) {
   if (!message) {
     return null;
   }

@@ -1,12 +1,14 @@
-import { CldImage } from 'next-cloudinary';
-import { categoryColors, categoryLabels, formatDate } from '.';
-import { News } from '../types/news.types';
+import Image from 'next/image';
+import { categoryColors, categoryLabels, formatDate } from '@/packages/news/utils/news.utils';
+import { News } from '@/packages/news/types/news.types';
 import Button from '@/packages/common/components/Button';
 import { TFunction } from 'i18next';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { NewsFleshesImage } from '@/packages/common/components/NewsFleshImage';
 import { ImageIndicators } from '@/packages/common/components/ImageIndicators';
+import { useAuth } from '@/packages/common/hooks/useAuth';
+import { useDeleteNews } from '@/packages/news/hooks/useDeteleNews';
 
 type FeaturedCardProps = {
   news: News;
@@ -16,9 +18,13 @@ type FeaturedCardProps = {
 export const FeaturedCard = ({ news, t }: FeaturedCardProps) => {
   const router = useRouter();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const { role } = useAuth();
+  const { mutate: deleteNews, isPending } = useDeleteNews();
 
   const hasMultipleImages = news.imageUrl && news.imageUrl.length > 1;
-  const currentImage = news.imageUrl?.[currentImageIndex] || 'elementor-placeholder-image-3610342416_bys2q8';
+  const currentImage = news.imageUrl?.[currentImageIndex]
+    ? `data:image/jpeg;base64,${news.imageUrl[currentImageIndex]}`
+    : 'elementor-placeholder-image-3610342416_bys2q8';
 
   const nextImage = () => {
     if (hasMultipleImages) {
@@ -37,7 +43,7 @@ export const FeaturedCard = ({ news, t }: FeaturedCardProps) => {
       <div className="grid grid-cols-1 gap-0 lg:grid-cols-2">
         {/* Image Section */}
         <div className="relative h-64 overflow-hidden lg:h-full">
-          <CldImage src={currentImage} alt={news.title} fill className="object-cover transition-transform duration-300 group-hover:scale-105" />
+          <Image src={currentImage} alt={news.title} fill className="object-cover transition-transform duration-300 group-hover:scale-105" />
           <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
 
           {hasMultipleImages && <NewsFleshesImage nextImage={nextImage} prevImage={prevImage} />}
@@ -83,9 +89,27 @@ export const FeaturedCard = ({ news, t }: FeaturedCardProps) => {
             </div>
           )}
 
-          <Button variant="primary" size="lg" onClick={() => router.push(`/news/${news.id}`)}>
-            {t('news.page.readMore')}
-          </Button>
+          <div className="flex justify-center gap-5">
+            <div>
+              <Button variant="primary" size="lg" onClick={() => router.push(`/news/${news.id}`)}>
+                {t('news.page.readMore')}
+              </Button>
+            </div>
+            {role == 'ADMIN' && (
+              <>
+                <div>
+                  <Button variant="warning" size="lg" onClick={() => router.push(`/news/${news.id}/edit`)}>
+                    {t('news.page.updateNews')}
+                  </Button>
+                </div>
+                <div>
+                  <Button variant="danger" size="lg" onClick={() => deleteNews(news.id)} loading={isPending}>
+                    {t('news.page.deleteNews')}
+                  </Button>
+                </div>
+              </>
+            )}
+          </div>
         </div>
       </div>
     </div>

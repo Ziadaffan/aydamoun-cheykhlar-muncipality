@@ -15,12 +15,11 @@ export default function MainNavigation({ t }: MainNavigationProps) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   return (
-    <nav className="sticky top-0 z-50 bg-white bg-gradient-to-r from-green-200 to-blue-300 shadow-md">
+    <nav className="bg-white bg-gradient-to-r from-green-200 to-blue-300 shadow-md">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="flex h-20 justify-between">
+        <div className="flex h-23 justify-between">
           <div className="flex items-center">
             <Link href="/" className="flex flex-shrink-0 items-center">
-              {/* <Image src="/assets/images/logo.png" alt="Municipality Logo" width={80} height={80} className="object-contain" priority /> */}
               <CldImage src="logo_smzpb2" alt="Municipality Logo" width={80} height={80} className="object-contain" priority />
             </Link>
           </div>

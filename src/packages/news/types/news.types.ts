@@ -10,7 +10,7 @@ export interface News {
   title: string;
   content: string;
   excerpt: string;
-  imageUrl: string[];
+  imageUrl: string[]; // base64 string
   category: NewsCategory;
   author: string;
   tags: string[];

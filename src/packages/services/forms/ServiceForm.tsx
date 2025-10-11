@@ -7,7 +7,7 @@ import PersonalInfoSection from './PersonalInfoSection';
 import AdditionalFieldsSection from './AdditionalFieldsSection';
 import RequestDetailsSection from './RequestDetailsSection';
 import FormSubmitButton from './FormSubmitButton';
-import FormMessage from './FormMessage';
+import InfoMessage from '@/packages/common/components/form/InfoMessage';
 
 type ServiceFormProps = {
   category: string;
@@ -29,7 +29,7 @@ export default function ServiceForm({ category, serviceId }: ServiceFormProps) {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="rounded-2xl bg-white p-8 shadow-xl">
-      <FormMessage message={message} onClose={closeMessage} />
+      <InfoMessage message={message} onClose={closeMessage} />
 
       <PersonalInfoSection control={control} errors={errors} />
 
@@ -37,7 +37,7 @@ export default function ServiceForm({ category, serviceId }: ServiceFormProps) {
 
       <RequestDetailsSection control={control} errors={errors} />
 
-      <FormSubmitButton isSubmitting={isSubmitting} isDirty={isDirty} isValid={isValid} />
+      <FormSubmitButton isSubmitting={isSubmitting} isDirty={isDirty} />
     </form>
   );
 }

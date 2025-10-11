@@ -1,5 +1,4 @@
 import { useTranslation } from 'react-i18next';
-import TopNavigation from './TopNavigation';
 import MainNavigation from './MainNavigation';
 
 export default function NavBar() {
@@ -7,7 +6,6 @@ export default function NavBar() {
 
   return (
     <div>
-      {/* <TopNavigation t={t} /> */}
       <MainNavigation t={t} />
     </div>
   );

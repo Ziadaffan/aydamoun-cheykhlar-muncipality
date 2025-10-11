@@ -1,6 +1,9 @@
 import { BasePrismaService } from '@/packages/common/services/prisma.service';
 import { NewsRepository } from '../repository/news.repository';
-import { NewsCategory } from '../types/news.types';
+import { News, NewsCategory } from '../types/news.types';
+import { getResourceType } from '@/packages/document/utils/document.utils';
+import { v2 as cloudinary } from 'cloudinary';
+import { v4 as uuidv4 } from 'uuid';
 
 export class NewsService extends BasePrismaService<'news'> {
   private static singlenton: NewsService;
@@ -11,6 +14,16 @@ export class NewsService extends BasePrismaService<'news'> {
 
   public static instance(): NewsService {
     if (!NewsService.singlenton) {
+      if (!process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME || !process.env.CLOUDINARY_API_KEY || !process.env.CLOUDINARY_API_SECRET) {
+        throw new Error('Cloudinary environment variables are missing');
+      }
+
+      cloudinary.config({
+        cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
+        api_key: process.env.CLOUDINARY_API_KEY,
+        api_secret: process.env.CLOUDINARY_API_SECRET,
+        secure: true,
+      });
       NewsService.singlenton = new NewsService();
     }
     return NewsService.singlenton;
@@ -60,5 +73,61 @@ export class NewsService extends BasePrismaService<'news'> {
         id: id,
       },
     });
+  }
+
+  public async deleteNews(id: string): Promise<boolean> {
+    const result = await this.repository.delete({ where: { id } });
+
+    if (!result) {
+      return false;
+    }
+
+    for (const imageUrl of result.imageUrl) {
+      await cloudinary.uploader.destroy(imageUrl, { resource_type: 'image' });
+    }
+
+    return true;
+  }
+
+  public async updateNews(id: string, newsData: Omit<News, 'id' | 'createdAt' | 'updatedAt' | 'imageUrl'> & { imageUrl: string[] }) {
+    try {
+      const newsToUpdate = {
+        title: newsData.title,
+        content: newsData.content,
+        excerpt: newsData.excerpt,
+        category: newsData.category,
+        author: newsData.author,
+        tags: newsData.tags,
+        featured: newsData.featured,
+        imageUrl: newsData.imageUrl,
+      };
+
+      return await this.repository.update({
+        where: { id },
+        data: newsToUpdate,
+      });
+    } catch (error) {
+      console.error('Error updating news:', error);
+      throw error;
+    }
+  }
+
+  public async create(newsData: Omit<News, 'id' | 'createdAt' | 'updatedAt' | 'imageUrl'> & { imageUrl: string[] }) {
+    try {
+      const { imageUrl, ...newsDataWithoutImages } = newsData;
+
+      const news = await this.repository.create({
+        data: {
+          ...newsDataWithoutImages,
+          imageUrl: imageUrl,
+          createdBy: 'ADMIN',
+        },
+      });
+
+      return news;
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
   }
 }

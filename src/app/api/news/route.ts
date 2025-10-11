@@ -17,3 +17,46 @@ export async function GET(request: NextRequest) {
     returnProperErrorMessage(error);
   }
 }
+
+export async function POST(request: NextRequest) {
+  try {
+    const formData = await request.formData();
+
+    const title = formData.get('title') as string;
+    const content = formData.get('content') as string;
+    const excerpt = formData.get('excerpt') as string;
+    const category = formData.get('category') as NewsCategory;
+    const author = formData.get('author') as string;
+    const featured = formData.get('featured') === 'true';
+    const tagsString = formData.get('tags') as string;
+    const tags = tagsString ? JSON.parse(tagsString) : [];
+
+    const imageUrl: string[] = [];
+    const imageFiles = formData.getAll('images') as File[];
+
+    for (const imageFile of imageFiles) {
+      if (imageFile && imageFile.size > 0) {
+        const buffer = await imageFile.arrayBuffer();
+        const base64 = Buffer.from(buffer).toString('base64');
+        imageUrl.push(base64);
+      }
+    }
+
+    const newsData = {
+      title,
+      content,
+      excerpt,
+      category,
+      author,
+      tags,
+      featured,
+      imageUrl,
+    };
+
+    const news = await newsService.create(newsData);
+
+    return NextResponse.json(news, { status: 201 });
+  } catch (error) {
+    return returnProperErrorMessage(error);
+  }
+}

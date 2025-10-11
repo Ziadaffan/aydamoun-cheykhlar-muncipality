@@ -11,7 +11,7 @@
       "services": "الخدمات",
       "news": "الأخبار",
       "documents": "المستندات",
-      "guide": "الدليل المنطقة",
+      "emplois": "الوظائف",
       "contactUs": "تواصل معنا",
       "auth": "تسجيل الدخول",
       "signup": "إنشاء حساب",
@@ -355,13 +355,81 @@
       "latestNews": "آخر الأخبار والتحديثات",
       "latestNewsDescription": "تابع آخر الأخبار والتطورات في بلدية عيدمون شيخلار، ومشاريعنا التنموية، والفعاليات المجتمعية",
       "featuredNews": "الخبر المميز",
-      "readMore": "اقرأ المزيد"
+      "readMore": "اقرأ المزيد",
+      "createNews": {
+        "title": "إنشاء خبر جديد"
+      },
+      "updateNews": "تعديل الخبر",
+      "deleteNews": "حذف الخبر",
+      "editNews": {
+        "title": "تعديل الخبر"
+      }
+    },
+    "form": {
+      "title": "إنشاء خبر جديد",
+      "newsTitle": "عنوان الخبر",
+      "titlePlaceholder": "أدخل عنوان الخبر",
+      "excerpt": "ملخص الخبر",
+      "excerptPlaceholder": "أدخل ملخص مختصر للخبر",
+      "content": "محتوى الخبر",
+      "contentPlaceholder": "أدخل المحتوى الكامل للخبر",
+      "category": "فئة الخبر",
+      "categoryPlaceholder": "اختر فئة الخبر",
+      "author": "اسم الكاتب",
+      "authorPlaceholder": "أدخل اسم الكاتب",
+      "tags": "العلامات",
+      "tagsPlaceholder": "أدخل العلامات مفصولة بفواصل",
+      "images": "الصور",
+      "featured": "خبر مميز",
+      "createNews": "إنشاء الخبر",
+      "creating": "جاري الإنشاء...",
+      "messages": {
+        "createSuccess": "تم إنشاء الخبر بنجاح",
+        "createError": "حدث خطأ أثناء إنشاء الخبر"
+      }
+    },
+    "categories": {
+      "municipalNews": "أخبار البلدية",
+      "developmentProjects": "مشاريع تنموية",
+      "announcements": "إعلانات",
+      "communityEvents": "فعاليات مجتمعية",
+      "infrastructure": "بنية تحتية",
+      "environmental": "بيئية",
+      "socialServices": "خدمات اجتماعية",
+      "healthAndSocialServices": "صحة وخدمات اجتماعية",
+      "other": "أخرى"
     }
   },
   "new": {
     "page": {
       "title": "تفاصيل الخبر",
       "description": "اقرأ التفاصيل الكاملة للخبر وتعرف على آخر التطورات والأحداث المهمة في بلدية عيدمون شيخلار"
+    }
+  },
+  "documents": {
+    "title": "المستندات",
+    "description": "استعرض وتحميل المستندات الرسمية المنشورة من قبل بلدية عيدمون شيخلار",
+    "added": "أضيف في",
+    "download": "تحميل المستند",
+    "noDocuments": "لا توجد مستندات",
+    "noDocumentsDescription": "لا توجد مستندات منشورة من قبل بلدية عيدمون شيخلار",
+    "createAdminDocument": "رفع مستند جديد",
+    "deleteDocument": "حذف المستند",
+    "form": {
+      "title": "رفع مستند جديد",
+      "titlePlaceholder": "أدخل عنوان المستند",
+      "description": "وصف المستند",
+      "descriptionPlaceholder": "أدخل وصف المستند",
+      "type": "نوع المستند",
+      "typePlaceholder": "اختر نوع المستند",
+      "file": "الملف",
+      "fileAccept": ".pdf,.doc,.docx,.jpg,.jpeg,.png,.gif,.mp4,.avi,.mov",
+      "uploading": "جاري الرفع...",
+      "upload": "رفع المستند",
+      "messages": {
+        "uploadSuccess": "تم رفع المستند بنجاح",
+        "uploadError": "حدث خطأ أثناء رفع المستند"
+      }
     }
   }
 }

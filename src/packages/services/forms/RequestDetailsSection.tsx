@@ -19,6 +19,7 @@ export default function RequestDetailsSection({ control, errors }: RequestDetail
       <h3 className="mb-6 border-b pb-2 text-xl font-bold text-gray-800">{t('services.form.requestDetails')}</h3>
 
       <ControlledTextArea
+        id="description"
         name="description"
         control={control}
         label={t('services.form.fields.description')}
@@ -26,14 +27,6 @@ export default function RequestDetailsSection({ control, errors }: RequestDetail
         required
         error={errors.description}
         rows={4}
-        minLength={10}
-        rules={{
-          required: t('services.form.fields.descriptionRequired'),
-          minLength: {
-            value: 10,
-            message: t('services.form.fields.descriptionMinLength'),
-          },
-        }}
       />
     </div>
   );

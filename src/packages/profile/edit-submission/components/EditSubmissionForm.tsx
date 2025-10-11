@@ -5,8 +5,8 @@ import { getAdditionalFields } from '@/packages/services/utils/form.utils';
 import PersonalInfoSection from '@/packages/services/forms/PersonalInfoSection';
 import AdditionalFieldsSection from '@/packages/services/forms/AdditionalFieldsSection';
 import RequestDetailsSection from '@/packages/services/forms/RequestDetailsSection';
-import FormSubmitButton from '@/packages/services/forms/FormSubmitButton';
-import FormMessage from '@/packages/services/forms/FormMessage';
+import EditSubmissionButton from '@/packages/profile/edit-submission/components/EditSubmissionButton';
+import InfoMessage from '@/packages/common/components/form/InfoMessage';
 import { Control, FieldErrors } from 'react-hook-form';
 
 type FormData = {
@@ -44,7 +44,7 @@ export default function EditSubmissionForm({ form, isSubmitting, message, onSubm
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="rounded-2xl bg-white p-8 shadow-xl">
-      <FormMessage message={message} onClose={closeMessage} />
+      <InfoMessage message={message} onClose={closeMessage} />
 
       <PersonalInfoSection control={control} errors={errors} />
 
@@ -52,7 +52,7 @@ export default function EditSubmissionForm({ form, isSubmitting, message, onSubm
 
       <RequestDetailsSection control={control} errors={errors} />
 
-      <FormSubmitButton isSubmitting={isSubmitting} isDirty={isDirty} isValid={isValid} />
+      <EditSubmissionButton isSubmitting={isSubmitting} isDirty={isDirty} isValid={isValid} />
     </form>
   );
 }

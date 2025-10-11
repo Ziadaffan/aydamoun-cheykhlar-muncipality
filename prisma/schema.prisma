@@ -139,15 +139,15 @@ model ServiceSubmission {
 }
 
 model News {
-  id          String       @id @default(uuid())
-  title       String
-  content     String       @db.Text
-  excerpt     String
-  imageUrl    String[]
-  category    NewsCategory
-  author      String
-  views       Int          @default(0)
-  featured    Boolean      @default(false)
+  id       String       @id @default(uuid())
+  title    String
+  content  String       @db.Text
+  excerpt  String
+  imageUrl String[]
+  category NewsCategory
+  author   String
+  views    Int          @default(0)
+  featured Boolean      @default(false)
 
   tags      String[]
   createdBy String
@@ -160,4 +160,27 @@ model News {
   @@index([createdAt])
 }
 
+model Document {
+  id          String  @id @default(uuid())
+  title       String
+  description String?
+  type        String
+  fileUrl     String
 
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Jobs {
+  id          String    @id @default(uuid())
+  title       String
+  description String?
+  provider    String
+  location    String
+  salary      String?
+  deadline    DateTime?
+  active      Boolean   @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

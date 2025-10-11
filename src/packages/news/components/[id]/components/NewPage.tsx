@@ -7,11 +7,11 @@ import Spinner from '@/packages/common/components/Spinner';
 import ErrorMessage from '@/packages/common/components/ErrorMessage';
 import { formatDate } from '@/packages/common/utils/date.utils';
 import { News } from '@/packages/news/types/news.types';
-import { CldImage } from 'next-cloudinary';
+import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { NewHeader } from './NewHeader';
 import { useTranslation } from 'react-i18next';
-import { categoryColors, categoryLabels } from '../..';
+import { categoryColors, categoryLabels } from '@/packages/news/utils/news.utils';
 import { NewsFleshesImage } from '@/packages/common/components/NewsFleshImage';
 import { ImageIndicators } from '@/packages/common/components/ImageIndicators';
 
@@ -38,7 +38,9 @@ export default function NewsPage() {
   }
 
   const hasMultipleImages = news.imageUrl && news.imageUrl.length > 1;
-  const currentImage = news.imageUrl?.[currentImageIndex] || 'elementor-placeholder-image-3610342416_bys2q8';
+  const currentImage = news.imageUrl?.[currentImageIndex]
+    ? `data:image/jpeg;base64,${news.imageUrl[currentImageIndex]}`
+    : 'elementor-placeholder-image-3610342416_bys2q8';
 
   const nextImage = () => {
     if (hasMultipleImages) {
@@ -66,7 +68,7 @@ export default function NewsPage() {
           {/* News Images */}
           {news.imageUrl && news.imageUrl.length > 0 && (
             <div className="relative h-[300px] overflow-hidden sm:h-[400px] lg:h-[500px]">
-              <CldImage
+              <Image
                 src={currentImage}
                 alt={news.title}
                 className="h-full w-full object-cover"
