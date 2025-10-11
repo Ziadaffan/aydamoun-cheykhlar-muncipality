@@ -161,11 +161,25 @@ model News {
 }
 
 model Document {
-  id          String       @id @default(uuid())
+  id          String  @id @default(uuid())
   title       String
   description String?
   type        String
   fileUrl     String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Jobs {
+  id          String    @id @default(uuid())
+  title       String
+  description String?
+  provider    String
+  location    String
+  salary      String?
+  deadline    DateTime?
+  active      Boolean   @default(true)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

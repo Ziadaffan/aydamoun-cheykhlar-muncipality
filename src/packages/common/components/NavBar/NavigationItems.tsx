@@ -48,8 +48,8 @@ export default function NavigationItems({ t, setIsMobileMenuOpen, isMobile = fal
         {t('navigation.main.documents')}
       </NavLink>
 
-      <NavLink href="/guide" setIsMobileMenuOpen={setIsMobileMenuOpen} additionalClasses={linkClasses}>
-        {t('navigation.main.guide')}
+      <NavLink href="/jobs" setIsMobileMenuOpen={setIsMobileMenuOpen} additionalClasses={linkClasses}>
+        {t('navigation.main.emplois')}
       </NavLink>
 
       <NavLink href="/contact-us" setIsMobileMenuOpen={setIsMobileMenuOpen} additionalClasses={linkClasses}>
