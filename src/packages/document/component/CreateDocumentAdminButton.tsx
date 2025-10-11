@@ -18,7 +18,7 @@ export default function CreateDocumentAdminButton({ t }: CreateDocumentAdminButt
           router.push('/documents/create');
         }}
       >
-        {t('documents.createAdminDocument')}
+        {t('documents.createAdminDocument')} (pdf)
       </Button>
     </div>
   );

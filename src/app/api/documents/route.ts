@@ -25,8 +25,7 @@ export const POST = ApiErrorHandler(async (request: Request): Promise<NextRespon
     }
 
     const bytes = await file.arrayBuffer();
-    const buffer = Buffer.from(bytes);
-    const base64String = `data:${file.type};base64,${buffer.toString('base64')}`;
+    const base64String = Buffer.from(bytes).toString('base64');
 
     const documentData = {
       title,

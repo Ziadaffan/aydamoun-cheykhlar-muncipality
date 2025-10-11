@@ -9,6 +9,19 @@ type DocumentCardProps = {
   t: TFunction;
 };
 
+const getFileUrl = (doc: Document) => {
+  const mimeType =
+    doc.type === 'pdf'
+      ? 'application/pdf'
+      : doc.type === 'jpg' || doc.type === 'jpeg'
+        ? 'image/jpeg'
+        : doc.type === 'png'
+          ? 'image/png'
+          : 'application/octet-stream';
+
+  return `data:${mimeType};base64,${doc.fileUrl}`;
+};
+
 const formatDate = (date: Date) => {
   return new Date(date).toLocaleDateString('ar-SA', {
     year: 'numeric',
@@ -19,6 +32,7 @@ const formatDate = (date: Date) => {
 
 export default function DocumentCard({ document, role, t }: DocumentCardProps) {
   const { mutate: deleteDocument, isPending } = useDeleteDocument();
+  const fileSrc = getFileUrl(document);
 
   const onDelete = () => {
     deleteDocument(document.id);
@@ -45,7 +59,8 @@ export default function DocumentCard({ document, role, t }: DocumentCardProps) {
         {/* Download Button */}
         <div className="mt-auto flex items-center gap-3">
           <a
-            href={document.fileUrl}
+            href={fileSrc}
+            download={document.title}
             target="_blank"
             rel="noopener noreferrer"
             className={`inline-flex flex-1 cursor-pointer items-center justify-center rounded-lg bg-blue-500 px-4 py-2 font-semibold text-white transition-opacity duration-200 hover:opacity-80`}

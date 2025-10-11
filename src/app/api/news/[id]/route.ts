@@ -51,15 +51,14 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
     const tagsString = formData.get('tags') as string;
     const tags = tagsString ? JSON.parse(tagsString) : [];
 
-    const images: { image: string; type: string }[] = [];
+    const imageUrl: string[] = [];
     const imageFiles = formData.getAll('images') as File[];
 
     for (const imageFile of imageFiles) {
       if (imageFile && imageFile.size > 0) {
         const buffer = await imageFile.arrayBuffer();
         const base64 = Buffer.from(buffer).toString('base64');
-        const dataUrl = `data:${imageFile.type};base64,${base64}`;
-        images.push({ image: dataUrl, type: imageFile.type });
+        imageUrl.push(base64);
       }
     }
 
@@ -71,7 +70,7 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
       author,
       tags,
       featured,
-      images,
+      imageUrl,
     };
 
     const result = await newsService.updateNews(id, newsData);

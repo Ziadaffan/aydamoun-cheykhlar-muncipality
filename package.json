@@ -31,6 +31,7 @@
     "cloudinary": "^2.7.0",
     "date-fns": "^4.1.0",
     "dotenv": "^17.0.0",
+    "file-type": "^21.0.0",
     "i18next": "^25.2.1",
     "i18next-browser-languagedetector": "^8.2.0",
     "i18next-http-backend": "^3.0.2",

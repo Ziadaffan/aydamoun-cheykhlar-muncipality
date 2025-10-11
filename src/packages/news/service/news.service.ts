@@ -89,24 +89,8 @@ export class NewsService extends BasePrismaService<'news'> {
     return true;
   }
 
-  public async updateNews(
-    id: string,
-    newsData: Omit<News, 'id' | 'createdAt' | 'updatedAt' | 'imageUrl'> & { images: { image: string; type: string }[] }
-  ) {
+  public async updateNews(id: string, newsData: Omit<News, 'id' | 'createdAt' | 'updatedAt' | 'imageUrl'> & { imageUrl: string[] }) {
     try {
-      const imageUrls: string[] = [];
-
-      for (const image of Object.values(newsData.images)) {
-        const type = image.type.split('/').pop() || 'png';
-        const resourceType = getResourceType(type);
-        const uploadResult = await cloudinary.uploader.upload(image.image, {
-          public_id: uuidv4(),
-          resource_type: resourceType,
-          format: type,
-        });
-        imageUrls.push(uploadResult.public_id);
-      }
-
       const newsToUpdate = {
         title: newsData.title,
         content: newsData.content,
@@ -115,7 +99,7 @@ export class NewsService extends BasePrismaService<'news'> {
         author: newsData.author,
         tags: newsData.tags,
         featured: newsData.featured,
-        imageUrl: imageUrls,
+        imageUrl: newsData.imageUrl,
       };
 
       return await this.repository.update({
@@ -128,28 +112,15 @@ export class NewsService extends BasePrismaService<'news'> {
     }
   }
 
-  public async create(newsData: Omit<News, 'id' | 'createdAt' | 'updatedAt' | 'imageUrl'> & { images: { image: string; type: string }[] }) {
+  public async create(newsData: Omit<News, 'id' | 'createdAt' | 'updatedAt' | 'imageUrl'> & { imageUrl: string[] }) {
     try {
-      const imageUrls: string[] = [];
-
-      for (const image of Object.values(newsData.images)) {
-        const type = image.type.split('/').pop() || 'png';
-        const resourceType = getResourceType(type);
-        const uploadResult = await cloudinary.uploader.upload(image.image, {
-          public_id: uuidv4(),
-          resource_type: resourceType,
-          format: type,
-        });
-        imageUrls.push(uploadResult.public_id);
-      }
-
-      const { images, ...newsDataWithoutImages } = newsData;
+      const { imageUrl, ...newsDataWithoutImages } = newsData;
 
       const news = await this.repository.create({
         data: {
           ...newsDataWithoutImages,
+          imageUrl: imageUrl,
           createdBy: 'ADMIN',
-          imageUrl: imageUrls,
         },
       });
 

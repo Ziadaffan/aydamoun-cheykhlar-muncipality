@@ -1,10 +1,10 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import NewsHero from '@/packages/news/components/NewsHero';
 import NewsFilters from '@/packages/news/components/NewsFilters';
 import NewsGrid from '@/packages/news/components/NewsGrid';
-import { News, NewsCategory } from '@/packages/news/types/news.types';
+import { NewsCategory } from '@/packages/news/types/news.types';
 import Button from '@/packages/common/components/Button';
 import { useGetFeaturedNews } from '@/packages/news/hooks/useGetFeaturedNews';
 import { useGetNewsCategories } from '@/packages/news/hooks/useGetNewsCategories';
@@ -13,32 +13,17 @@ import Spinner from '@/packages/common/components/Spinner';
 import NoNews from '@/packages/news/components/NoNews';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '@/packages/common/hooks/useAuth';
+import { useRouter } from 'next/navigation';
 
 export default function NewsPage() {
   const { t } = useTranslation();
   const [selectedCategory, setSelectedCategory] = useState<NewsCategory | 'ALL'>('ALL');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const { role } = useAuth();
-
-  const [featuredNews, setFeaturedNews] = useState<News | null>(null);
-  const [categories, setCategories] = useState<NewsCategory[]>([]);
-  const [filteredNews, setFilteredNews] = useState<News[]>([]);
-
-  const { data: featuredNewsData } = useGetFeaturedNews();
-  const { data: categoriesData } = useGetNewsCategories();
-  const { data: filteredNewsData } = useGetNewsByCategory(selectedCategory);
-
-  useEffect(() => {
-    if (featuredNewsData) {
-      setFeaturedNews(featuredNewsData);
-    }
-    if (categoriesData) {
-      setCategories(categoriesData);
-    }
-    if (filteredNewsData) {
-      setFilteredNews(filteredNewsData);
-    }
-  }, [featuredNewsData, categoriesData, filteredNewsData]);
+  const router = useRouter();
+  const { data: featuredNews, isLoading: isLoadingFeatured } = useGetFeaturedNews();
+  const { data: categories, isLoading: isLoadingCategories } = useGetNewsCategories();
+  const { data: filteredNews, isLoading: isLoadingNews } = useGetNewsByCategory(selectedCategory);
 
   const handleCategoryChange = (category: NewsCategory | 'ALL') => {
     setSelectedCategory(category);
@@ -48,14 +33,21 @@ export default function NewsPage() {
     setViewMode(mode);
   };
 
-  if (!featuredNews || !categories || !filteredNews) {
+  if (isLoadingCategories || isLoadingNews) {
     return <Spinner className="min-h-screen" />;
   }
 
   return (
     <div className="min-h-screen bg-gradient-to-r from-blue-50 to-green-50 py-20">
       {/* Hero Section */}
-      <NewsHero featuredNews={featuredNews} t={t} role={role} />
+      {role === 'ADMIN' && (
+        <div className="mb-8 flex justify-center">
+          <Button variant="primary" size="lg" onClick={() => router.push('/news/create')}>
+            {t('news.page.createNews.title')}
+          </Button>
+        </div>
+      )}
+      {featuredNews && <NewsHero featuredNews={featuredNews} t={t} role={role} />}
 
       {/* Main Content */}
       <div className="container mx-auto px-4 pb-12">
@@ -111,7 +103,7 @@ export default function NewsPage() {
         </div>
 
         {/* News Grid */}
-        {filteredNews.length > 0 ? <NewsGrid news={filteredNews} variant={viewMode} t={t} /> : <NoNews t={t} />}
+        {filteredNews && filteredNews.length > 0 ? <NewsGrid news={filteredNews} variant={viewMode} t={t} /> : <NoNews t={t} />}
       </div>
     </div>
   );

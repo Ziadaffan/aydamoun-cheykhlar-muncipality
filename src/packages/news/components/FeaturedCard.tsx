@@ -1,4 +1,4 @@
-import { CldImage } from 'next-cloudinary';
+import Image from 'next/image';
 import { categoryColors, categoryLabels, formatDate } from '@/packages/news/utils/news.utils';
 import { News } from '@/packages/news/types/news.types';
 import Button from '@/packages/common/components/Button';
@@ -22,7 +22,9 @@ export const FeaturedCard = ({ news, t }: FeaturedCardProps) => {
   const { mutate: deleteNews, isPending } = useDeleteNews();
 
   const hasMultipleImages = news.imageUrl && news.imageUrl.length > 1;
-  const currentImage = news.imageUrl?.[currentImageIndex] || 'elementor-placeholder-image-3610342416_bys2q8';
+  const currentImage = news.imageUrl?.[currentImageIndex]
+    ? `data:image/jpeg;base64,${news.imageUrl[currentImageIndex]}`
+    : 'elementor-placeholder-image-3610342416_bys2q8';
 
   const nextImage = () => {
     if (hasMultipleImages) {
@@ -41,7 +43,7 @@ export const FeaturedCard = ({ news, t }: FeaturedCardProps) => {
       <div className="grid grid-cols-1 gap-0 lg:grid-cols-2">
         {/* Image Section */}
         <div className="relative h-64 overflow-hidden lg:h-full">
-          <CldImage src={currentImage} alt={news.title} fill className="object-cover transition-transform duration-300 group-hover:scale-105" />
+          <Image src={currentImage} alt={news.title} fill className="object-cover transition-transform duration-300 group-hover:scale-105" />
           <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
 
           {hasMultipleImages && <NewsFleshesImage nextImage={nextImage} prevImage={prevImage} />}
