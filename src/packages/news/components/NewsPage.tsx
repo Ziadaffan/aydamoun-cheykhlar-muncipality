@@ -14,6 +14,7 @@ import NoNews from '@/packages/news/components/NoNews';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '@/packages/common/hooks/useAuth';
 import { useRouter } from 'next/navigation';
+import { categoryLabels } from '../utils/news.utils';
 
 export default function NewsPage() {
   const { t } = useTranslation();
@@ -33,7 +34,7 @@ export default function NewsPage() {
     setViewMode(mode);
   };
 
-  if (isLoadingCategories || isLoadingNews) {
+  if (isLoadingCategories || isLoadingNews || isLoadingFeatured) {
     return <Spinner className="min-h-screen" />;
   }
 
@@ -47,6 +48,7 @@ export default function NewsPage() {
           </Button>
         </div>
       )}
+
       {featuredNews && <NewsHero featuredNews={featuredNews} t={t} role={role} />}
 
       {/* Main Content */}
@@ -54,7 +56,7 @@ export default function NewsPage() {
         {/* View Mode Toggle */}
         <div className="mb-6 flex items-center justify-between">
           <h2 className="text-2xl font-bold text-gray-800">
-            {selectedCategory === 'ALL' ? t('news.page.allNews') : t('news.page.newsInCategory', { category: selectedCategory })}
+            {selectedCategory === 'ALL' ? t('news.page.allNews') : categoryLabels[selectedCategory]}
           </h2>
 
           <div className="flex items-center space-x-2">
