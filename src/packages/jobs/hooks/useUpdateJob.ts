@@ -25,7 +25,11 @@ const updateJob = async (data: UpdateJobFormData & { id: string }) => {
     formData.append('salary', data.salary);
   }
   if (data.deadline) {
-    const deadlineDate = data.deadline instanceof Date ? data.deadline : new Date(data.deadline);
+    const deadlineDate = data.deadline instanceof Date 
+      ? data.deadline 
+      : typeof data.deadline === 'string' 
+        ? new Date(data.deadline) 
+        : new Date(data.deadline as string | number);
     formData.append('deadline', deadlineDate.toISOString());
   }
   formData.append('active', data.active?.toString() || 'true');
