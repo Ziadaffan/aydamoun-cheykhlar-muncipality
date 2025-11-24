@@ -102,6 +102,17 @@ export class NewsService extends BasePrismaService<'news'> {
         imageUrl: newsData.imageUrl,
       };
 
+      if(newsToUpdate.featured){
+        await this.repository.updateMany({
+          where: {
+            featured: true,
+          },
+          data: {
+            featured: false,
+          },
+        });
+      }
+
       return await this.repository.update({
         where: { id },
         data: newsToUpdate,

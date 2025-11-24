@@ -6,7 +6,7 @@ import { Control, Controller, FieldError, FieldErrorsImpl, Merge } from 'react-h
 interface ControlledInputTextProps {
   id: string;
   label: string;
-  type?: 'text' | 'email' | 'password' | 'tel' | 'number';
+  type?: 'text' | 'email' | 'password' | 'tel' | 'number' | 'datetime-local' | 'date';
   placeholder?: string;
   control: Control<any>;
   name: string;
