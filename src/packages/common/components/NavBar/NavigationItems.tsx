@@ -34,11 +34,10 @@ export default function NavigationItems({ t, setIsMobileMenuOpen, isMobile = fal
         {t('navigation.main.aboutUs')}
       </NavLink>
 
-      {isAuthenticated && (
-        <NavLink href="/services" setIsMobileMenuOpen={setIsMobileMenuOpen} additionalClasses={linkClasses}>
-          {t('navigation.main.services')}
-        </NavLink>
-      )}
+      <NavLink href="/services" setIsMobileMenuOpen={setIsMobileMenuOpen} additionalClasses={linkClasses}>
+        {t('navigation.main.services')}
+      </NavLink>
+
       <NavLink href="/news" setIsMobileMenuOpen={setIsMobileMenuOpen} additionalClasses={linkClasses}>
         {t('navigation.main.news')}
       </NavLink>
@@ -51,9 +50,6 @@ export default function NavigationItems({ t, setIsMobileMenuOpen, isMobile = fal
         {t('navigation.main.emplois')}
       </NavLink>
 
-      <NavLink href="/contact-us" setIsMobileMenuOpen={setIsMobileMenuOpen} additionalClasses={linkClasses}>
-        {t('navigation.main.contactUs')}
-      </NavLink>
       {isAuthenticated && (
         <>
           <NavLink href="/profile" setIsMobileMenuOpen={setIsMobileMenuOpen} additionalClasses={linkClasses}>
@@ -64,7 +60,7 @@ export default function NavigationItems({ t, setIsMobileMenuOpen, isMobile = fal
             className={
               isMobile
                 ? 'block w-full rounded-md px-4 py-3 text-right text-base font-medium text-gray-700 transition-colors duration-200 hover:bg-gray-50 hover:text-blue-800'
-                : "relative inline-block cursor-pointer px-4 py-2 text-sm whitespace-nowrap text-gray-700 transition-colors duration-150 after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-full after:origin-bottom-right after:scale-x-0 after:bg-blue-800 after:transition-transform after:duration-300 after:content-[''] hover:text-blue-800 hover:after:origin-bottom-left hover:after:scale-x-100"
+                : "text-md relative inline-block cursor-pointer px-4 py-2 text-lg font-medium whitespace-nowrap text-gray-700 transition-colors duration-150 after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-full after:origin-bottom-right after:scale-x-0 after:bg-blue-800 after:transition-transform after:duration-300 after:content-[''] hover:text-blue-800 hover:after:origin-bottom-left hover:after:scale-x-100"
             }
           >
             {t('navigation.main.logout')}

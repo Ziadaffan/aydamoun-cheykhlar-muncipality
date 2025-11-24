@@ -10,6 +10,7 @@ import Button from '@/packages/common/components/Button';
 import Banner from '@/packages/common/components/Banner';
 import useLogin from '@/packages/auth/hooks/useLogin';
 import { loginSchema, LoginFormData } from '@/packages/auth/validation/auth.validation';
+import { CldImage } from 'next-cloudinary';
 
 export default function LogInPage() {
   const { t } = useTranslation();
@@ -73,7 +74,7 @@ export default function LogInPage() {
     <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-blue-100 to-blue-300">
       <form onSubmit={handleSubmit(onSubmit)} className="mx-2 w-full max-w-xs rounded-2xl bg-white p-6 shadow-xl md:max-w-md md:p-10">
         <div className="mb-6 flex justify-center">
-          <Image src="/assets/images/logo.png" alt="Logo" width={64} height={64} className="h-16 w-16 rounded-full shadow-md" priority />
+          <CldImage src="logo_smzpb2" alt="Municipality Logo" width={80} height={80} className="object-contain" priority />
         </div>
         <h2 className="mb-8 text-center text-xl font-extrabold text-blue-700 md:text-2xl">{t('auth.login.title')}</h2>
 

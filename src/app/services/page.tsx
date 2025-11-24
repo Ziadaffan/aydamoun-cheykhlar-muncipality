@@ -1,7 +1,7 @@
 'use client';
 
 import { useTranslation } from 'react-i18next';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import ServicesHeroSection from '../../packages/services/components/ServicesHeroSection';
 import ServicesCategorySection from '../../packages/services/components/ServicesCategorySection';
 import { useGetServices } from '@/packages/services/hooks/useGetServices';
@@ -9,9 +9,12 @@ import { ServiceType, Service } from '@prisma/client';
 import Spinner from '@/packages/common/components/Spinner';
 import ErrorMessage from '@/packages/common/components/ErrorMessage';
 import { getServiceCategoryMeta } from '@/packages/services/utils/service.utils';
+import { useAuth } from '@/packages/common/hooks/useAuth';
+import AuthBanner from '@/packages/common/components/AuthBanner';
 
 export default function ServicesPage() {
   const { t } = useTranslation();
+  const { isAuthenticated } = useAuth();
   const { data: services = [], isLoading, error } = useGetServices();
 
   const servicesByType = services.reduce(
@@ -37,8 +40,14 @@ export default function ServicesPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-r from-blue-50 to-green-50">
+      {!isAuthenticated && (
+        <AuthBanner />
+      )}
+
       {/* Hero Section */}
       <ServicesHeroSection t={t} />
+
+      {/* Authentication Banner */}
 
       {/* Render each category section dynamically */}
       {serviceTypes.map(type => {
