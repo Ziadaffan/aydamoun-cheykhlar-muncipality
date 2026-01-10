@@ -12,6 +12,7 @@
       "news": "الأخبار",
       "documents": "المستندات",
       "emplois": "الوظائف",
+      "adminSubmissions": "طلبات الخدمات",
       "contactUs": "تواصل معنا",
       "auth": "تسجيل الدخول",
       "signup": "إنشاء حساب",
@@ -343,6 +344,24 @@
         "updateSuccess": "تم تعديل الطلب بنجاح",
         "updateError": "حدث خطأ أثناء تعديل الطلب"
       }
+    }
+  },
+  "admin": {
+    "serviceSubmissions": {
+      "title": "طلبات الخدمات",
+      "description": "إدارة جميع طلبات الخدمات المقدمة من المستخدمين",
+      "empty": "لا توجد طلبات خدمات حالياً",
+      "status": "الحالة",
+      "statusLabel": "تحديث حالة الطلب",
+      "serviceName": "الخدمة",
+      "actions": "الإجراءات",
+      "updateStatus": "تحديث الحالة",
+      "view": "عرض",
+      "viewTitle": "عرض الطلب",
+      "edit": "تعديل",
+      "applicantInfo": "معلومات مقدم الطلب",
+      "noAdditionalInfo": "لا توجد معلومات إضافية",
+      "unauthorized": "لا تملك صلاحية الوصول إلى لوحة الإدارة"
     }
   },
   "news": {

@@ -7,6 +7,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useTranslation } from 'react-i18next';
 import { useCreateServiceSubmission } from '@/packages/services/hooks/useCreateServiceSubmission';
 import { createServiceSubmissionSchema } from '@/packages/services/validation/services.validation';
+import { ServiceStatus } from '@prisma/client';
 
 type FormData = {
   // Informations personnelles
@@ -21,6 +22,9 @@ type FormData = {
 
   // Informations supplémentaires selon la catégorie
   additionalInfo: Record<string, any>;
+
+  // Status (admin only / optional in UI)
+  status?: ServiceStatus | undefined;
 
   // Documents
   // documents: File[];
@@ -40,7 +44,7 @@ export function useServiceForm({ category, serviceId }: UseServiceFormProps) {
   const { mutate: createServiceSubmission } = useCreateServiceSubmission(serviceId);
 
   const form = useForm<FormData>({
-    resolver: yupResolver(createServiceSubmissionSchema(category, serviceId)),
+    resolver: yupResolver(createServiceSubmissionSchema(category, serviceId)) as any,
     defaultValues: {
       fullName: '',
       phone: '',
@@ -49,6 +53,7 @@ export function useServiceForm({ category, serviceId }: UseServiceFormProps) {
       serviceType: serviceId ? serviceId.toString() : '',
       description: '',
       additionalInfo: {},
+      status: undefined,
       // documents: [],
     },
   });

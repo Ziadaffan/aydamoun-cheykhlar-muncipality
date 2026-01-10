@@ -1,6 +1,4 @@
-'use client';
-
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -8,38 +6,29 @@ import { useTranslation } from 'react-i18next';
 import { Service, ServiceStatus, ServiceSubmission } from '@prisma/client';
 import { createServiceSubmissionSchema } from '@/packages/services/validation/services.validation';
 import { mapServiceTypeToCategory } from '@/packages/services/utils/category.utils';
-import { useGetServiceSubmission } from './useGetServiceSubmission';
-import { useUpdateServiceSubmission } from './useUpdateServiceSubmission';
+import { useAdminServiceSubmission } from './useAdminSubmission';
+import { useAdminUpdateServiceSubmission } from './useAdminUpdateServiceSubmission';
 
 type FormData = {
   fullName: string;
   phone: string;
   email: string;
   address: string;
-
   serviceType: string;
   description: string;
-
   additionalInfo: Record<string, any>;
   status?: ServiceStatus | undefined;
 };
 
-type UseEditSubmissionProps = {
-  submissionId: string;
-  serviceId: string;
-  category: string;
-};
-
-export function useEditSubmission({ submissionId, serviceId, category }: UseEditSubmissionProps) {
+export function useAdminEditSubmission(submissionId: string) {
   const { t } = useTranslation();
   const router = useRouter();
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
-  const [submission, setSubmission] = useState<(ServiceSubmission & { service: Service }) | null>(null);
-  const { data: submissionData, isLoading: isLoadingSubmission, error: errorSubmission } = useGetServiceSubmission(submissionId);
-  const { mutate: updateServiceSubmission, isPending: isLoadingUpdate, error: errorUpdate } = useUpdateServiceSubmission(submissionId);
-
   const [mappedCategory, setMappedCategory] = useState<string>('');
   const [mappedServiceId, setMappedServiceId] = useState<string>('');
+
+  const { data: submissionData, isLoading: isLoadingSubmission, error: errorSubmission } = useAdminServiceSubmission(submissionId);
+  const { mutate: updateServiceSubmission, isPending: isLoadingUpdate } = useAdminUpdateServiceSubmission();
 
   const form = useForm<FormData>({
     resolver: yupResolver(createServiceSubmissionSchema(mappedCategory, mappedServiceId)) as any,
@@ -57,8 +46,6 @@ export function useEditSubmission({ submissionId, serviceId, category }: UseEdit
 
   useEffect(() => {
     if (submissionData) {
-      setSubmission(submissionData);
-
       const category = mapServiceTypeToCategory(submissionData.service?.type || '');
       const serviceId = submissionData.serviceId;
 
@@ -78,33 +65,36 @@ export function useEditSubmission({ submissionId, serviceId, category }: UseEdit
     }
   }, [submissionData, form]);
 
-  const onSubmit = async (data: FormData) => {
+  const onSubmit = (data: FormData) => {
     setMessage(null);
-
     window.scrollTo({ top: 0, behavior: 'smooth' });
 
-    updateServiceSubmission(data, {
-      onSuccess: () => {
-        setMessage({ type: 'success', text: t('profile.editSubmission.messages.updateSuccess') });
+    updateServiceSubmission(
+      {
+        submissionId,
+        data,
       },
-      onError: () => {
-        setMessage({ type: 'error', text: t('profile.editSubmission.messages.updateError') });
-      },
-      onSettled: () => {
-        setTimeout(() => {
-          router.push('/profile');
-        }, 1000);
-      },
-    });
+      {
+        onSuccess: () => {
+          setMessage({ type: 'success', text: t('profile.editSubmission.messages.updateSuccess') });
+        },
+        onError: () => {
+          setMessage({ type: 'error', text: t('profile.editSubmission.messages.updateError') });
+        },
+        onSettled: () => {
+          setTimeout(() => {
+            router.push('/admin/service-submissions');
+          }, 800);
+        },
+      }
+    );
   };
 
-  const closeMessage = () => {
-    setMessage(null);
-  };
+  const closeMessage = () => setMessage(null);
 
   return {
     form,
-    submission,
+    submission: (submissionData as ServiceSubmission & { service: Service }) || null,
     errorSubmission,
     isLoading: isLoadingSubmission,
     isSubmitting: isLoadingUpdate,

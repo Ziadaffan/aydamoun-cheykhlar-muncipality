@@ -50,6 +50,12 @@ export default function NavigationItems({ t, setIsMobileMenuOpen, isMobile = fal
         {t('navigation.main.emplois')}
       </NavLink>
 
+      {isAdmin && (
+        <NavLink href="/admin/service-submissions" setIsMobileMenuOpen={setIsMobileMenuOpen} additionalClasses={linkClasses}>
+          {t('navigation.main.adminSubmissions')}
+        </NavLink>
+      )}
+
       {isAuthenticated && (
         <>
           <NavLink href="/profile" setIsMobileMenuOpen={setIsMobileMenuOpen} additionalClasses={linkClasses}>

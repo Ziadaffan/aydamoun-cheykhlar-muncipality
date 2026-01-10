@@ -1,6 +1,10 @@
 import React from 'react';
 
-export default function ErrorMessage() {
+type ErrorMessageProps = {
+  message?: string;
+};
+
+export default function ErrorMessage({ message }: ErrorMessageProps) {
   return (
     <div className="flex items-center justify-center p-4" dir="rtl">
       <div className="rounded-lg border border-red-200 bg-red-50 p-8 text-center shadow-lg">
@@ -10,7 +14,9 @@ export default function ErrorMessage() {
           </svg>
         </div>
         <h2 className="mb-4 text-2xl font-bold text-red-900">عذراً، حدث خطأ</h2>
-        <p className="text-lg text-red-800">لقد وجدنا خطأ في النظام. يرجى إخبارنا وسنقوم بإصلاحه في أقرب وقت ممكن.</p>
+        <p className="text-lg text-red-800">
+          {message || 'لقد وجدنا خطأ في النظام. يرجى إخبارنا وسنقوم بإصلاحه في أقرب وقت ممكن.'}
+        </p>
       </div>
     </div>
   );

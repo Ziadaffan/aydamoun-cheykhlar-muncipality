@@ -7,7 +7,17 @@ export default withAuth(
   },
   {
     callbacks: {
-      authorized: ({ token }) => !!token,
+      authorized: ({ token, req }) => {
+        if (!token) return false;
+
+        const isAdminRoute = req.nextUrl.pathname.startsWith('/admin');
+
+        if (isAdminRoute) {
+          return token.role === 'ADMIN';
+        }
+
+        return true;
+      },
     },
   }
 );

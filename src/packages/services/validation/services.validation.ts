@@ -1,4 +1,5 @@
 import * as yup from 'yup';
+import { ServiceStatus } from '@prisma/client';
 import { getAdditionalFields } from '@/packages/services/utils/form.utils';
 import { commonValidations, validationMessages } from '../../common/validation/common.validation';
 
@@ -80,6 +81,12 @@ export const createServiceSubmissionSchema = (category: string, serviceId?: stri
 
     // Additional Information (dynamic fields based on category and serviceId)
     additionalInfo: createAdditionalInfoSchema(category, serviceId),
+
+    // Status (used by admin)
+    status: yup
+      .mixed<ServiceStatus>()
+      .oneOf(Object.values(ServiceStatus) as ServiceStatus[], 'حالة الطلب غير صالحة')
+      .optional(),
   });
 };
 
