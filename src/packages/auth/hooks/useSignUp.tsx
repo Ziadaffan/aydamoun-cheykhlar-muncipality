@@ -2,7 +2,8 @@ import { useMutation } from '@tanstack/react-query';
 
 export interface SignUpData {
   name: string;
-  email: string;
+  email?: string;
+  phone?: string;
   password: string;
   confirmPassword: string;
 }
@@ -17,6 +18,9 @@ const signUp = async (data: SignUpData) => {
   try {
     const response = await fetch('/api/auth/signup', {
       method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
       body: JSON.stringify(data),
     });
 

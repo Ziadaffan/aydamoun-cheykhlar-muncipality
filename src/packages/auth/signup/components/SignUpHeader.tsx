@@ -12,6 +12,7 @@ export default function SignUpHeader() {
         <CldImage src="logo_smzpb2" alt="Municipality Logo" width={80} height={80} className="object-contain" priority />
       </div>
       <h2 className="mb-8 text-center text-xl font-extrabold text-blue-700 md:text-2xl">{t('auth.signup.title')}</h2>
+      <p className="-mt-6 mb-8 text-center text-sm text-gray-600">{t('auth.signup.helper')}</p>
     </>
   );
 }

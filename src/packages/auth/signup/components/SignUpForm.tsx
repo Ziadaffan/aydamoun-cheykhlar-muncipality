@@ -29,10 +29,11 @@ export default function SignUpForm({ onSuccess }: SignUpFormProps) {
     formState: { errors },
     watch,
   } = useForm<SignupFormData>({
-    resolver: yupResolver(signupSchema),
+    resolver: yupResolver(signupSchema) as any,
     defaultValues: {
       name: '',
       email: '',
+      phone: '',
       password: '',
       confirmPassword: '',
     },
@@ -47,7 +48,7 @@ export default function SignUpForm({ onSuccess }: SignUpFormProps) {
       onSuccess: async () => {
         setMessage({ type: 'success', text: t('auth.signup.messages.accountCreated') });
         const signInResult = await signIn('credentials', {
-          email: data.email,
+          identifier: (data.email?.trim() ? data.email : data.phone) || '',
           password: data.password,
           redirect: false,
         });
@@ -101,7 +102,16 @@ export default function SignUpForm({ onSuccess }: SignUpFormProps) {
         control={control}
         name="email"
         error={errors.email}
-        required
+      />
+
+      <ControlledInputText
+        id="phone"
+        label={t('auth.signup.phone')}
+        type="text"
+        placeholder={t('auth.signup.phonePlaceholder')}
+        control={control}
+        name="phone"
+        error={errors.phone}
       />
 
       <ControlledInputText

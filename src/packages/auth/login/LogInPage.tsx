@@ -26,7 +26,7 @@ export default function LogInPage() {
   } = useForm<LoginFormData>({
     resolver: yupResolver(loginSchema),
     defaultValues: {
-      email: '',
+      identifier: '',
       password: '',
     },
   });
@@ -77,17 +77,18 @@ export default function LogInPage() {
           <CldImage src="logo_smzpb2" alt="Municipality Logo" width={80} height={80} className="object-contain" priority />
         </div>
         <h2 className="mb-8 text-center text-xl font-extrabold text-blue-700 md:text-2xl">{t('auth.login.title')}</h2>
+        <p className="-mt-6 mb-8 text-center text-sm text-gray-600">{t('auth.login.helper')}</p>
 
         {message && <Banner type={message.type} message={message.text} onClose={() => setMessage(null)} />}
 
         <ControlledInputText
-          id="email"
+          id="identifier"
           label={t('auth.login.email')}
-          type="email"
+          type="text"
           placeholder={t('auth.login.emailPlaceholder')}
           control={control}
-          name="email"
-          error={errors.email}
+          name="identifier"
+          error={errors.identifier}
           required
         />
 

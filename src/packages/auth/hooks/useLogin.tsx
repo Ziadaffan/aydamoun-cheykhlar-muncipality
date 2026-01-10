@@ -2,7 +2,7 @@ import { useMutation } from '@tanstack/react-query';
 import { signIn } from 'next-auth/react';
 
 export interface LoginData {
-  email: string;
+  identifier: string;
   password: string;
 }
 
@@ -14,8 +14,9 @@ export default function useLogin() {
 
 const login = async (data: LoginData) => {
   try {
+    const identifier = data.identifier.trim();
     const result = await signIn('credentials', {
-      email: data.email,
+      identifier: identifier.includes('@') ? identifier.toLowerCase() : identifier.replace(/\s|-/g, ''),
       password: data.password,
       redirect: false,
     });

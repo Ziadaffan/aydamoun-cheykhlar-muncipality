@@ -18,10 +18,24 @@ export class AuthService extends BasePrismaService<'user'> {
   }
 
   public async signup(data: any): Promise<User> {
-    const existingUser = await this.repository.findUnique({ where: { email: data.email } });
+    const rawEmail = data.email ? String(data.email).trim() : '';
+    const rawPhone = data.phone ? String(data.phone).trim() : '';
+
+    const email = rawEmail ? rawEmail.toLowerCase() : null;
+    const phone = rawPhone ? rawPhone.replace(/\s|-/g, '') : null;
+
+    if (!email && !phone) {
+      throw new BadRequestError('Email or phone is required');
+    }
+
+    const existingUser = await this.repository.findFirst({
+      where: {
+        OR: [...(email ? [{ email }] : []), ...(phone ? [{ phone }] : [])],
+      },
+    });
 
     if (existingUser) {
-      throw new BadRequestError('User with this email already exists');
+      throw new BadRequestError('User with this email or phone already exists');
     }
 
     const hashedPassword = await bcrypt.hash(data.password, 12);
@@ -29,7 +43,8 @@ export class AuthService extends BasePrismaService<'user'> {
     const user = await this.repository.create({
       data: {
         name: data.name,
-        email: data.email,
+        email,
+        phone,
         password: hashedPassword,
       },
     });

@@ -6,9 +6,9 @@ const authService = AuthService.instance();
 
 export async function POST(request: NextRequest) {
   try {
-    const { name, email, password } = await request.json();
+    const { name, email, phone, password } = await request.json();
 
-    const user = await authService.signup({ name, email, password });
+    const user = await authService.signup({ name, email, phone, password });
 
     const { password: _, ...userWithoutPassword } = user;
 
