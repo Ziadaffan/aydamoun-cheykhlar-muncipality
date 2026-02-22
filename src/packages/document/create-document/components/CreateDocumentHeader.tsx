@@ -1,4 +1,4 @@
-import { BackButton } from '@/packages/common/components/BackBotton';
+import { BackButton } from '@/packages/common/components/BackButton';
 import { useTranslation } from 'react-i18next';
 
 export default function CreateDocumentHeader() {

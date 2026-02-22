@@ -20,15 +20,18 @@ const createJob = async (data: CreateJobFormData) => {
     formData.append('description', data.description);
   }
   formData.append('provider', data.provider);
+  if (data.phone) {
+    formData.append('phone', data.phone);
+  }
   formData.append('location', data.location);
   if (data.salary) {
     formData.append('salary', data.salary);
   }
   if (data.deadline) {
-    const deadlineDate = data.deadline instanceof Date 
-      ? data.deadline 
-      : typeof data.deadline === 'string' 
-        ? new Date(data.deadline) 
+    const deadlineDate = data.deadline instanceof Date
+      ? data.deadline
+      : typeof data.deadline === 'string'
+        ? new Date(data.deadline)
         : new Date(data.deadline as string | number);
     formData.append('deadline', deadlineDate.toISOString());
   }

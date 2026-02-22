@@ -4,7 +4,7 @@ import { useParams } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import Spinner from '@/packages/common/components/Spinner';
 import ErrorMessage from '@/packages/common/components/ErrorMessage';
-import { BackButton } from '@/packages/common/components/BackBotton';
+import { BackButton } from '@/packages/common/components/BackButton';
 import { useAuth } from '@/packages/common/hooks/useAuth';
 import EditSubmissionHeader from '@/packages/profile/edit-submission/components/EditSubmissionHeader';
 import EditSubmissionForm from '@/packages/profile/edit-submission/components/EditSubmissionForm';

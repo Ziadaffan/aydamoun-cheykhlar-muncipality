@@ -52,7 +52,7 @@ export default function CreateDocumentForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="rounded-2xl bg-white p-8 shadow-xl">
+    <form onSubmit={handleSubmit(onSubmit)} className="rounded-2xl bg-white p-8 shadow-xl" noValidate>
       <FormMessage message={message} onClose={() => setMessage(null)} />
 
       <div className="mb-8">

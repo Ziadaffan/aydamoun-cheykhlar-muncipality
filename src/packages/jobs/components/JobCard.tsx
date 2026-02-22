@@ -13,7 +13,7 @@ export interface JobCardProps {
 export default function JobCard({ job }: JobCardProps) {
   const { role } = useAuth();
   return (
-    <div className={`flex ${role === 'ADMIN' ? 'h-110' : 'h-90'} flex-col divide-y divide-gray-200 rounded-lg bg-white shadow-sm`}>
+    <div className={`flex ${role === 'ADMIN' ? 'h-120' : 'h-96'} flex-col divide-y divide-gray-200 rounded-lg bg-white shadow-sm`}>
       {/* Header */}
       <JobCardHeader job={job} />
 

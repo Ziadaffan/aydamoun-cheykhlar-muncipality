@@ -2,7 +2,7 @@ import { TFunction } from 'i18next';
 import Image from 'next/image';
 import { useState } from 'react';
 import Link from 'next/link';
-import MobileMenuButoon from './MobileMenuButoon';
+import MobileMenuButton from './MobileMenuButton';
 import MobileMenu from './MobileMenu';
 import NavigationItems from './NavigationItems';
 import { CldImage } from 'next-cloudinary';
@@ -29,7 +29,7 @@ export default function MainNavigation({ t }: MainNavigationProps) {
             <NavigationItems t={t} />
           </div>
 
-          <MobileMenuButoon isMobileMenuOpen={isMobileMenuOpen} setIsMobileMenuOpen={setIsMobileMenuOpen} />
+          <MobileMenuButton isMobileMenuOpen={isMobileMenuOpen} setIsMobileMenuOpen={setIsMobileMenuOpen} />
         </div>
       </div>
 

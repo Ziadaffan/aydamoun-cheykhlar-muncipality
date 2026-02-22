@@ -17,7 +17,7 @@ export default function HomeHeaderSection({ t }: HomeHeaderSectionProps) {
       }}
     >
       <div className="relative z-10 px-4 text-center text-white">
-        <h1 style={{ fontFamily: 'var(--font-baloo-bhaijaan-2), serif' }} className="mb-6 text-4xl leading-tight font-bold md:text-6xl">
+        <h1 className="mb-6 text-4xl leading-tight font-bold md:text-6xl">
           {t('home.hero.title')}
         </h1>
         <p className="mb-8 text-xl text-gray-100 md:text-2xl">{t('home.hero.subtitle')}</p>

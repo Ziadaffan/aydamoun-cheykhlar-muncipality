@@ -28,6 +28,7 @@ export default function CreateJobForm() {
       title: '',
       description: '',
       provider: '',
+      phone: '',
       location: '',
       salary: '',
       deadline: '',
@@ -41,10 +42,11 @@ export default function CreateJobForm() {
   const onSubmit = (data: CreateJobFormData) => {
     setIsPending(true);
     setMessage(null);
-    
+
     const jobData = {
       ...data,
       description: data.description && typeof data.description === 'string' && data.description.trim() ? data.description : null,
+      phone: data.phone && typeof data.phone === 'string' && data.phone.trim() ? data.phone : null,
       salary: data.salary && typeof data.salary === 'string' && data.salary.trim() ? data.salary : null,
       deadline:
         data.deadline && typeof data.deadline === 'string' && data.deadline.trim()
@@ -53,7 +55,7 @@ export default function CreateJobForm() {
             ? data.deadline
             : null,
     };
-    
+
     createJob(jobData, {
       onSuccess: () => {
         setMessage({ type: 'success', text: 'تم إنشاء الوظيفة بنجاح' });
@@ -109,6 +111,16 @@ export default function CreateJobForm() {
           error={errors.provider}
           placeholder="أدخل اسم المزود"
           required
+        />
+
+        <ControlledInputText
+          id="phone"
+          label="رقم هاتف المزود"
+          type="tel"
+          control={control}
+          name="phone"
+          error={errors.phone}
+          placeholder="أدخل رقم هاتف المزود (اختياري)"
         />
 
         <ControlledInputText

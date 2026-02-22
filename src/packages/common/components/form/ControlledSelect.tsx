@@ -37,7 +37,7 @@ export default function ControlledSelect({
     <div className="mb-5">
       <label className="mb-1 block text-right text-sm font-medium text-gray-700 md:text-base" htmlFor={id}>
         {label}
-        {required && <span className="mr-1 text-red-500">*</span>}
+        {required && <span className="me-1 text-red-500">*</span>}
       </label>
       <Controller
         name={name}
@@ -47,9 +47,8 @@ export default function ControlledSelect({
             id={id}
             disabled={disabled}
             {...field}
-            className={`w-full rounded-lg border px-3 py-2 text-right text-sm transition focus:ring-2 focus:ring-blue-200 md:text-base ${
-              error ? 'border-red-300 focus:border-red-500' : 'border-gray-300 focus:border-blue-500'
-            } ${disabled ? 'cursor-not-allowed bg-gray-100' : ''} ${className}`}
+            className={`w-full rounded-lg border px-3 py-2 text-right text-sm transition focus:ring-2 focus:ring-blue-200 md:text-base ${error ? 'border-red-300 focus:border-red-500' : 'border-gray-300 focus:border-blue-500'
+              } ${disabled ? 'cursor-not-allowed bg-gray-100' : ''} ${className}`}
           >
             {placeholder && (
               <option value="" disabled>

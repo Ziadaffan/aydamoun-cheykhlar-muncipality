@@ -42,21 +42,6 @@ export default function ChangePasswordForm({ onCancel, onSuccess }: ChangePasswo
   });
 
   const handleChangePassword = (data: ChangePasswordFormData) => {
-    if (data.oldPassword === data.newPassword) {
-      setMessage({ type: 'error', text: t('profile.changePassword.errors.samePassword') });
-      return;
-    }
-
-    if (data.oldPassword === '' || data.newPassword === '' || data.confirmPassword === '') {
-      setMessage({ type: 'error', text: t('profile.changePassword.errors.passwordRequired') });
-      return;
-    }
-
-    if (data.newPassword !== data.confirmPassword) {
-      setMessage({ type: 'error', text: t('profile.changePassword.errors.passwordMismatch') });
-      return;
-    }
-
     updatePassword(
       {
         oldPassword: data.oldPassword,
@@ -88,7 +73,7 @@ export default function ChangePasswordForm({ onCancel, onSuccess }: ChangePasswo
     <div className="px-6 py-8">
       {message && <Banner type={message.type} message={message.text} onClose={() => setMessage(null)} />}
 
-      <form onSubmit={handleSubmit(handleChangePassword)} className="space-y-6">
+      <form onSubmit={handleSubmit(handleChangePassword)} className="space-y-6" noValidate>
         <ControlledInputText
           id="oldPassword"
           label={t('profile.changePassword.oldPassword')}

@@ -80,7 +80,7 @@ export default function SignUpForm({ onSuccess }: SignUpFormProps) {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6" noValidate>
       {message && <Banner type={message.type} message={message.text} onClose={() => setMessage(null)} />}
 
       <ControlledInputText

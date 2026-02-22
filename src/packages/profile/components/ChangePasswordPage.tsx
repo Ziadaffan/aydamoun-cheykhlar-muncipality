@@ -1,7 +1,7 @@
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/packages/common/hooks/useAuth';
 import Spinner from '@/packages/common/components/Spinner';
-import { BackButton } from '@/packages/common/components/BackBotton';
+import { BackButton } from '@/packages/common/components/BackButton';
 import ChangePasswordForm from './ChangePasswordForm';
 import ChangePasswordHeader from './ChangePasswordHeader';
 import ChangePasswordCard from './ChangePasswordCard';

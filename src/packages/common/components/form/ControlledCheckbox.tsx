@@ -28,11 +28,10 @@ export default function ControlledCheckbox({ id, label, control, name, error, cl
               onChange={onChange}
               disabled={disabled}
               {...field}
-              className={`h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-2 focus:ring-blue-200 ${
-                error ? 'border-red-300' : 'border-gray-300'
-              } ${disabled ? 'cursor-not-allowed bg-gray-100' : ''} ${className}`}
+              className={`h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-2 focus:ring-blue-200 ${error ? 'border-red-300' : 'border-gray-300'
+                } ${disabled ? 'cursor-not-allowed bg-gray-100' : ''} ${className}`}
             />
-            <label htmlFor={id} className="mr-2 text-sm font-medium text-gray-700">
+            <label htmlFor={id} className="ms-2 text-sm font-medium text-gray-700">
               {label}
             </label>
           </div>

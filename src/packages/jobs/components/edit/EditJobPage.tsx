@@ -1,6 +1,6 @@
 'use client';
 
-import { BackButton } from '@/packages/common/components/BackBotton';
+import { BackButton } from '@/packages/common/components/BackButton';
 import EditJobForm from './EditJobForm';
 import { useTranslation } from 'react-i18next';
 

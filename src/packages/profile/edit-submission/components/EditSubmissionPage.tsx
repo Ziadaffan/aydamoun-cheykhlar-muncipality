@@ -6,7 +6,7 @@ import { useEditSubmission } from '../hooks/useEditSubmission';
 import EditSubmissionForm from './EditSubmissionForm';
 import EditSubmissionHeader from './EditSubmissionHeader';
 import Spinner from '@/packages/common/components/Spinner';
-import { BackButton } from '@/packages/common/components/BackBotton';
+import { BackButton } from '@/packages/common/components/BackButton';
 import ErrorMessage from '@/packages/common/components/ErrorMessage';
 
 export default function EditSubmissionPage() {

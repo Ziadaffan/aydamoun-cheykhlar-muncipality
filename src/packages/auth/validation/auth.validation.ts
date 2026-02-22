@@ -1,4 +1,5 @@
 import * as yup from 'yup';
+import { commonValidations } from '../../common/validation/common.validation';
 
 export const loginSchema = yup.object({
   identifier: yup
@@ -47,11 +48,8 @@ export const signupSchema = yup.object({
       const email = (this.parent?.email || '').trim();
       return !!email || !!phone;
     }),
-  password: yup.string().min(6, 'كلمة المرور يجب أن تكون 6 أحرف على الأقل').required('كلمة المرور مطلوبة'),
-  confirmPassword: yup
-    .string()
-    .oneOf([yup.ref('password')], 'كلمات المرور غير متطابقة')
-    .required('تأكيد كلمة المرور مطلوب'),
+  password: commonValidations.password(),
+  confirmPassword: commonValidations.confirmPassword(),
 });
 
 export type LoginFormData = yup.InferType<typeof loginSchema>;

@@ -33,6 +33,7 @@ export default function EditJobForm() {
       title: '',
       description: '',
       provider: '',
+      phone: '',
       location: '',
       salary: '',
       deadline: '',
@@ -66,6 +67,7 @@ export default function EditJobForm() {
         title: jobData.title || '',
         description: jobData.description ?? '',
         provider: jobData.provider || '',
+        phone: jobData.phone ?? '',
         location: jobData.location || '',
         salary: jobData.salary ?? '',
         deadline: formattedDeadline || '',
@@ -84,6 +86,7 @@ export default function EditJobForm() {
       id: jobId,
       ...data,
       description: data.description && typeof data.description === 'string' && data.description.trim() ? data.description : null,
+      phone: data.phone && typeof data.phone === 'string' && data.phone.trim() ? data.phone : null,
       salary: data.salary && typeof data.salary === 'string' && data.salary.trim() ? data.salary : null,
       deadline:
         data.deadline && typeof data.deadline === 'string' && data.deadline.trim()
@@ -156,6 +159,16 @@ export default function EditJobForm() {
           error={errors.provider}
           placeholder="أدخل اسم المزود"
           required
+        />
+
+        <ControlledInputText
+          id="phone"
+          label="رقم هاتف المزود"
+          type="tel"
+          control={control}
+          name="phone"
+          error={errors.phone}
+          placeholder="أدخل رقم هاتف المزود (اختياري)"
         />
 
         <ControlledInputText

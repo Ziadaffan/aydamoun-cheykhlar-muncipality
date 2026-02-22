@@ -29,7 +29,7 @@ export default function Banner({ type, message, onClose, className = '' }: Banne
   return (
     <div className={classes}>
       <div className="flex items-center">
-        <div className={`mr-3 ${iconClasses[type]}`}>
+        <div className={`me-3 ${iconClasses[type]}`}>
           {type === 'success' && (
             <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
               <path
@@ -67,10 +67,10 @@ export default function Banner({ type, message, onClose, className = '' }: Banne
             </svg>
           )}
         </div>
-        <span className="mr-1 text-sm font-medium">{message}</span>
+        <span className="text-sm font-medium">{message}</span>
       </div>
       {onClose && (
-        <button onClick={onClose} className={`ml-3 ${iconClasses[type]} transition-opacity hover:opacity-70`}>
+        <button onClick={onClose} className={`ms-3 ${iconClasses[type]} transition-opacity hover:opacity-70`}>
           <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
             <path
               fillRule="evenodd"

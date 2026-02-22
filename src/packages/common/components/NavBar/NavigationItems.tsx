@@ -18,7 +18,7 @@ export default function NavigationItems({ t, setIsMobileMenuOpen, isMobile = fal
     await signOut();
   };
 
-  const containerClasses = isMobile ? 'flex flex-col space-y-4' : 'flex flex-nowrap items-center space-x-4 overflow-x-auto';
+  const containerClasses = isMobile ? 'flex flex-col gap-4' : 'flex flex-nowrap items-center gap-4 overflow-x-auto';
 
   const linkClasses = isMobile
     ? 'block w-full px-4 py-3 text-base font-medium text-gray-700 hover:text-blue-800 hover:bg-gray-50 rounded-md transition-colors duration-200'

@@ -12,7 +12,7 @@ export default function Footer() {
             <h3 className="text-center text-lg font-bold md:text-right">{t('footer.title')}</h3>
           </div>
 
-          <div className="flex flex-col items-center space-y-2 md:flex-row md:space-y-0 md:space-x-6">
+          <div className="flex flex-col items-center gap-2 md:flex-row md:gap-6">
             <Link href="/privacy-policy" className="text-gray-300 transition-colors duration-200 hover:text-white">
               {t('footer.privacyPolicy')}
             </Link>

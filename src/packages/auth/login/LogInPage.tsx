@@ -72,7 +72,7 @@ export default function LogInPage() {
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-blue-100 to-blue-300">
-      <form onSubmit={handleSubmit(onSubmit)} className="mx-2 w-full max-w-xs rounded-2xl bg-white p-6 shadow-xl md:max-w-md md:p-10">
+      <form onSubmit={handleSubmit(onSubmit)} className="mx-2 w-full max-w-xs rounded-2xl bg-white p-6 shadow-xl md:max-w-md md:p-10" noValidate>
         <div className="mb-6 flex justify-center">
           <CldImage src="logo_smzpb2" alt="Municipality Logo" width={80} height={80} className="object-contain" priority />
         </div>
@@ -110,7 +110,7 @@ export default function LogInPage() {
           </a>
         </div>
 
-        <Button type="submit" variant="primary" size="lg" loading={isLoading} disabled={isLoading || !isValid} className="w-full">
+        <Button type="submit" variant="primary" size="lg" loading={isLoading} disabled={isLoading} className="w-full">
           {t('auth.login.submit')}
         </Button>
 

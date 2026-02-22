@@ -1,9 +1,10 @@
 'use client';
 
 import { useTranslation } from 'react-i18next';
-import { Control, FieldErrors, Controller } from 'react-hook-form';
+import { Control, FieldErrors } from 'react-hook-form';
 import ControlledSelect from '@/packages/common/components/form/ControlledSelect';
 import ControlledRadio from '@/packages/common/components/form/ControlledRadio';
+import ControlledInputText from '@/packages/common/components/form/ControlledInputText';
 
 type AdditionalField = {
   name: string;
@@ -82,30 +83,14 @@ function AdditionalFieldRenderer({ field, control, errors }: AdditionalFieldRend
   }
 
   return (
-    <Controller
+    <ControlledInputText
+      id={field.name}
       name={`additionalInfo.${field.name}`}
       control={control}
-      rules={{ required: field.required ? `${field.label} مطلوب` : false }}
-      render={({ field: { onChange, value } }) => (
-        <div>
-          <label className="mb-2 block text-sm font-medium text-gray-700">
-            {field.label} {field.required && <span className="text-red-500">*</span>}
-          </label>
-          <input
-            type={field.type}
-            value={value || ''}
-            onChange={onChange}
-            className={`w-full rounded-lg border px-4 py-2 focus:border-transparent focus:ring-2 focus:ring-blue-500 ${
-              errors.additionalInfo?.[field.name] ? 'border-red-500' : 'border-gray-300'
-            }`}
-          />
-          {errors.additionalInfo?.[field.name] && (
-            <p className="mt-1 text-sm text-red-500">
-              {String(errors.additionalInfo[field.name]?.message || t('services.form.messages.fieldRequired'))}
-            </p>
-          )}
-        </div>
-      )}
+      label={field.label}
+      type={field.type as any}
+      required={field.required}
+      error={errors.additionalInfo?.[field.name] as any}
     />
   );
 }

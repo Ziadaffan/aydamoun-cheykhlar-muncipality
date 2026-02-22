@@ -44,6 +44,7 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
     const title = formData.get('title') as string;
     const description = formData.get('description') as string | null;
     const provider = formData.get('provider') as string;
+    const phone = formData.get('phone') as string | null;
     const location = formData.get('location') as string;
     const salary = formData.get('salary') as string | null;
     const deadlineString = formData.get('deadline') as string | null;
@@ -55,6 +56,7 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
       title,
       description: description || null,
       provider,
+      phone: phone || null,
       location,
       salary: salary || null,
       deadline,

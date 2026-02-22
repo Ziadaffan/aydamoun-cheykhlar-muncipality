@@ -7,7 +7,7 @@ import Spinner from '@/packages/common/components/Spinner';
 import ErrorMessage from '@/packages/common/components/ErrorMessage';
 import Button from '@/packages/common/components/Button';
 import { DeleteButton } from '@/packages/common/components/DeleteButton';
-import { BackButton } from '@/packages/common/components/BackBotton';
+import { BackButton } from '@/packages/common/components/BackButton';
 import { useAuth } from '@/packages/common/hooks/useAuth';
 import { getAdditionalFields } from '@/packages/services/utils/form.utils';
 import { mapServiceTypeToCategory } from '@/packages/services/utils/category.utils';

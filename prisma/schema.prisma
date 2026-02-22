@@ -177,6 +177,7 @@ model Jobs {
   title       String
   description String?
   provider    String
+  phone       String?
   location    String
   salary      String?
   deadline    DateTime?

@@ -16,6 +16,8 @@ export const createJobSchema = yup.object({
     .max(100, validationMessages.maxLength('اسم المزود', 100))
     .required(validationMessages.required('اسم المزود')),
 
+  phone: yup.string().nullable().default(null),
+
   location: yup
     .string()
     .min(2, validationMessages.minLength('الموقع', 2))
@@ -64,6 +66,8 @@ export const updateJobSchema = yup.object({
     .max(100, validationMessages.maxLength('اسم المزود', 100))
     .required(validationMessages.required('اسم المزود')),
 
+  phone: yup.string().nullable().default(null),
+
   location: yup
     .string()
     .min(2, validationMessages.minLength('الموقع', 2))
@@ -101,6 +105,7 @@ export type UpdateJobFormData = {
   title: string;
   description: YupUpdateJobFormData['description'];
   provider: string;
+  phone: YupUpdateJobFormData['phone'];
   location: string;
   salary: YupUpdateJobFormData['salary'];
   deadline: YupUpdateJobFormData['deadline'];

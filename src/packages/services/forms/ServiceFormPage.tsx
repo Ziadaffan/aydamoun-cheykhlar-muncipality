@@ -1,4 +1,4 @@
-import { BackButton } from '@/packages/common/components/BackBotton';
+import { BackButton } from '@/packages/common/components/BackButton';
 import ServiceForm from '@/packages/services/forms/ServiceForm';
 import { useTranslation } from 'react-i18next';
 import { getServiceCategoryMeta } from '@/packages/services/utils/service.utils';

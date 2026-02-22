@@ -1,11 +1,11 @@
 import React from 'react';
 
-interface MobileMenuButoonProps {
+interface MobileMenuButtonProps {
   isMobileMenuOpen: boolean;
   setIsMobileMenuOpen: (isMobileMenuOpen: boolean) => void;
 }
 
-export default function MobileMenuButoon({ isMobileMenuOpen, setIsMobileMenuOpen }: MobileMenuButoonProps) {
+export default function MobileMenuButton({ isMobileMenuOpen, setIsMobileMenuOpen }: MobileMenuButtonProps) {
   return (
     <div className="flex items-center lg:hidden">
       <button

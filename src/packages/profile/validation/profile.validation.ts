@@ -1,4 +1,5 @@
 import * as yup from 'yup';
+import { commonValidations } from '../../common/validation/common.validation';
 
 export const profileUpdateSchema = yup.object({
   name: yup.string().min(2, 'الاسم يجب أن يكون حرفين على الأقل').max(50, 'الاسم يجب أن يكون أقل من 50 حرف').required('الاسم مطلوب'),
@@ -7,11 +8,10 @@ export const profileUpdateSchema = yup.object({
 
 export const passwordChangeSchema = yup.object({
   oldPassword: yup.string().required('كلمة المرور الحالية مطلوبة'),
-  newPassword: yup.string().min(6, 'كلمة المرور الجديدة يجب أن تكون 6 أحرف على الأقل').required('كلمة المرور الجديدة مطلوبة'),
-  confirmPassword: yup
-    .string()
-    .oneOf([yup.ref('newPassword')], 'كلمات المرور غير متطابقة')
-    .required('تأكيد كلمة المرور الجديدة مطلوب'),
+  newPassword: commonValidations
+    .password()
+    .notOneOf([yup.ref('oldPassword')], 'كلمة المرور الجديدة يجب أن تكون مختلفة عن القديمة'),
+  confirmPassword: commonValidations.confirmPassword('newPassword'),
 });
 
 export type ProfileUpdateFormData = yup.InferType<typeof profileUpdateSchema>;
