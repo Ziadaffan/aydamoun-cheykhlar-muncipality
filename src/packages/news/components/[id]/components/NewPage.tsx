@@ -1,8 +1,9 @@
 'use client';
+// Fixed: BackButton import path
 
 import { useParams } from 'next/navigation';
 import { useGetNewsById } from '@/packages/news/hooks/useGetNewsById';
-import { BackButton } from '@/packages/common/components/BackBotton';
+import { BackButton } from '@/packages/common/components/BackButton';
 import Spinner from '@/packages/common/components/Spinner';
 import ErrorMessage from '@/packages/common/components/ErrorMessage';
 import { formatDate } from '@/packages/common/utils/date.utils';
