@@ -1,8 +1,7 @@
-import { authOptions } from '@/lib/auth';
 import { ApiErrorHandler } from '@/packages/common/errors';
 import { returnProperErrorMessage } from '@/packages/common/utils/error.utils';
 import { UserService } from '@/packages/user/services/user.service';
-import { getServerSession } from 'next-auth';
+import { getAuthSession } from '@/lib/mobile-auth';
 import { NextRequest, NextResponse } from 'next/server';
 
 export const dynamic = 'force-dynamic';
@@ -11,7 +10,7 @@ const userService = UserService.instance();
 
 export const PUT = ApiErrorHandler(async (request: NextRequest, context): Promise<NextResponse> => {
   try {
-    const session = await getServerSession(authOptions);
+    const session = await getAuthSession(request);
 
     if (!session?.user?.id) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
@@ -29,7 +28,7 @@ export const PUT = ApiErrorHandler(async (request: NextRequest, context): Promis
 
 export const PATCH = ApiErrorHandler(async (request: NextRequest, context): Promise<NextResponse> => {
   try {
-    const session = await getServerSession(authOptions);
+    const session = await getAuthSession(request);
     const body = await request.json();
     const { oldPassword, newPassword } = body;
 

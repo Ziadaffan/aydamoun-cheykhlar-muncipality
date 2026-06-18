@@ -2,8 +2,7 @@ import { ApiErrorHandler } from '@/packages/common/errors';
 import { returnProperErrorMessage } from '@/packages/common/utils/error.utils';
 import { NextRequest, NextResponse } from 'next/server';
 import { ServiceSubmissionService } from '@/packages/serviceSubmissions/services/serviceSubmission.service';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth';
+import { getAuthSession } from '@/lib/mobile-auth';
 
 export const dynamic = 'force-dynamic';
 
@@ -11,7 +10,7 @@ const serviceSubmissionService = ServiceSubmissionService.instance();
 
 export const GET = ApiErrorHandler(async (request: NextRequest, context): Promise<NextResponse> => {
   try {
-    const session = await getServerSession(authOptions);
+    const session = await getAuthSession(request);
 
     if (!session?.user?.id) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });

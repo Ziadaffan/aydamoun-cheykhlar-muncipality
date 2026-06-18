@@ -1,16 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
 import { ApiErrorHandler } from '@/packages/common/errors';
 import { returnProperErrorMessage } from '@/packages/common/utils/error.utils';
 import { ServiceSubmissionService } from '@/packages/serviceSubmissions/services/serviceSubmission.service';
-import { authOptions } from '@/lib/auth';
+import { getAuthSession } from '@/lib/mobile-auth';
 
 const serviceSubmissionService = ServiceSubmissionService.instance();
 
 export const dynamic = 'force-dynamic';
 
-const requireAdminSession = async () => {
-  const session = await getServerSession(authOptions);
+const requireAdminSession = async (request: NextRequest) => {
+  const session = await getAuthSession(request);
 
   if (!session?.user?.id || session.user.role !== 'ADMIN') {
     return null;
@@ -21,7 +20,7 @@ const requireAdminSession = async () => {
 
 export const GET = ApiErrorHandler(async (req: NextRequest): Promise<NextResponse> => {
   try {
-    const session = await requireAdminSession();
+    const session = await requireAdminSession(req);
 
     if (!session) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
