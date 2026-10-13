@@ -1,11 +1,11 @@
 # 16 — Change password
 
-| | |
-|---|---|
-| **Route** | `/(account)/profile/change-password` |
+|                |                                                                                                                                                                                     |
+| -------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Route**      | `/(account)/profile/change-password`                                                                                                                                                |
 | **Web parity** | [src/app/profile/change-password/page.tsx](../../src/app/profile/change-password/page.tsx) → [ChangePasswordPage.tsx](../../src/packages/profile/components/ChangePasswordPage.tsx) |
-| **Auth** | **Required** |
-| **API** | `PATCH /api/user` |
+| **Auth**       | **Required**                                                                                                                                                                        |
+| **API**        | `PATCH /api/user`                                                                                                                                                                   |
 
 ## Purpose
 
@@ -40,10 +40,15 @@ Change the logged-in user's password.
 ```ts
 const schema = yup.object({
   oldPassword: yup.string().min(6).required(),
-  newPassword: yup.string().min(6).required()
+  newPassword: yup
+    .string()
+    .min(6)
+    .required()
     .notOneOf([yup.ref('oldPassword')], 'errors.password.sameAsOld'),
-  confirmPassword: yup.string()
-    .oneOf([yup.ref('newPassword')], 'errors.passwordMismatch').required(),
+  confirmPassword: yup
+    .string()
+    .oneOf([yup.ref('newPassword')], 'errors.passwordMismatch')
+    .required(),
 });
 ```
 
@@ -60,7 +65,7 @@ const change = useMutation({
     showBanner('success', t('profile.password.success'));
     setTimeout(() => router.replace('/profile'), 1200);
   },
-  onError: (err) => showBanner('error', err.message), // e.g. "Invalid old password"
+  onError: err => showBanner('error', err.message), // e.g. "Invalid old password"
 });
 ```
 
@@ -77,4 +82,4 @@ const change = useMutation({
 
 ## Excluded
 
-No "Forgot password" link yet (the API doesn't ship a reset flow). Add a TODO and stub a button that opens a `mailto:` to the municipality if you want to give users a recourse.
+For a forgotten password (user not logged in), see the "Forgot password?" flow in [18-login.md](18-login.md).

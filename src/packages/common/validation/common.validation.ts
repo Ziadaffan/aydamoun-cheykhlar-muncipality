@@ -52,7 +52,8 @@ export const commonValidations = {
   password: () =>
     yup
       .string()
-      .min(6, validationMessages.minLength('كلمة المرور', 6))
+      // "كلمة" is feminine, so the generic minLength wording ("يكون") doesn't fit here.
+      .min(6, 'كلمة المرور يجب أن تكون 6 أحرف على الأقل')
       .matches(passwordPattern, validationMessages.invalidPassword)
       .required(validationMessages.required('كلمة المرور')),
 

@@ -8,15 +8,12 @@ All endpoints below live on the Next.js host. Set `EXPO_PUBLIC_API_BASE_URL` in 
 // lib/api.ts
 const BASE = process.env.EXPO_PUBLIC_API_BASE_URL!;
 
-export async function api<T>(
-  path: string,
-  init: RequestInit = {}
-): Promise<T> {
+export async function api<T>(path: string, init: RequestInit = {}): Promise<T> {
   const res = await fetch(`${BASE}${path}`, {
     ...init,
     headers: {
       'Content-Type': 'application/json',
-      ...(await authHeader()),         // see 03-authentication.md
+      ...(await authHeader()), // see 03-authentication.md
       ...init.headers,
     },
   });
@@ -41,44 +38,50 @@ Status codes: `400` validation, `401` unauthenticated, `403` forbidden, `404` no
 
 ### Auth
 
-| Method | Path | Auth | Used by |
-|---|---|---|---|
-| `POST` | `/api/auth/signup` | — | [Signup](pages/19-signup.md) |
-| `POST` | `/api/auth/callback/credentials` | — | [Login](pages/18-login.md) (NextAuth) |
-| `GET` | `/api/auth/session` | session cookie | App boot (whoami) |
-| `POST` | `/api/auth/signout` | session cookie | Logout button |
-| `POST` | `/api/auth/logout` | — | Optional helper, returns 200 |
+| Method | Path                             | Auth           | Used by                                                                      |
+| ------ | -------------------------------- | -------------- | ---------------------------------------------------------------------------- |
+| `POST` | `/api/auth/signup`               | —              | [Signup](pages/19-signup.md)                                                 |
+| `POST` | `/api/auth/callback/credentials` | —              | [Login](pages/18-login.md) (NextAuth)                                        |
+| `GET`  | `/api/auth/session`              | session cookie | App boot (whoami)                                                            |
+| `POST` | `/api/auth/signout`              | session cookie | Logout button                                                                |
+| `POST` | `/api/auth/logout`               | —              | Optional helper, returns 200                                                 |
+| `POST` | `/api/auth/forgot-password`      | —              | [Login](pages/18-login.md) "Forgot password?" — body `{ email }`, always 200 |
+| `POST` | `/api/auth/reset-password`       | —              | Web page opened from the email link — body `{ token, password }`             |
 
 Signup body:
+
 ```json
 { "name": "string", "email"?: "string", "phone"?: "string", "password": "string" }
 ```
+
 At least one of `email` / `phone` is required.
 
 Login body (form-encoded for NextAuth credentials callback):
+
 ```
 identifier=<email-or-phone>&password=<pwd>&csrfToken=<from /api/auth/csrf>&json=true
 ```
 
 ### News
 
-| Method | Path | Auth | Returns |
-|---|---|---|---|
-| `GET` | `/api/news` | — | `News[]` |
-| `GET` | `/api/news?category=<NewsCategory>` | — | `News[]` filtered |
-| `GET` | `/api/news/featured` | — | `News` (most recent featured) |
-| `GET` | `/api/news/categories` | — | `NewsCategory[]` |
-| `GET` | `/api/news/[id]` | — | `News` (increments view count) |
+| Method | Path                                | Auth | Returns                        |
+| ------ | ----------------------------------- | ---- | ------------------------------ |
+| `GET`  | `/api/news`                         | —    | `News[]`                       |
+| `GET`  | `/api/news?category=<NewsCategory>` | —    | `News[]` filtered              |
+| `GET`  | `/api/news/featured`                | —    | `News` (most recent featured)  |
+| `GET`  | `/api/news/categories`              | —    | `NewsCategory[]`               |
+| `GET`  | `/api/news/[id]`                    | —    | `News` (increments view count) |
 
 ### Services
 
-| Method | Path | Auth | Returns |
-|---|---|---|---|
-| `GET` | `/api/services` | — | `Service[]` |
-| `GET` | `/api/services/[serviceId]` | — | `Service` |
+| Method | Path                                    | Auth | Returns             |
+| ------ | --------------------------------------- | ---- | ------------------- |
+| `GET`  | `/api/services`                         | —    | `Service[]`         |
+| `GET`  | `/api/services/[serviceId]`             | —    | `Service`           |
 | `POST` | `/api/services/[serviceId]/submissions` | user | `ServiceSubmission` |
 
 Submission body (JSON):
+
 ```json
 {
   "fullName": "string",
@@ -92,47 +95,47 @@ Submission body (JSON):
 
 ### My account
 
-| Method | Path | Auth | Body / Returns |
-|---|---|---|---|
-| `PUT` | `/api/user` | user | `{ name?, email?, phone? }` → `{ user }` |
-| `PATCH` | `/api/user` | user | `{ oldPassword, newPassword }` → `{ user }` |
-| `GET` | `/api/user/service-submissions` | user | `ServiceSubmission[]` |
-| `GET` | `/api/user/service-submissions/[id]` | user | `ServiceSubmission` |
-| `PUT` | `/api/user/service-submissions/[id]` | user | partial submission → updated |
-| `DELETE` | `/api/user/service-submissions/[id]` | user | `{ message }` |
+| Method   | Path                                 | Auth | Body / Returns                              |
+| -------- | ------------------------------------ | ---- | ------------------------------------------- |
+| `PUT`    | `/api/user`                          | user | `{ name?, email?, phone? }` → `{ user }`    |
+| `PATCH`  | `/api/user`                          | user | `{ oldPassword, newPassword }` → `{ user }` |
+| `GET`    | `/api/user/service-submissions`      | user | `ServiceSubmission[]`                       |
+| `GET`    | `/api/user/service-submissions/[id]` | user | `ServiceSubmission`                         |
+| `PUT`    | `/api/user/service-submissions/[id]` | user | partial submission → updated                |
+| `DELETE` | `/api/user/service-submissions/[id]` | user | `{ message }`                               |
 
 ### Jobs
 
-| Method | Path | Auth | Returns |
-|---|---|---|---|
-| `GET` | `/api/jobs` | — | `Job[]` |
-| `GET` | `/api/jobs/[id]` | — | `Job` |
+| Method | Path             | Auth | Returns |
+| ------ | ---------------- | ---- | ------- |
+| `GET`  | `/api/jobs`      | —    | `Job[]` |
+| `GET`  | `/api/jobs/[id]` | —    | `Job`   |
 
 ### Documents
 
-| Method | Path | Auth | Returns |
-|---|---|---|---|
-| `GET` | `/api/documents` | — | `Document[]` |
+| Method | Path             | Auth | Returns      |
+| ------ | ---------------- | ---- | ------------ |
+| `GET`  | `/api/documents` | —    | `Document[]` |
 
 ### Associations
 
-| Method | Path | Auth | Returns |
-|---|---|---|---|
-| `GET` | `/api/associations` | — | `Association[]` |
-| `GET` | `/api/associations/[id]` | — | `Association` |
+| Method | Path                     | Auth | Returns         |
+| ------ | ------------------------ | ---- | --------------- |
+| `GET`  | `/api/associations`      | —    | `Association[]` |
+| `GET`  | `/api/associations/[id]` | —    | `Association`   |
 
 ### Taxi stops
 
-| Method | Path | Auth | Returns |
-|---|---|---|---|
-| `GET` | `/api/taxi-stops` | — | `TaxiStop[]` |
-| `GET` | `/api/taxi-stops/[id]` | — | `TaxiStop` |
+| Method | Path                   | Auth | Returns      |
+| ------ | ---------------------- | ---- | ------------ |
+| `GET`  | `/api/taxi-stops`      | —    | `TaxiStop[]` |
+| `GET`  | `/api/taxi-stops/[id]` | —    | `TaxiStop`   |
 
 ### Council
 
-| Method | Path | Auth | Returns |
-|---|---|---|---|
-| `GET` | `/api/council` | — | `Council[]` |
+| Method | Path           | Auth | Returns     |
+| ------ | -------------- | ---- | ----------- |
+| `GET`  | `/api/council` | —    | `Council[]` |
 
 ## Data shapes (TypeScript)
 
@@ -152,9 +155,15 @@ type Position = 'PRESIDENT' | 'VICE_PRESIDENT' | 'COUNCIL_MEMBER';
 type ServiceStatus = 'PENDING' | 'IN_PROGRESS' | 'COMPLETED' | 'REJECTED';
 
 type NewsCategory =
-  | 'MUNICIPAL_NEWS' | 'DEVELOPMENT_PROJECTS' | 'ANNOUNCEMENTS'
-  | 'COMMUNITY_EVENTS' | 'INFRASTRUCTURE' | 'ENVIRONMENTAL'
-  | 'SOCIAL_SERVICES' | 'HEALTH_AND_SOCIAL_SERVICES' | 'OTHER';
+  | 'MUNICIPAL_NEWS'
+  | 'DEVELOPMENT_PROJECTS'
+  | 'ANNOUNCEMENTS'
+  | 'COMMUNITY_EVENTS'
+  | 'INFRASTRUCTURE'
+  | 'ENVIRONMENTAL'
+  | 'SOCIAL_SERVICES'
+  | 'HEALTH_AND_SOCIAL_SERVICES'
+  | 'OTHER';
 
 interface User {
   id: string;
@@ -170,9 +179,9 @@ interface User {
 interface News {
   id: string;
   title: string;
-  content: string;     // HTML
+  content: string; // HTML
   excerpt: string;
-  imageUrl: string[];  // Cloudinary URLs OR base64 data URIs
+  imageUrl: string[]; // Cloudinary URLs OR base64 data URIs
   category: NewsCategory;
   author: string;
   views: number;
@@ -202,7 +211,7 @@ interface ServiceSubmission {
   status: ServiceStatus;
   userId: string;
   serviceId: string;
-  service?: Service;   // included when expanded
+  service?: Service; // included when expanded
   createdAt: string;
   updatedAt: string;
 }
@@ -215,7 +224,7 @@ interface Job {
   phone: string | null;
   location: string;
   salary: string | null;
-  deadline: string | null;  // ISO
+  deadline: string | null; // ISO
   active: boolean;
   createdAt: string;
   updatedAt: string;
@@ -225,8 +234,8 @@ interface Document {
   id: string;
   title: string;
   description: string | null;
-  type: string;        // file extension
-  fileUrl: string;     // Cloudinary URL
+  type: string; // file extension
+  fileUrl: string; // Cloudinary URL
   createdAt: string;
   updatedAt: string;
 }
@@ -235,7 +244,7 @@ interface Association {
   id: string;
   name: string;
   description: string;
-  picaURL: string;     // image URL
+  picaURL: string; // image URL
   createdAt: string;
   updatedAt: string;
 }
@@ -279,5 +288,11 @@ The web admin uses `multipart/form-data` for image-bearing endpoints. Since the 
 const fd = new FormData();
 fd.append('fullName', fullName);
 fd.append('attachment', { uri: pickedUri, name: 'file.pdf', type: 'application/pdf' } as any);
-api('/api/services/<id>/submissions', { method: 'POST', body: fd, headers: { /* drop content-type so RN sets boundary */ } });
+api('/api/services/<id>/submissions', {
+  method: 'POST',
+  body: fd,
+  headers: {
+    /* drop content-type so RN sets boundary */
+  },
+});
 ```

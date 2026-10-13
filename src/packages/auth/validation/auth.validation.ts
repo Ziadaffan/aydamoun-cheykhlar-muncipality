@@ -54,3 +54,15 @@ export const signupSchema = yup.object({
 
 export type LoginFormData = yup.InferType<typeof loginSchema>;
 export type SignupFormData = yup.InferType<typeof signupSchema>;
+
+export const forgotPasswordSchema = yup.object({
+  email: yup.string().trim().email('يجب إدخال بريد إلكتروني صحيح').required('البريد الإلكتروني مطلوب'),
+});
+
+export const resetPasswordSchema = yup.object({
+  password: commonValidations.password(),
+  confirmPassword: commonValidations.confirmPassword(),
+});
+
+export type ForgotPasswordFormData = yup.InferType<typeof forgotPasswordSchema>;
+export type ResetPasswordFormData = yup.InferType<typeof resetPasswordSchema>;

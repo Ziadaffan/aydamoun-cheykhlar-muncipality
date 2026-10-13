@@ -26,6 +26,10 @@ export class PrismaRepository<K extends Exclude<keyof PrismaClient, symbol | `$$
     return (this.client[this.model].delete as any)(...args);
   }
 
+  deleteMany(...args: Parameters<PrismaClient[K]['deleteMany']>): ReturnType<PrismaClient[K]['deleteMany']> {
+    return (this.client[this.model].deleteMany as any)(...args);
+  }
+
   findFirst(...args: Parameters<PrismaClient[K]['findFirst']>): ReturnType<PrismaClient[K]['findFirst']> {
     return (this.client[this.model].findFirst as any)(...args);
   }

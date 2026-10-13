@@ -1,8 +1,11 @@
 import { BasePrismaService } from '@/packages/common/services/prisma.service';
-import { User } from '@prisma/client';
+import { Role, User } from '@prisma/client';
+import { commonValidations } from '@/packages/common/validation/common.validation';
 import { UserRepository } from '../repository/user.repository';
 import bcrypt from 'bcryptjs';
 import { BadRequestError } from '@/packages/common/errors';
+
+export const PUBLIC_USER_SELECT = { id: true, name: true, email: true, phone: true, role: true, createdAt: true, updatedAt: true } as const;
 
 export class UserService extends BasePrismaService<'user'> {
   private static singleton: UserService;
@@ -67,7 +70,7 @@ export class UserService extends BasePrismaService<'user'> {
     return this.repository.update({
       where: { id },
       data: updateData,
-      select: { id: true, name: true, email: true, phone: true, role: true, createdAt: true, updatedAt: true },
+      select: PUBLIC_USER_SELECT,
     });
   }
 
@@ -93,7 +96,52 @@ export class UserService extends BasePrismaService<'user'> {
     return this.repository.update({
       where: { id },
       data: { password: hashedNewPassword },
-      select: { id: true, name: true, email: true, phone: true, role: true, createdAt: true, updatedAt: true },
+      select: PUBLIC_USER_SELECT,
     });
+  }
+
+  // ---- Admin ----
+
+  public async listUsers() {
+    return this.repository.findMany({
+      select: { ...PUBLIC_USER_SELECT, _count: { select: { submissions: true } } },
+      orderBy: { createdAt: 'desc' },
+    });
+  }
+
+  /** Admin sets a temporary password; used for phone-only accounts that can't receive a reset email. */
+  public async adminSetPassword(id: string, newPassword: string) {
+    try {
+      commonValidations.password().validateSync(newPassword);
+    } catch (e) {
+      throw new BadRequestError((e as Error).message);
+    }
+
+    const user = await this.repository.findUnique({ where: { id } });
+    if (!user) {
+      throw new BadRequestError('User not found');
+    }
+
+    return this.repository.update({
+      where: { id },
+      data: { password: await bcrypt.hash(newPassword, 12) },
+      select: PUBLIC_USER_SELECT,
+    });
+  }
+
+  public async adminSetRole(id: string, role: Role, actingAdminId: string) {
+    if (!Object.values(Role).includes(role)) {
+      throw new BadRequestError('Invalid role');
+    }
+    if (id === actingAdminId && role !== Role.ADMIN) {
+      throw new BadRequestError('You cannot remove your own admin role');
+    }
+
+    const user = await this.repository.findUnique({ where: { id } });
+    if (!user) {
+      throw new BadRequestError('User not found');
+    }
+
+    return this.repository.update({ where: { id }, data: { role }, select: PUBLIC_USER_SELECT });
   }
 }

@@ -105,7 +105,7 @@ export default function LogInPage() {
 
         {/* Lien mot de passe oublié */}
         <div className="mb-6 text-left">
-          <a href="#" className="text-xs text-blue-600 hover:underline md:text-sm">
+          <a href="/auth/forgot-password" className="text-xs text-blue-600 hover:underline md:text-sm">
             {t('auth.login.forgotPassword')}
           </a>
         </div>
