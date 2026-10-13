@@ -43,6 +43,7 @@ export default function RootLayout({
           name="keywords"
           content="بلدية عيدمون شيخلار, عيدمون شيخلار, بلدية عيدمون, شيخلار, خدمات بلدية عيدمون, بلدية شيخلار الرسمية, خدمات المواطنين في عيدمون, بلدية عيدمون شيخلار الرسمية, خدمات بلدية عيدمون شيخلار, municipality services, Aydamoun Cheikh Lahr,  Aydamoun municipality, Cheikh Lahr municipality"
         />
+        <meta name="google-site-verification" content="jbv3hYwCYoalgc0zsI2HwrSuGi3H9g_cbpvjHQDawVE" />
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable} ${amiri.variable} ${balooBhaijaan2.variable} antialiased`}>
         <ClientLayout>{children}</ClientLayout>
