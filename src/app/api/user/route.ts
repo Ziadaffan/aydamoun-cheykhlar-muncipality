@@ -16,9 +16,9 @@ export const PUT = ApiErrorHandler(async (request: NextRequest, context): Promis
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const body = await request.json();
+    const { name, email, phone } = await request.json();
 
-    const user = await userService.updateUser(session.user.id, body);
+    const user = await userService.updateUser(session.user.id, { name, email, phone });
 
     return NextResponse.json({ user }, { status: 200 });
   } catch (error) {

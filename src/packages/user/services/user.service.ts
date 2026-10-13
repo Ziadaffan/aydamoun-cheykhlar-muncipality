@@ -17,10 +17,57 @@ export class UserService extends BasePrismaService<'user'> {
     return UserService.singleton;
   }
 
-  public async updateUser(id: string, data: Partial<User>) {
+  /**
+   * Only profile fields can be changed here. Anything else in the body
+   * (role, password, id, ...) is dropped so a user can't escalate themselves.
+   */
+  public async updateUser(id: string, data: Partial<Pick<User, 'name' | 'email' | 'phone'>>) {
+    const updateData: Partial<Pick<User, 'name' | 'email' | 'phone'>> = {};
+
+    if (data.name !== undefined) {
+      const name = String(data.name).trim();
+      if (!name) {
+        throw new BadRequestError('Name is required');
+      }
+      updateData.name = name;
+    }
+
+    if (data.email !== undefined) {
+      const email = data.email ? String(data.email).trim().toLowerCase() : null;
+      updateData.email = email || null;
+    }
+
+    if (data.phone !== undefined) {
+      const phone = data.phone ? String(data.phone).trim().replace(/\s|-/g, '') : null;
+      updateData.phone = phone || null;
+    }
+
+    const current = await this.repository.findUnique({ where: { id } });
+    if (!current) {
+      throw new BadRequestError('User not found');
+    }
+
+    const nextEmail = updateData.email !== undefined ? updateData.email : current.email;
+    const nextPhone = updateData.phone !== undefined ? updateData.phone : current.phone;
+
+    if (!nextEmail && !nextPhone) {
+      throw new BadRequestError('Email or phone is required');
+    }
+
+    const conflicts = [...(nextEmail ? [{ email: nextEmail }] : []), ...(nextPhone ? [{ phone: nextPhone }] : [])];
+    if (conflicts.length) {
+      const taken = await this.repository.findFirst({
+        where: { id: { not: id }, OR: conflicts },
+      });
+      if (taken) {
+        throw new BadRequestError('Email or phone already in use');
+      }
+    }
+
     return this.repository.update({
       where: { id },
-      data,
+      data: updateData,
+      select: { id: true, name: true, email: true, phone: true, role: true, createdAt: true, updatedAt: true },
     });
   }
 
@@ -46,6 +93,7 @@ export class UserService extends BasePrismaService<'user'> {
     return this.repository.update({
       where: { id },
       data: { password: hashedNewPassword },
+      select: { id: true, name: true, email: true, phone: true, role: true, createdAt: true, updatedAt: true },
     });
   }
 }

@@ -3,6 +3,9 @@ import { Prisma, ServiceStatus, ServiceSubmission } from '@prisma/client';
 import { ServiceSubmissionRepository } from '../repository/serviceSubmission.repository';
 import { NotFoundError } from '@/packages/common/errors';
 
+// Never send the password hash along with a submission's user.
+const SAFE_USER_SELECT = { id: true, name: true, email: true, phone: true, role: true, createdAt: true } as const;
+
 export class ServiceSubmissionService extends BasePrismaService<'serviceSubmission'> {
   private static singleton: ServiceSubmissionService;
   constructor(repository: ServiceSubmissionRepository = new ServiceSubmissionRepository()) {
@@ -24,6 +27,10 @@ export class ServiceSubmissionService extends BasePrismaService<'serviceSubmissi
     return this.repository.findMany({ where: { serviceId: id } });
   }
 
+  public async getServiceSubmissionsByServiceIdForUser(serviceId: string, userId: string): Promise<ServiceSubmission[]> {
+    return this.repository.findMany({ where: { serviceId, userId } });
+  }
+
   public async getServiceSubmissionByUserId(userId: string, submissionId: string): Promise<ServiceSubmission> {
     const serviceSubmission = await this.repository.findUnique({ where: { id: submissionId, userId }, include: { service: true } });
 
@@ -34,8 +41,18 @@ export class ServiceSubmissionService extends BasePrismaService<'serviceSubmissi
     return serviceSubmission;
   }
 
-  public async getServiceSubmissionById(id: string, serviceId: string): Promise<ServiceSubmission> {
-    const serviceSubmission = await this.repository.findUnique({ where: { id, serviceId } });
+  /**
+   * Non-admin callers only get their own submission; anything else is reported
+   * as not found so we don't reveal whether the id exists.
+   */
+  public async getServiceSubmissionById(
+    id: string,
+    serviceId: string,
+    requester: { userId: string; isAdmin: boolean }
+  ): Promise<ServiceSubmission> {
+    const serviceSubmission = await this.repository.findUnique({
+      where: { id, serviceId, ...(requester.isAdmin ? {} : { userId: requester.userId }) },
+    });
 
     if (!serviceSubmission) {
       throw new NotFoundError('Service Submission not found');
@@ -50,7 +67,7 @@ export class ServiceSubmissionService extends BasePrismaService<'serviceSubmissi
 
   public async getAllServiceSubmissionsWithDetails(): Promise<ServiceSubmission[]> {
     return this.repository.findMany({
-      include: { service: true, user: true },
+      include: { service: true, user: { select: SAFE_USER_SELECT } },
       orderBy: { createdAt: 'desc' },
     });
   }
@@ -102,7 +119,7 @@ export class ServiceSubmissionService extends BasePrismaService<'serviceSubmissi
   }
 
   public async getServiceSubmissionByIdAdmin(id: string): Promise<ServiceSubmission> {
-    const serviceSubmission = await this.repository.findUnique({ where: { id }, include: { service: true, user: true } });
+    const serviceSubmission = await this.repository.findUnique({ where: { id }, include: { service: true, user: { select: SAFE_USER_SELECT } } });
 
     if (!serviceSubmission) {
       throw new NotFoundError('Service Submission not found');

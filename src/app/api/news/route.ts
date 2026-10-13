@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { requireAdmin } from '@/lib/mobile-auth';
 import { returnProperErrorMessage } from '@/packages/common/utils/error.utils';
 import { NewsService } from '@/packages/news/service/news.service';
 import { NewsCategory } from '@/packages/news/types/news.types';
@@ -14,12 +15,14 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json(news);
   } catch (error) {
-    returnProperErrorMessage(error);
+    return returnProperErrorMessage(error);
   }
 }
 
 export async function POST(request: NextRequest) {
   try {
+    await requireAdmin(request);
+
     const formData = await request.formData();
 
     const title = formData.get('title') as string;

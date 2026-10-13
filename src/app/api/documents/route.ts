@@ -1,4 +1,5 @@
 import { ApiErrorHandler } from '@/packages/common/errors';
+import { requireAdmin } from '@/lib/mobile-auth';
 import { returnProperErrorMessage } from '@/packages/common/utils/error.utils';
 import { DocumentService } from '@/packages/document/services/document.service';
 import { NextRequest, NextResponse } from 'next/server';
@@ -11,8 +12,10 @@ type DocumentIdParams = {
   documentId: string;
 };
 
-export const POST = ApiErrorHandler(async (request: Request): Promise<NextResponse> => {
+export const POST = ApiErrorHandler(async (request: NextRequest): Promise<NextResponse> => {
   try {
+    await requireAdmin(request);
+
     const formData = await request.formData();
 
     const title = formData.get('title') as string;

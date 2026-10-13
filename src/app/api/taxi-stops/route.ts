@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { requireAdmin } from '@/lib/mobile-auth';
 import { ApiErrorHandler } from '@/packages/common/errors';
 import { returnProperErrorMessage } from '@/packages/common/utils/error.utils';
 import { TaxiStopsService } from '@/packages/taxiStops/services/taxiStops.service';
@@ -18,6 +19,8 @@ export const GET = ApiErrorHandler(async (): Promise<NextResponse> => {
 
 export async function POST(request: NextRequest) {
   try {
+    await requireAdmin(request);
+
     const formData = await request.formData();
 
     const name = formData.get('name') as string;

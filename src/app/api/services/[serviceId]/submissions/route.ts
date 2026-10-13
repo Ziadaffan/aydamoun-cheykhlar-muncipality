@@ -2,7 +2,7 @@ import { ApiErrorHandler } from '@/packages/common/errors';
 import { returnProperErrorMessage } from '@/packages/common/utils/error.utils';
 import { ServiceSubmissionService } from '@/packages/serviceSubmissions/services/serviceSubmission.service';
 import { NextRequest, NextResponse } from 'next/server';
-import { getAuthSession } from '@/lib/mobile-auth';
+import { requireAuth } from '@/lib/mobile-auth';
 
 const serviceSubmissionService = ServiceSubmissionService.instance();
 
@@ -12,15 +12,13 @@ export const GET = ApiErrorHandler(async (req: NextRequest, context) => {
   try {
     const { serviceId } = await context.params;
 
-    const session = await getAuthSession(req);
+    const session = await requireAuth(req);
 
-    if (!session?.user?.id) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
-
-    const userId = session.user.id;
-
-    const submissions = await serviceSubmissionService.getServiceSubmissionsByServiceId(serviceId);
+    // Admins see every submission for the service; users only see their own.
+    const submissions =
+      session.user.role === 'ADMIN'
+        ? await serviceSubmissionService.getServiceSubmissionsByServiceId(serviceId)
+        : await serviceSubmissionService.getServiceSubmissionsByServiceIdForUser(serviceId, session.user.id);
 
     return NextResponse.json(submissions, { status: 200 });
   } catch (error) {
@@ -33,17 +31,11 @@ export const POST = ApiErrorHandler(async (req: NextRequest, context) => {
     const { serviceId } = await context.params;
     const data = await req.json();
 
-    const session = await getAuthSession(req);
-
-    if (!session?.user?.id) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
-
-    const userId = session.user.id;
+    const session = await requireAuth(req);
 
     const submission = await serviceSubmissionService.createServiceSubmissions(serviceId, {
       ...data,
-      userId,
+      userId: session.user.id,
     });
 
     return NextResponse.json(submission, { status: 201 });

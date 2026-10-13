@@ -2,6 +2,7 @@ import { getServerSession } from 'next-auth';
 import { SignJWT, jwtVerify } from 'jose';
 import { NextRequest } from 'next/server';
 import { authOptions } from '@/lib/auth';
+import { ForbiddenError, UnauthorizedError } from '@/packages/common/errors';
 
 /**
  * Token-based auth for non-browser clients (e.g. the React Native app).
@@ -85,4 +86,25 @@ export async function getAuthSession(request?: NextRequest): Promise<AuthSession
     return session as AuthSession;
   }
   return null;
+}
+
+/**
+ * Guards for API routes. Both throw an HttpError, which every handler's
+ * catch block already maps to the right status via returnProperErrorMessage /
+ * ApiErrorHandler.
+ */
+export async function requireAuth(request?: NextRequest): Promise<AuthSession> {
+  const session = await getAuthSession(request);
+  if (!session?.user?.id) {
+    throw new UnauthorizedError('Unauthorized');
+  }
+  return session;
+}
+
+export async function requireAdmin(request?: NextRequest): Promise<AuthSession> {
+  const session = await requireAuth(request);
+  if (session.user.role !== 'ADMIN') {
+    throw new ForbiddenError('Admin access required');
+  }
+  return session;
 }

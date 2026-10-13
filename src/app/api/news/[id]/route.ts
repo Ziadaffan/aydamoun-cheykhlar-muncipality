@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { requireAdmin } from '@/lib/mobile-auth';
 import { returnProperErrorMessage } from '@/packages/common/utils/error.utils';
 import { NewsService } from '@/packages/news/service/news.service';
 import { NewsCategory } from '@/packages/news/types/news.types';
@@ -23,6 +24,8 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
 
 export async function DELETE(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
+    await requireAdmin(request);
+
     const { id } = await params;
 
     const result = await newsService.deleteNews(id);
@@ -39,6 +42,8 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
 
 export async function PUT(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
+    await requireAdmin(request);
+
     const { id } = await params;
     const formData = await request.formData();
 

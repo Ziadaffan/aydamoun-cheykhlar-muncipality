@@ -1,4 +1,5 @@
 import { ApiErrorHandler } from '@/packages/common/errors/ApiErrorHandler';
+import { requireAdmin } from '@/lib/mobile-auth';
 import { NextRequest, NextResponse } from 'next/server';
 import { returnProperErrorMessage } from '@/packages/common/utils/error.utils';
 import { DocumentService } from '@/packages/document/services/document.service';
@@ -11,6 +12,8 @@ const documentService = DocumentService.instance();
 
 export const DELETE = ApiErrorHandler(async (request: NextRequest, context: { params: Promise<DocumentIdParams> }): Promise<NextResponse> => {
   try {
+    await requireAdmin(request);
+
     const { id } = await context.params;
 
     if (!id) {

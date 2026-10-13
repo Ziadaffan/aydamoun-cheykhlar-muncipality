@@ -1,4 +1,5 @@
 import { ApiErrorHandler } from '@/packages/common/errors';
+import { requireAdmin } from '@/lib/mobile-auth';
 import { returnProperErrorMessage } from '@/packages/common/utils/error.utils';
 import { NextRequest, NextResponse } from 'next/server';
 import { JobsService } from '@/packages/jobs/services/jobs.service';
@@ -20,6 +21,8 @@ export const GET = ApiErrorHandler(async (): Promise<NextResponse> => {
 
 export async function POST(request: NextRequest) {
   try {
+    await requireAdmin(request);
+
     const formData = await request.formData();
 
     const title = formData.get('title') as string;

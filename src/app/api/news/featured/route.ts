@@ -10,6 +10,6 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json(featuredNews);
   } catch (error) {
-    returnProperErrorMessage(error);
+    return returnProperErrorMessage(error);
   }
 }
