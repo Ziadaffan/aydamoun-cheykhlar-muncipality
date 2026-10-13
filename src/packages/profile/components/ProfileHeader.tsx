@@ -22,7 +22,9 @@ export default function ProfileHeader({ user }: ProfileHeaderProps) {
         <div className="text-center sm:text-right">
           <h1 className="mb-2 text-3xl font-extrabold tracking-tight text-gray-900">{user?.name}</h1>
           <div className="space-y-1">
-            <p className="font-medium text-gray-700">{user?.email}</p>
+            <p className="font-medium text-gray-700" dir="ltr">
+              {user?.email || user?.phone}
+            </p>
             <p className="text-sm text-gray-500">
               {t('profile.header.memberSince')} {user?.createdAt ? new Date(user.createdAt).toLocaleDateString('ar-SA') : ''}
             </p>

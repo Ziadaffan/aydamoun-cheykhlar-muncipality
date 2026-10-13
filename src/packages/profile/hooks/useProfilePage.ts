@@ -15,6 +15,7 @@ import { profileUpdateSchema } from '@/packages/profile/validation/profile.valid
 export type ProfileFormData = {
   name: string;
   email: string;
+  phone: string;
 };
 
 export function useProfilePage() {
@@ -35,6 +36,7 @@ export function useProfilePage() {
     defaultValues: {
       name: '',
       email: '',
+      phone: '',
     },
   });
 
@@ -49,6 +51,7 @@ export function useProfilePage() {
       form.reset({
         name: user.name || '',
         email: user.email || '',
+        phone: user.phone || '',
       });
     }
   }, [user, form]);

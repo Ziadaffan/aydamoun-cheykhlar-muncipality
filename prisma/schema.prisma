@@ -131,7 +131,7 @@ model ServiceSubmission {
   additionalInfo Json
   status         ServiceStatus @default(PENDING)
   userId         String
-  user           User          @relation(fields: [userId], references: [id])
+  user           User          @relation(fields: [userId], references: [id], onDelete: Cascade)
   serviceId      String
   service        Service       @relation(fields: [serviceId], references: [id])
 

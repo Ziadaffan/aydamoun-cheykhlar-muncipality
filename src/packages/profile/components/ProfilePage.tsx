@@ -8,6 +8,7 @@ import ProfileHeader from './ProfileHeader';
 import ProfileFormSection from './ProfileFormSection';
 import ProfileActions from './ProfileActions';
 import SubmissionsSection from './SubmissionsSection';
+import DeleteAccountSection from './DeleteAccountSection';
 
 export default function ProfilePage() {
   const {
@@ -67,6 +68,8 @@ export default function ProfilePage() {
           onEditSubmission={handleEditSubmission}
           onDeleteSubmission={handleDeleteSubmission}
         />
+
+        <DeleteAccountSection />
       </div>
     </div>
   );

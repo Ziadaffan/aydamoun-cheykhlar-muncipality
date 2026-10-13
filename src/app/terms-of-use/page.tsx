@@ -1,6 +1,7 @@
-import ComingSoon from '@/packages/common/components/ComingSoon';
-import React from 'react';
+'use client';
 
-export default function page() {
-  return <ComingSoon />;
+import TermsOfUsePage from '@/packages/legal/components/TermsOfUsePage';
+
+export default function Page() {
+  return <TermsOfUsePage />;
 }

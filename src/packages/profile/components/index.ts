@@ -6,3 +6,4 @@ export { default as ProfileFormSection } from './ProfileFormSection';
 export { default as ProfileActions } from './ProfileActions';
 export { default as SubmissionsSection } from './SubmissionsSection';
 export { default as SubmissionCard } from './SubmissionCard';
+export { default as DeleteAccountSection } from './DeleteAccountSection';

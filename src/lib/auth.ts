@@ -40,6 +40,7 @@ export const authOptions: NextAuthOptions = {
         return {
           id: user.id,
           email: user.email,
+          phone: user.phone,
           name: user.name,
           role: user.role,
           createdAt: user.createdAt,
@@ -59,6 +60,7 @@ export const authOptions: NextAuthOptions = {
     async jwt({ token, user, trigger }) {
       if (user) {
         token.role = user.role;
+        token.phone = user.phone;
         token.createdAt = user.createdAt;
         token.lastUpdated = Date.now();
       }
@@ -72,6 +74,7 @@ export const authOptions: NextAuthOptions = {
             id: true,
             name: true,
             email: true,
+            phone: true,
             role: true,
             createdAt: true,
           },
@@ -81,6 +84,7 @@ export const authOptions: NextAuthOptions = {
           token.role = user.role;
           token.name = user.name;
           token.email = user.email;
+          token.phone = user.phone;
           token.createdAt = user.createdAt;
           token.lastUpdated = Date.now();
         }
@@ -93,6 +97,7 @@ export const authOptions: NextAuthOptions = {
         session.user.id = token.sub!;
         session.user.name = token.name;
         session.user.email = token.email;
+        session.user.phone = token.phone;
         session.user.role = token.role;
         session.user.createdAt = token.createdAt;
         session.expires = new Date((token.exp as number) * 1000).toISOString();

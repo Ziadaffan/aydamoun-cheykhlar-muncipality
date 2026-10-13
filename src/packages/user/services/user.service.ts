@@ -100,6 +100,31 @@ export class UserService extends BasePrismaService<'user'> {
     });
   }
 
+  /**
+   * Permanently removes the account. Submissions, sessions and accounts go with
+   * it via ON DELETE CASCADE. Re-checks the password so a stolen session alone
+   * can't destroy an account.
+   */
+  public async deleteAccount(id: string, password: string) {
+    const user = await this.repository.findUnique({ where: { id } });
+
+    if (!user) {
+      throw new BadRequestError('User not found');
+    }
+
+    if (user.password) {
+      if (!password) {
+        throw new BadRequestError('Password is required');
+      }
+      const isPasswordValid = await bcrypt.compare(password, user.password);
+      if (!isPasswordValid) {
+        throw new BadRequestError('Invalid password');
+      }
+    }
+
+    await this.repository.delete({ where: { id } });
+  }
+
   // ---- Admin ----
 
   public async listUsers() {

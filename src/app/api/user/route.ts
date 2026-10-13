@@ -43,3 +43,21 @@ export const PATCH = ApiErrorHandler(async (request: NextRequest, context): Prom
     return returnProperErrorMessage(error);
   }
 });
+
+export const DELETE = ApiErrorHandler(async (request: NextRequest, context): Promise<NextResponse> => {
+  try {
+    const session = await getAuthSession(request);
+
+    if (!session?.user?.id) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    const { password } = await request.json().catch(() => ({ password: '' }));
+
+    await userService.deleteAccount(session.user.id, String(password ?? ''));
+
+    return NextResponse.json({ message: 'Account deleted successfully' }, { status: 200 });
+  } catch (error) {
+    return returnProperErrorMessage(error);
+  }
+});

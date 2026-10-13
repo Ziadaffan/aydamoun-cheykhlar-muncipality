@@ -8,6 +8,7 @@ import Banner from '@/packages/common/components/Banner';
 type ProfileFormData = {
   name: string;
   email: string;
+  phone: string;
 };
 
 type ProfileFormSectionProps = {
@@ -41,11 +42,19 @@ export default function ProfileFormSection({ control, errors, updateMessage, onC
           id="email"
           label={t('profile.accountInfo.email')}
           type="email"
-          placeholder={t('profile.accountInfo.email')}
+          placeholder={t('profile.accountInfo.emailPlaceholder')}
           control={control}
           name="email"
           error={errors.email}
-          required
+        />
+        <ControlledInputText
+          id="phone"
+          label={t('profile.accountInfo.phone')}
+          type="text"
+          placeholder={t('profile.accountInfo.phonePlaceholder')}
+          control={control}
+          name="phone"
+          error={errors.phone}
         />
       </div>
     </div>

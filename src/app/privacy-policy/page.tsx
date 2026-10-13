@@ -1,5 +1,7 @@
-import React from 'react';
+'use client';
 
-export default function page() {
-  return <div>Privacy Policy</div>;
+import PrivacyPolicyPage from '@/packages/legal/components/PrivacyPolicyPage';
+
+export default function Page() {
+  return <PrivacyPolicyPage />;
 }
