@@ -1,6 +1,7 @@
 import { TFunction } from 'i18next';
 import React from 'react';
 import HomeServiceCard from './HomeServiceCard';
+import HomeSectionHeader from './HomeSectionHeader';
 
 type HomeServicesSectionProps = {
   t: TFunction<'translation', undefined>;
@@ -63,6 +64,7 @@ export default function HomeServicesSection({ t }: HomeServicesSectionProps) {
   return (
     <div className="px-4 py-16">
       <div className="mx-auto max-w-7xl">
+        <HomeSectionHeader title={t('home.services.title')} />
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
           {services.map(service => (
             <HomeServiceCard key={service.id} service={service} t={t} />

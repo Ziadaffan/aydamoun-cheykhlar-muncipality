@@ -142,6 +142,19 @@
         "title": "الخريطة",
         "subtitle": "تفاعلية لموقع البلدية"
       }
+    },
+    "viewAll": "عرض الكل",
+    "news": {
+      "title": "آخر الأخبار",
+      "viewAllLabel": "عرض كل الأخبار"
+    },
+    "quickLinks": {
+      "title": "روابط سريعة"
+    },
+    "requests": {
+      "latest": "آخر طلب",
+      "updatedOn": "آخر تحديث: {{date}}",
+      "viewAllLabel": "عرض كل طلباتي"
     }
   },
   "services": {
