@@ -9,77 +9,34 @@
 
 ## Purpose
 
-Change the logged-in user's password.
+Change the signed-in user's password.
 
-## Screen layout
+## Form (`changePasswordSchema`, `features/auth/validation.ts`)
 
-```
-┌─────────────────────────────────────┐
-│  [<]  Change password               │
-├─────────────────────────────────────┤
-│                                     │
-│  Current password                   │
-│  [••••••••••••••••••••]   [👁]      │
-│                                     │
-│  New password                       │
-│  [••••••••••••••••••••]   [👁]      │
-│  Helper: min 6 characters           │
-│                                     │
-│  Confirm new password               │
-│  [••••••••••••••••••••]   [👁]      │
-│                                     │
-│  ▮ MessageBanner                    │
-│                                     │
-│  [ Cancel ]   [ Update password ]   │
-│                                     │
-└─────────────────────────────────────┘
-```
+Same rules as the website's `passwordChangeSchema` and the server:
 
-## Form
+- `oldPassword`: required only (an older, weaker password must still be accepted).
+- `newPassword`: the [password rule](../02-api-integration.md#password-rule) — 6+ characters with a lower-case letter, an upper-case letter and a digit — and different from the current one (`errors.password.same`).
+- `confirmPassword`: must match.
 
-```ts
-const schema = yup.object({
-  oldPassword: yup.string().min(6).required(),
-  newPassword: yup
-    .string()
-    .min(6)
-    .required()
-    .notOneOf([yup.ref('oldPassword')], 'errors.password.sameAsOld'),
-  confirmPassword: yup
-    .string()
-    .oneOf([yup.ref('newPassword')], 'errors.passwordMismatch')
-    .required(),
-});
-```
+All three are `InputPassword` (show/hide, autocorrect off). Mode `onTouched`; errors show on visited fields or after a submit attempt.
 
 ## Submit
 
-```ts
-const change = useMutation({
-  mutationFn: ({ oldPassword, newPassword }) =>
-    api('/api/user', {
-      method: 'PATCH',
-      body: JSON.stringify({ oldPassword, newPassword }),
-    }),
-  onSuccess: () => {
-    showBanner('success', t('profile.password.success'));
-    setTimeout(() => router.replace('/profile'), 1200);
-  },
-  onError: err => showBanner('error', err.message), // e.g. "Invalid old password"
-});
-```
-
-## UX details
-
-- All three inputs are `<InputPassword>` with show/hide toggle.
-- After success, clear the form and route back to `/profile`.
-- Disable Save until form is dirty AND valid.
+`useChangePassword()` → `PATCH /api/user { oldPassword, newPassword }`. Success → toast `profile.password.success`, `router.back()`. Existing tokens stay valid.
 
 ## Errors
 
-- `400` "Invalid old password" — show under the old-password field.
-- `400` validation — surface under the relevant field.
+| Server                                                                 | Shown                                                     |
+| ---------------------------------------------------------------------- | --------------------------------------------------------- |
+| `400 INVALID_PASSWORD` (older deployments: message `Invalid password`) | under the current password, `profile.password.invalidOld` |
+| `400 SAME_PASSWORD`                                                    | under the new password, `errors.password.same`            |
+| `422 WEAK_PASSWORD`                                                    | under the new password, `errors.password.pattern`         |
+| `401`                                                                  | signed out; the login prompt replaces the screen          |
+| other                                                                  | banner, `userMessage(err)`                                |
 
-## Excluded
+A wrong current password is a `400`, never a `401`, so it never ends the session.
 
-For a forgotten password (user not logged in), see the "Forgot password?" flow in [18-login.md](18-login.md).
+## Forgotten password
+
+From the login screen: [18-login.md → Forgot password](18-login.md#forgot-password-authforgot-password).

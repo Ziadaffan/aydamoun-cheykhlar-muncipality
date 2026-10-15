@@ -2,7 +2,7 @@ import { createHash, randomBytes } from 'crypto';
 import bcrypt from 'bcryptjs';
 import { BasePrismaService } from '@/packages/common/services/prisma.service';
 import { BadRequestError } from '@/packages/common/errors';
-import { commonValidations } from '@/packages/common/validation/common.validation';
+import { assertStrongPassword } from '@/packages/common/utils/password.utils';
 import { passwordResetEmail, sendMail } from '@/lib/mailer';
 import { PasswordResetRepository } from '../repository/password-reset.repository';
 import { AuthRepository } from '../repository/auth.repository';
@@ -42,7 +42,7 @@ export class PasswordResetService extends BasePrismaService<'verificationToken'>
       .trim()
       .toLowerCase();
     if (!email) {
-      throw new BadRequestError('Email is required');
+      throw new BadRequestError('Email is required', 'EMAIL_REQUIRED');
     }
 
     const user = await this.users.findUnique({ where: { email } });
@@ -74,23 +74,19 @@ export class PasswordResetService extends BasePrismaService<'verificationToken'>
 
   public async resetPassword(token: string, newPassword: string): Promise<void> {
     if (!token) {
-      throw new BadRequestError('Invalid or expired token');
+      throw new BadRequestError('Invalid or expired token', 'INVALID_TOKEN');
     }
 
-    try {
-      commonValidations.password().validateSync(newPassword);
-    } catch (e) {
-      throw new BadRequestError((e as Error).message);
-    }
+    assertStrongPassword(newPassword);
 
     const record = await this.repository.findUnique({ where: { token: hashToken(token) } });
     if (!record || !record.identifier.startsWith(IDENTIFIER_PREFIX)) {
-      throw new BadRequestError('Invalid or expired token');
+      throw new BadRequestError('Invalid or expired token', 'INVALID_TOKEN');
     }
 
     if (record.expires.getTime() < Date.now()) {
       await this.repository.deleteMany({ where: { identifier: record.identifier } });
-      throw new BadRequestError('Invalid or expired token');
+      throw new BadRequestError('Invalid or expired token', 'INVALID_TOKEN');
     }
 
     const userId = record.identifier.slice(IDENTIFIER_PREFIX.length);

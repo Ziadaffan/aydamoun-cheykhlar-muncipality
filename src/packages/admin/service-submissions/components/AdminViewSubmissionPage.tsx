@@ -9,8 +9,9 @@ import Button from '@/packages/common/components/Button';
 import { DeleteButton } from '@/packages/common/components/DeleteButton';
 import { BackButton } from '@/packages/common/components/BackButton';
 import { useAuth } from '@/packages/common/hooks/useAuth';
-import { getAdditionalFields } from '@/packages/services/utils/form.utils';
+import { describeAdditionalInfo } from '@/packages/services/utils/form.utils';
 import { mapServiceTypeToCategory } from '@/packages/services/utils/category.utils';
+import { submissionReference } from '@/packages/serviceSubmissions/utils/reference';
 import { useAdminServiceSubmission } from '../hooks/useAdminSubmission';
 import { useAdminDeleteServiceSubmission } from '../hooks/useAdminDeleteServiceSubmission';
 
@@ -73,8 +74,11 @@ export default function AdminViewSubmissionPage() {
     return <ErrorMessage />;
   }
 
-  const additionalFields = getAdditionalFields(mapServiceTypeToCategory(submission.service?.type || ''), submission.serviceId);
-  const additionalInfoEntries = buildAdditionalInfoEntries(submission.additionalInfo, additionalFields);
+  const additionalInfoEntries = describeAdditionalInfo(
+    submission.additionalInfo,
+    mapServiceTypeToCategory(submission.service?.type || ''),
+    submission.serviceId
+  );
 
   return (
     <div className="min-h-screen bg-gray-50 py-12" dir="rtl">
@@ -87,6 +91,12 @@ export default function AdminViewSubmissionPage() {
           <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
             <div>
               <h1 className="text-2xl font-bold text-gray-900">{t('admin.serviceSubmissions.viewTitle')}</h1>
+              <p className="mt-2 text-gray-600">
+                {t('admin.serviceSubmissions.reference')}:{' '}
+                <span dir="ltr" className="font-mono font-semibold text-gray-800">
+                  {submissionReference(submission.id)}
+                </span>
+              </p>
               <p className="mt-2 text-gray-600">
                 {t('admin.serviceSubmissions.serviceName')}: <span className="font-semibold text-gray-800">{submission.service?.name || '-'}</span>
               </p>
@@ -107,7 +117,7 @@ export default function AdminViewSubmissionPage() {
             <h2 className="mb-4 text-xl font-bold text-gray-900">{t('admin.serviceSubmissions.applicantInfo')}</h2>
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <InfoRow label={t('services.form.fields.fullName')} value={submission.fullName} />
-              <InfoRow label={t('services.form.fields.phone')} value={submission.phone} />
+              <InfoRow label={t('services.form.fields.phone')} value={submission.phone} dir="ltr" />
               <InfoRow label={t('services.form.fields.email')} value={submission.email || submission.user?.email || '-'} />
               <InfoRow label={t('services.form.fields.address')} value={submission.address} />
               <InfoRow
@@ -142,73 +152,13 @@ export default function AdminViewSubmissionPage() {
   );
 }
 
-function InfoRow({ label, value }: { label: string; value: string }) {
+function InfoRow({ label, value, dir }: { label: string; value: string; dir?: 'ltr' }) {
   return (
     <div className="rounded-lg border border-gray-100 bg-gray-50 p-4">
       <div className="text-sm font-semibold text-gray-700">{label}</div>
-      <div className="mt-1 text-gray-900">{value}</div>
+      <div className="mt-1 text-right text-gray-900" dir={dir}>
+        {value}
+      </div>
     </div>
   );
 }
-
-type AdditionalFieldDef = { name: string; label: string };
-
-function buildAdditionalInfoEntries(additionalInfo: unknown, additionalFields: AdditionalFieldDef[]) {
-  if (!additionalInfo || typeof additionalInfo !== 'object' || Array.isArray(additionalInfo)) {
-    const value = formatAdditionalInfoValue(additionalInfo);
-    return value ? [{ key: 'value', label: 'القيمة', value }] : [];
-  }
-
-  const additionalInfoObj = additionalInfo as Record<string, any>;
-  const fieldLabelByName = new Map<string, string>(additionalFields.map(f => [f.name, f.label]));
-  const usedKeys = new Set<string>();
-
-  const fromDefs = additionalFields
-    .filter(f => Object.prototype.hasOwnProperty.call(additionalInfoObj, f.name))
-    .map(f => {
-      usedKeys.add(f.name);
-      return {
-        key: f.name,
-        label: f.label,
-        value: formatAdditionalInfoValue(additionalInfoObj[f.name]),
-      };
-    });
-
-  const remaining = Object.keys(additionalInfoObj)
-    .filter(key => !usedKeys.has(key))
-    .sort()
-    .map(key => ({
-      key,
-      label: fieldLabelByName.get(key) || prettifyKey(key),
-      value: formatAdditionalInfoValue(additionalInfoObj[key]),
-    }));
-
-  return [...fromDefs, ...remaining].filter(e => e.value !== '');
-}
-
-function formatAdditionalInfoValue(value: any): string {
-  if (value === null || value === undefined) return '';
-  if (typeof value === 'string') return value.trim();
-  if (typeof value === 'number') return String(value);
-  if (typeof value === 'boolean') return value ? 'نعم' : 'لا';
-  if (Array.isArray(value)) {
-    const parts = value.map(v => formatAdditionalInfoValue(v)).filter(Boolean);
-    return parts.join('، ');
-  }
-  if (typeof value === 'object') {
-    try {
-      return JSON.stringify(value, null, 2);
-    } catch {
-      return String(value);
-    }
-  }
-  return String(value);
-}
-
-function prettifyKey(key: string): string {
-  return key
-    .replace(/([a-z])([A-Z])/g, '$1 $2')
-    .replace(/[_-]+/g, ' ')
-    .trim();
-}
-

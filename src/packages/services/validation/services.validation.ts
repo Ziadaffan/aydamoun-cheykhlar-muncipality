@@ -1,7 +1,26 @@
 import * as yup from 'yup';
 import { ServiceStatus } from '@prisma/client';
-import { getAdditionalFields } from '@/packages/services/utils/form.utils';
+import { getAdditionalFields, toDateOnly } from '@/packages/services/utils/form.utils';
 import { commonValidations, validationMessages } from '../../common/validation/common.validation';
+import { isValidPhone, normalizePhone } from '@/packages/common/utils/phone.utils';
+
+// Same rules as the mobile app's request form and the server (6–15 digits once
+// spaces, dashes and Arabic-Indic digits are normalized); the number is sent normalized.
+const requestPhone = () =>
+  yup
+    .string()
+    .transform((value: unknown) => (typeof value === 'string' ? normalizePhone(value) : value))
+    .required(validationMessages.required('رقم الهاتف'))
+    .test('phone', validationMessages.invalidPhone, value => !value || isValidPhone(value));
+
+// Optional, as in the app: accounts can be made with a phone number only.
+const requestEmail = () =>
+  yup
+    .string()
+    .trim()
+    .email(validationMessages.email)
+    .transform((value: unknown) => (value === '' ? null : value))
+    .nullable();
 
 // Helper function to create dynamic validation schema for additional fields
 const createAdditionalInfoSchema = (category: string, serviceId?: string) => {
@@ -47,7 +66,12 @@ const createAdditionalInfoSchema = (category: string, serviceId?: string) => {
         break;
 
       case 'date':
-        fieldSchema = yup.date().typeError(`${field.label} يجب أن يكون تاريخاً صحيحاً`);
+        // Kept as the input's 'YYYY-MM-DD' (yup.date() would store the browser's local
+        // midnight as a UTC timestamp, a day off in other readers).
+        fieldSchema = yup
+          .string()
+          .transform((value: unknown) => (typeof value === 'string' && value ? toDateOnly(value) : undefined))
+          .matches(/^\d{4}-\d{2}-\d{2}$/, `${field.label} يجب أن يكون تاريخاً صحيحاً`);
         if (field.required) {
           fieldSchema = fieldSchema.required(validationMessages.required(field.label));
         }
@@ -71,8 +95,8 @@ export const createServiceSubmissionSchema = (category: string, serviceId?: stri
   return yup.object({
     // Personal Information
     fullName: commonValidations.name('الاسم الكامل').max(100, validationMessages.maxLength('الاسم الكامل', 100)),
-    phone: commonValidations.phone(),
-    email: commonValidations.email(),
+    phone: requestPhone(),
+    email: requestEmail(),
     address: commonValidations.address(),
 
     // Service Information
@@ -94,8 +118,8 @@ export const createServiceSubmissionSchema = (category: string, serviceId?: stri
 export const serviceSubmissionSchema = yup.object({
   // Personal Information
   fullName: commonValidations.name('الاسم الكامل').max(100, validationMessages.maxLength('الاسم الكامل', 100)),
-  phone: commonValidations.phone(),
-  email: commonValidations.email(),
+  phone: requestPhone(),
+  email: requestEmail(),
   address: commonValidations.address(),
 
   // Service Information

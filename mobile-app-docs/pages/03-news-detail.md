@@ -7,6 +7,14 @@
 | **Auth** | Public |
 | **API** | `GET /api/news/[id]` |
 
+## Current behaviour (release 1.2)
+
+The sections below describe the original port; where they differ, this list wins.
+
+- Opens instantly from the cached list item, then loads the body. Plain-text bodies (the website's admin form is a textarea) keep their paragraphs and line breaks; the website article page now does the same (`whitespace-pre-line`) and no longer italicises the excerpt.
+- Shared links are `https://aydamoun-cheykhlar-municipality.org/news/<id>`; with the app installed they open this screen, otherwise the website's article page (which now shows «هذا الخبر غير متاح…» for a deleted article instead of spinning).
+- Images: Cloudinary URLs (new and migrated articles) or legacy base64; the website serves Cloudinary images through Cloudinary's own resizing (`newsImageLoader`), not Vercel's image optimizer.
+
 ## Purpose
 
 Read a full news article. The API call increments `views` server-side.

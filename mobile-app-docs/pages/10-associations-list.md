@@ -7,6 +7,13 @@
 | **Auth** | Public |
 | **API** | `GET /api/associations` |
 
+## Current behaviour (release 1.2)
+
+The sections below describe the original port; where they differ, this list wins.
+
+- Data-first states (`QueryView`), measured `CldImage` cells with a fallback icon; odd grids are padded instead of stretching the last card.
+- `https://aydamoun-cheykhlar-municipality.org/associations` opens this screen when the app is installed.
+
 ## Purpose
 
 Browse community associations active in the municipality.

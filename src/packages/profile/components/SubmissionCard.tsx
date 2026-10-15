@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { ServiceSubmission } from '@prisma/client';
 import { EditButton } from '@/packages/common/components/EditButton';
 import { DeleteButton } from '@/packages/common/components/DeleteButton';
+import { submissionReference } from '@/packages/serviceSubmissions/utils/reference';
 
 type SubmissionCardProps = {
   submission: ServiceSubmission & {
@@ -56,6 +57,12 @@ export default function SubmissionCard({ submission, deletingId, onEdit, onDelet
           <p className="mt-1 text-xs text-gray-500">
             {t('profile.submissions.submissionDate')}: {new Date(submission.createdAt).toLocaleDateString('ar-SA')}
           </p>
+          <p className="mt-1 text-xs text-gray-500">
+            {t('profile.submissions.reference')}:{' '}
+            <span dir="ltr" className="font-mono font-semibold text-gray-700">
+              {submissionReference(submission.id)}
+            </span>
+          </p>
         </div>
         <div className="flex flex-col items-end space-y-2">
           <div>
@@ -64,10 +71,13 @@ export default function SubmissionCard({ submission, deletingId, onEdit, onDelet
             </span>
           </div>
 
-          <div className="flex space-x-2 space-x-reverse">
-            <EditButton onClick={() => onEdit(submission.id)} />
-            <DeleteButton onClick={() => onDelete(submission.id)} isDeleting={deletingId === submission.id} className="mr-2" />
-          </div>
+          {/* Like the app: residents change or withdraw a request only while it is pending. */}
+          {submission.status === 'PENDING' && (
+            <div className="flex space-x-2 space-x-reverse">
+              <EditButton onClick={() => onEdit(submission.id)} />
+              <DeleteButton onClick={() => onDelete(submission.id)} isDeleting={deletingId === submission.id} className="mr-2" />
+            </div>
+          )}
         </div>
       </div>
     </div>

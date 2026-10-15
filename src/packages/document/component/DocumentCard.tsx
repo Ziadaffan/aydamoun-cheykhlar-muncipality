@@ -2,6 +2,7 @@ import { Document } from '@prisma/client';
 import { TFunction } from 'i18next';
 import Button from '@/packages/common/components/Button';
 import { useDeleteDocument } from '@/packages/document/hooks/useDeleteDocument';
+import { documentExtension, documentMimeType, isRemoteFileUrl } from '@/packages/document/utils/document.utils';
 
 type DocumentCardProps = {
   document: Document;
@@ -9,17 +10,10 @@ type DocumentCardProps = {
   t: TFunction;
 };
 
+// The API returns the file's web address; base64 (older API) still works as a data: URI.
 const getFileUrl = (doc: Document) => {
-  const mimeType =
-    doc.type === 'pdf'
-      ? 'application/pdf'
-      : doc.type === 'jpg' || doc.type === 'jpeg'
-        ? 'image/jpeg'
-        : doc.type === 'png'
-          ? 'image/png'
-          : 'application/octet-stream';
-
-  return `data:${mimeType};base64,${doc.fileUrl}`;
+  if (isRemoteFileUrl(doc.fileUrl) || doc.fileUrl.startsWith('data:')) return doc.fileUrl;
+  return `data:${documentMimeType(doc.type)};base64,${doc.fileUrl}`;
 };
 
 const formatDate = (date: Date) => {
@@ -60,7 +54,7 @@ export default function DocumentCard({ document, role, t }: DocumentCardProps) {
         <div className="mt-auto flex items-center gap-3">
           <a
             href={fileSrc}
-            download={document.title}
+            download={`${document.title}.${documentExtension(document.type)}`}
             target="_blank"
             rel="noopener noreferrer"
             className={`inline-flex flex-1 cursor-pointer items-center justify-center rounded-lg bg-blue-500 px-4 py-2 font-semibold text-white transition-opacity duration-200 hover:opacity-80`}

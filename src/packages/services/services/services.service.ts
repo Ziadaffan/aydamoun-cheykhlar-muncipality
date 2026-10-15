@@ -1,6 +1,7 @@
 import { BasePrismaService } from '@/packages/common/services/prisma.service';
 import { ServicesRepository } from '../repository/services.repository';
 import { Service } from '@prisma/client';
+import { NotFoundError } from '@/packages/common/errors';
 
 export class ServiceService extends BasePrismaService<'service'> {
   private static singleton: ServiceService;
@@ -23,7 +24,7 @@ export class ServiceService extends BasePrismaService<'service'> {
     const service = await this.repository.findUnique({ where: { id } });
 
     if (!service) {
-      throw new Error('Service not found');
+      throw new NotFoundError('Service not found', 'SERVICE_NOT_FOUND');
     }
 
     return service;

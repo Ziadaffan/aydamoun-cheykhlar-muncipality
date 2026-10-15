@@ -3,9 +3,15 @@
 | | |
 |---|---|
 | **Route** | `/legal/privacy-policy` |
-| **Web parity** | [src/app/privacy-policy/page.tsx](../../src/app/privacy-policy/page.tsx) (currently a placeholder on web) |
+| **Web parity** | [src/app/privacy-policy/page.tsx](../../src/app/privacy-policy/page.tsx) → [PrivacyPolicyPage.tsx](../../src/packages/legal/components/PrivacyPolicyPage.tsx) |
 | **Auth** | Public |
 | **API** | None |
+
+## Current behaviour (release 1.2)
+
+The sections below describe the original port; where they differ, this list wins.
+
+- Same text as the website (`legal.privacy` in its ar.json), rendered by `components/about/LegalDocument`. The contact section uses `CONTACT` cards; the website's contact lines show the same email and phone.
 
 ## Purpose
 

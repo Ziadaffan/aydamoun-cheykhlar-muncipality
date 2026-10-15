@@ -10,6 +10,14 @@ import Button from '@/packages/common/components/Button';
 import Banner from '@/packages/common/components/Banner';
 import { passwordChangeSchema } from '@/packages/profile/validation/profile.validation';
 
+// useUpdatePassword's error codes → messages.
+const ERROR_KEYS: Record<string, string> = {
+  INVALID_PASSWORD: 'profile.changePassword.messages.invalidOldPassword',
+  SAME_PASSWORD: 'profile.changePassword.errors.samePassword',
+  WEAK_PASSWORD: 'profile.changePassword.messages.weakPassword',
+  UNAUTHORIZED: 'common.sessionExpired',
+};
+
 export type ChangePasswordFormData = {
   oldPassword: string;
   newPassword: string;
@@ -57,8 +65,8 @@ export default function ChangePasswordForm({ onCancel, onSuccess }: ChangePasswo
             }, 1000);
           }
         },
-        onError: () => {
-          setMessage({ type: 'error', text: t('profile.changePassword.messages.error') });
+        onError: error => {
+          setMessage({ type: 'error', text: t(ERROR_KEYS[error.message] ?? 'profile.changePassword.messages.error') });
         },
         onSettled: () => {
           setTimeout(() => {

@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import { categoryColors, categoryLabels, formatDate } from '@/packages/news/utils/news.utils';
+import { newsImageLoader, newsImageSrc } from '@/packages/news/utils/newsImage.utils';
 import { News } from '@/packages/news/types/news.types';
 import Link from 'next/link';
 
@@ -15,9 +16,11 @@ export const CompactCard = ({ news }: CompactCardProps) => (
     {/* Image */}
     <div className="relative h-20 w-20 flex-shrink-0 overflow-hidden rounded-lg">
       <Image
-        src={news.imageUrl?.[0] ? `data:image/jpeg;base64,${news.imageUrl[0]}` : 'elementor-placeholder-image-3610342416_bys2q8'}
+        src={newsImageSrc(news.imageUrl?.[0])}
+        loader={newsImageLoader(newsImageSrc(news.imageUrl?.[0]))}
         alt={news.title}
         fill
+        sizes="80px"
         className="object-cover"
       />
     </div>

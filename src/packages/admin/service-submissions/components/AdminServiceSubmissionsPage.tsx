@@ -14,6 +14,18 @@ import { useAdminServiceSubmissions } from '../hooks/useAdminServiceSubmissions'
 import { useAdminDeleteServiceSubmission } from '../hooks/useAdminDeleteServiceSubmission';
 import { useAdminUpdateServiceSubmission } from '../hooks/useAdminUpdateServiceSubmission';
 import { AdminServiceSubmission } from '../types';
+import { matchesSubmissionReference, submissionReference } from '@/packages/serviceSubmissions/utils/reference';
+import { normalizePhone } from '@/packages/common/utils/phone.utils';
+
+/** Staff look a request up by the number the resident quotes, or by name or phone. */
+function matchesSearch(submission: AdminServiceSubmission, query: string): boolean {
+  const text = query.trim();
+  if (!text) return true;
+  if (matchesSubmissionReference(submission.id, text)) return true;
+  if (submission.fullName.toLowerCase().includes(text.toLowerCase())) return true;
+  const phone = normalizePhone(text);
+  return phone.length >= 3 && normalizePhone(submission.phone).includes(phone.replace(/^\+/, ''));
+}
 
 export default function AdminServiceSubmissionsPage() {
   const { role, isLoading: authLoading } = useAuth();
@@ -27,6 +39,9 @@ export default function AdminServiceSubmissionsPage() {
   const [statusDrafts, setStatusDrafts] = useState<Record<string, ServiceStatus>>({});
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [updatingId, setUpdatingId] = useState<string | null>(null);
+  const [search, setSearch] = useState('');
+
+  const visibleSubmissions = useMemo(() => (submissions ?? []).filter(s => matchesSearch(s, search)), [submissions, search]);
 
   useEffect(() => {
     if (submissions) {
@@ -95,9 +110,31 @@ export default function AdminServiceSubmissionsPage() {
           <p className="mt-2 text-gray-600">{t('admin.serviceSubmissions.description')}</p>
         </div>
 
+        {submissions && submissions.length > 0 && (
+          <div className="mb-6 max-w-md">
+            <label htmlFor="submissionSearch" className="mb-2 block text-sm font-medium text-gray-700">
+              {t('admin.serviceSubmissions.searchLabel')}
+            </label>
+            <input
+              id="submissionSearch"
+              type="search"
+              value={search}
+              onChange={e => setSearch(e.target.value)}
+              placeholder={t('admin.serviceSubmissions.searchPlaceholder')}
+              className="w-full rounded-md border border-gray-300 px-3 py-2 text-right text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
+              autoComplete="off"
+              spellCheck={false}
+            />
+          </div>
+        )}
+
         {!submissions || submissions.length === 0 ? (
           <div className="rounded-lg bg-white p-8 text-center shadow">
             <p className="text-gray-600">{t('admin.serviceSubmissions.empty')}</p>
+          </div>
+        ) : visibleSubmissions.length === 0 ? (
+          <div className="rounded-lg bg-white p-8 text-center shadow">
+            <p className="text-gray-600">{t('admin.serviceSubmissions.noResults')}</p>
           </div>
         ) : (
           <div className="overflow-hidden rounded-lg bg-white shadow">
@@ -105,6 +142,7 @@ export default function AdminServiceSubmissionsPage() {
               <table className="min-w-full divide-y divide-gray-200">
                 <thead className="bg-gray-50">
                   <tr>
+                    <th className="px-6 py-3 text-right text-xs font-medium uppercase tracking-wider text-gray-500">{t('admin.serviceSubmissions.reference')}</th>
                     <th className="px-6 py-3 text-right text-xs font-medium uppercase tracking-wider text-gray-500">{t('services.form.fields.fullName')}</th>
                     <th className="px-6 py-3 text-right text-xs font-medium uppercase tracking-wider text-gray-500">{t('profile.submissions.submissionDate')}</th>
                     <th className="px-6 py-3 text-right text-xs font-medium uppercase tracking-wider text-gray-500">{t('admin.serviceSubmissions.status')}</th>
@@ -113,8 +151,13 @@ export default function AdminServiceSubmissionsPage() {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200 bg-white">
-                  {submissions.map((submission: AdminServiceSubmission) => (
+                  {visibleSubmissions.map((submission: AdminServiceSubmission) => (
                     <tr key={submission.id}>
+                      <td className="whitespace-nowrap px-6 py-4 text-right text-sm text-gray-900">
+                        <span dir="ltr" className="font-mono font-semibold">
+                          {submissionReference(submission.id)}
+                        </span>
+                      </td>
                       <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-900">
                         <div className="font-semibold">{submission.fullName}</div>
                         <div className="text-gray-500">{submission.address}</div>

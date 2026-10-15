@@ -3,6 +3,7 @@ import { returnProperErrorMessage } from '@/packages/common/utils/error.utils';
 import { NextRequest, NextResponse } from 'next/server';
 import { ServiceSubmissionService } from '@/packages/serviceSubmissions/services/serviceSubmission.service';
 import { getAuthSession } from '@/lib/mobile-auth';
+import { parseSubmissionUpdate, readJsonObject } from '@/packages/serviceSubmissions/validation/submission.validation';
 
 export const dynamic = 'force-dynamic';
 
@@ -34,8 +35,8 @@ export const PUT = ApiErrorHandler(async (request: NextRequest, context): Promis
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const body = await request.json();
-    const updatedSubmission = await serviceSubmissionService.updateServiceSubmission(submissionId, session.user.id, body);
+    const data = parseSubmissionUpdate(await readJsonObject(request));
+    const updatedSubmission = await serviceSubmissionService.updateServiceSubmission(submissionId, session.user.id, data);
 
     return NextResponse.json(updatedSubmission, { status: 200 });
   } catch (error) {

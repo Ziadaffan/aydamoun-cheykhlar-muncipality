@@ -2,6 +2,7 @@ import { getServerSession } from 'next-auth';
 import { SignJWT, jwtVerify } from 'jose';
 import { NextRequest } from 'next/server';
 import { authOptions } from '@/lib/auth';
+import prisma from '@/packages/lib/db';
 import { ForbiddenError, UnauthorizedError } from '@/packages/common/errors';
 
 /**
@@ -14,7 +15,11 @@ import { ForbiddenError, UnauthorizedError } from '@/packages/common/errors';
  * getAuthSession() accepts either, so protected API routes work for both.
  */
 
-const MOBILE_TOKEN_MAX_AGE = 24 * 60 * 60; // 24h, matches the NextAuth session
+// Residents open a municipal app rarely, so app tokens last 30 days and GET /api/user
+// swaps any token older than a day for a fresh one (sliding session). The web's
+// cookie session keeps NextAuth's own lifetime.
+const MOBILE_TOKEN_MAX_AGE = 30 * 24 * 60 * 60;
+const MOBILE_TOKEN_RENEW_AFTER = 24 * 60 * 60;
 
 function getSecretKey(): Uint8Array {
   const secret = process.env.NEXTAUTH_SECRET;
@@ -34,6 +39,8 @@ export interface SessionUser {
 
 export interface AuthSession {
   user: SessionUser;
+  /** Set when the request authenticated with a Bearer token: the token's `iat`, in seconds. */
+  bearerIssuedAt?: number;
 }
 
 export async function signMobileToken(user: SessionUser): Promise<string> {
@@ -62,10 +69,21 @@ async function verifyBearer(token: string): Promise<AuthSession | null> {
         role: (payload.role as string) ?? null,
         createdAt: (payload.createdAt as string) ?? null,
       },
+      bearerIssuedAt: payload.iat ?? 0,
     };
   } catch {
     return null;
   }
+}
+
+/**
+ * A fresh token when the session came from a Bearer token older than a day,
+ * otherwise undefined. Cookie (web) sessions are left to NextAuth.
+ */
+export async function renewMobileToken(session: AuthSession, user: SessionUser): Promise<string | undefined> {
+  if (session.bearerIssuedAt === undefined) return undefined;
+  const ageSeconds = Math.floor(Date.now() / 1000) - session.bearerIssuedAt;
+  return ageSeconds > MOBILE_TOKEN_RENEW_AFTER ? signMobileToken(user) : undefined;
 }
 
 /**
@@ -103,7 +121,12 @@ export async function requireAuth(request?: NextRequest): Promise<AuthSession> {
 
 export async function requireAdmin(request?: NextRequest): Promise<AuthSession> {
   const session = await requireAuth(request);
-  if (session.user.role !== 'ADMIN') {
+  // An app token's role claim can be up to 30 days old, so a demoted admin is caught here.
+  const role =
+    session.bearerIssuedAt === undefined
+      ? session.user.role
+      : (await prisma.user.findUnique({ where: { id: session.user.id }, select: { role: true } }))?.role;
+  if (role !== 'ADMIN') {
     throw new ForbiddenError('Admin access required');
   }
   return session;

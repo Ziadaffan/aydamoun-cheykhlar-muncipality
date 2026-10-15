@@ -3,9 +3,17 @@
 | | |
 |---|---|
 | **Route** | `/jobs/[id]` |
-| **Web parity** | None — web only shows cards in the list. New on mobile. |
+| **Web parity** | [src/app/jobs/[id]/page.tsx](../../src/app/jobs/[id]/page.tsx) → [JobPage.tsx](../../src/packages/jobs/components/[id]/JobPage.tsx) |
 | **Auth** | Public |
 | **API** | `GET /api/jobs/[id]` |
+
+## Current behaviour (release 1.2)
+
+The sections below describe the original port; where they differ, this list wins.
+
+- Header title «الوظائف» in every state, labelled share button in the header. Shares `https://aydamoun-cheykhlar-municipality.org/jobs/<id>`.
+- The website now has a public page at that address (description with line breaks, provider, phone, location, salary, dates, «غير مفعل» badge, 404 state «الوظيفة غير متاحة»), so shared links no longer 404. With the app installed the link opens this screen.
+- Seeded from the cached list (`initialData`); a 404 shows «الوظيفة غير متاحة».
 
 ## Purpose
 

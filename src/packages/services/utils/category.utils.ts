@@ -1,16 +1,11 @@
+import { ServiceType } from '@prisma/client';
+import { getServiceCategoryMeta } from './service.utils';
+
+/**
+ * The form category (form.utils) of a service type. Same mapping as the request form
+ * itself, so the edit and admin pages show the fields the request was made with.
+ */
 export const mapServiceTypeToCategory = (serviceType: string): string => {
-  switch (serviceType) {
-    case 'LICENSEES_AND_CONSTRUCTION_SERVICES':
-      return 'buildingLicenses';
-    case 'ENVIRONMENTAL_SERVICES':
-      return 'environmentalServices';
-    case 'ADMINISTRATIVE_TRANSACTIONS':
-      return 'administrativeTransactions';
-    case 'COMPLAINTS_AND_SUGGESTIONS':
-      return 'complaintsAndSuggestions';
-    case 'ADDITIONAL_SERVICES':
-      return 'additionalServices';
-    default:
-      return '';
-  }
+  if (!Object.values(ServiceType).includes(serviceType as ServiceType)) return '';
+  return getServiceCategoryMeta(serviceType as ServiceType).categoryKey;
 };

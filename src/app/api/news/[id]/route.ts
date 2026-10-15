@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { requireAdmin } from '@/lib/mobile-auth';
 import { returnProperErrorMessage } from '@/packages/common/utils/error.utils';
 import { NewsService } from '@/packages/news/service/news.service';
+import { readImageFiles } from '@/packages/news/service/newsImage.service';
 import { NewsCategory } from '@/packages/news/types/news.types';
 
 const newsService = NewsService.instance();
@@ -56,17 +57,6 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
     const tagsString = formData.get('tags') as string;
     const tags = tagsString ? JSON.parse(tagsString) : [];
 
-    const imageUrl: string[] = [];
-    const imageFiles = formData.getAll('images') as File[];
-
-    for (const imageFile of imageFiles) {
-      if (imageFile && imageFile.size > 0) {
-        const buffer = await imageFile.arrayBuffer();
-        const base64 = Buffer.from(buffer).toString('base64');
-        imageUrl.push(base64);
-      }
-    }
-
     const newsData = {
       title,
       content,
@@ -75,10 +65,9 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
       author,
       tags,
       featured,
-      imageUrl,
     };
 
-    const result = await newsService.updateNews(id, newsData);
+    const result = await newsService.updateNews(id, newsData, readImageFiles(formData));
 
     if (!result) {
       return NextResponse.json({ error: 'Failed to update news' }, { status: 500 });

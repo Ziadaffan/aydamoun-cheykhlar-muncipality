@@ -1,5 +1,6 @@
 import * as yup from 'yup';
 import { commonValidations } from '../../common/validation/common.validation';
+import { isValidPhone, normalizePhone } from '../../common/utils/phone.utils';
 
 // An account may be registered with an email, a phone number, or both — so
 // neither is required on its own, but at least one must remain set.
@@ -17,7 +18,8 @@ export const profileUpdateSchema = yup.object({
     .string()
     .trim()
     .default('')
-    .test('phone', 'يرجى إدخال رقم هاتف صحيح', value => !value || /^[0-9+\-\s]{6,20}$/.test(value))
+    // Same rule as the server: separators and Arabic-Indic digits are normalized away.
+    .test('phone', 'يرجى إدخال رقم هاتف صحيح', value => !value || isValidPhone(normalizePhone(value)))
     .test('email-or-phone-required', 'يرجى إدخال البريد الإلكتروني أو رقم الهاتف (أحدهما مطلوب)', function (value) {
       return !!(value?.trim() || (this.parent?.email || '').trim());
     }),

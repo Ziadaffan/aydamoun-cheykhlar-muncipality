@@ -1,0 +1,15 @@
+[
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls",
+      "delegate_permission/common.get_login_creds"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.ziadaffan.aydamouncheykhlar",
+      "sha256_cert_fingerprints": [
+        "44:BE:C9:A5:B6:40:79:6C:C8:83:5E:1B:D7:2C:20:0E:51:5E:8F:A3:CF:4E:18:F5:17:B3:A3:65:B4:CE:EB:EB"
+      ]
+    }
+  }
+]

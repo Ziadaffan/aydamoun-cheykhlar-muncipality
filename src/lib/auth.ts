@@ -2,6 +2,7 @@ import { NextAuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import prisma from '@/packages/lib/db';
 import bcrypt from 'bcryptjs';
+import { normalizePhone, phoneLookupValues } from '@/packages/common/utils/phone.utils';
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -18,13 +19,14 @@ export const authOptions: NextAuthOptions = {
 
         const identifier = credentials.identifier.trim();
         const isEmail = identifier.includes('@');
+        const phone = isEmail ? '' : normalizePhone(identifier);
+
+        if (!isEmail && !phone) {
+          return null;
+        }
 
         const user = await prisma.user.findFirst({
-          where: isEmail
-            ? { email: identifier.toLowerCase() }
-            : {
-                phone: identifier.replace(/\s|-/g, ''),
-              },
+          where: isEmail ? { email: identifier.toLowerCase() } : { phone: { in: phoneLookupValues(identifier) } },
         });
 
         if (!user || !user.password) {

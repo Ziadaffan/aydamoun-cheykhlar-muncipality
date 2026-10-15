@@ -1,97 +1,73 @@
-# 18 — Login
+# 18 — Login (and forgot password)
 
-|                |                                                                                                                                 |
-| -------------- | ------------------------------------------------------------------------------------------------------------------------------- |
-| **Route**      | `/(auth)/login`                                                                                                                 |
-| **Web parity** | [src/app/auth/login/page.tsx](../../src/app/auth/login/page.tsx) → [LogInPage.tsx](../../src/packages/auth/login/LogInPage.tsx) |
-| **Auth**       | Public (redirects to home if already logged in)                                                                                 |
-| **API**        | NextAuth credentials flow — see [03-authentication.md](../03-authentication.md)                                                 |
+|                |                                                                                                                                                                                                                           |
+| -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Route**      | `/(auth)/login`, `/(auth)/forgot-password`                                                                                                                                                                                |
+| **Web parity** | [src/app/auth/login/page.tsx](../../src/app/auth/login/page.tsx) → [LogInPage.tsx](../../src/packages/auth/login/LogInPage.tsx); [ForgotPasswordPage.tsx](../../src/packages/auth/forgot-password/ForgotPasswordPage.tsx) |
+| **Auth**       | Public (closes itself if already logged in)                                                                                                                                                                               |
+| **API**        | `POST /api/auth/mobile-login`, `POST /api/auth/forgot-password` — see [02-api-integration.md](../02-api-integration.md#auth)                                                                                              |
 
 ## Purpose
 
-Authenticate a returning user with email **or** phone + password.
+Authenticate a returning user with email **or** phone + password, and start an email password reset.
 
 ## Screen layout
 
 ```
 ┌─────────────────────────────────────┐
-│  [<]                                │
+│  [<]  تسجيل الدخول                  │
 ├─────────────────────────────────────┤
-│                                     │
 │            ┌─────┐                  │
 │            │ logo│                  │
 │            └─────┘                  │
-│                                     │
-│       Welcome back                  │
-│       Log in to continue            │
+│       مرحباً بعودتك                 │
+│       helper (email or phone)       │
 │                                     │
 │  ▮ MessageBanner                    │
 │                                     │
-│  Email or phone                     │
+│  البريد الإلكتروني أو رقم الهاتف     │
 │  [_____________________________]    │
-│  ⚠ error text under field           │
-│                                     │
-│  Password                           │
+│  كلمة المرور                        │
 │  [••••••••••••••••••]   [👁]        │
-│  ⚠ error text under field           │
-│                                     │
-│              [ Forgot password? ]   │
-│                                     │
-│  [        Log in            ]       │
-│                                     │
-│  Don't have an account? [Sign up]   │
-│                                     │
+│              [ نسيت كلمة المرور؟ ]   │
+│  [            دخول            ]     │
+│  ليس لديك حساب؟ [إنشاء حساب]        │
 └─────────────────────────────────────┘
 ```
 
-Centered card with horizontal padding `xl`, max content width 480.
-
 ## Form
 
-```ts
-const phoneRegex = /^[0-9+\-\s]{6,20}$/;
-const schema = yup.object({
-  identifier: yup
-    .string()
-    .trim()
-    .required()
-    .test('email-or-phone', 'errors.identifier.invalid', v => !!v && (yup.string().email().isValidSync(v) || phoneRegex.test(v))),
-  password: yup.string().min(6).required(),
-});
-```
+`loginSchema` in `features/auth/validation.ts`:
+
+- `identifier`: required, trimmed; must be an email or a valid phone (checked after normalizing with `lib/phone.ts`, the same function as the server's `phone.utils.ts`: 6–15 digits, optional `+`). Emails are sent lower-cased; phones are sent **as typed**: the server normalizes them and also tries the raw text and the old signup form (spaces and dashes removed), so numbers stored before normalization (`"03 123 456"`, `"03/123456"`) still match.
+- `password`: required only. No length or pattern rule: older passwords that predate the [password rule](../02-api-integration.md#password-rule) must still log in.
+
+Validation mode `onTouched`. The submit button is only disabled while a request runs, so a tap shows every error and focuses the first field. Return keys chain the fields (`next` → `go`); autofill hints `username` / `current-password`.
 
 ## Submit
 
-See [03-authentication.md → Strategy A](../03-authentication.md#login-flow-strategy-a). The mobile-friendly summary:
+`useSession().login(identifier, password)` → `POST /api/auth/mobile-login`, stores the token and user (see [03-authentication.md](../03-authentication.md)).
 
-```ts
-const submit = useMutation({
-  mutationFn: ({ identifier, password }) => auth.login({ identifier, password }),
-  onSuccess: () => {
-    showBanner('success', t('auth.login.success'));
-    setTimeout(() => router.replace(next ?? '/home'), 800);
-  },
-  onError: err => {
-    if (err.code === 'INVALID_CREDENTIALS') showBanner('error', t('auth.login.errors.invalid'));
-    else showBanner('error', err.message);
-  },
-});
-```
+- `401` (`INVALID_CREDENTIALS`) → banner `auth.login.errors.invalid`. A `401` on `/api/auth/*` never signs anyone out.
+- Anything else → `userMessage(err)` (`lib/errors.ts`): network, timeout and server errors in Arabic.
+- Success → toast `auth.login.success`, then leave the auth screens.
 
-`next` comes from `?next=` in the URL (set by `RequireAuth`).
+## Navigation (`features/auth/navigation.ts`)
 
-## On mount
+- `next` (route param) is followed only when `safeNext()` accepts it: an in-app path starting with `/`, not `//host`, no scheme, not an auth screen.
+- `leaveAuth(next)`: `router.dismissTo(next)` when given; otherwise `router.dismiss()` when the auth stack can be dismissed, else `router.replace('/(tabs)/home')`. So a login opened from More, Services or the account gate returns there.
+- Login ↔ signup links pass `next` along and replace each other, so only one auth screen is ever on the stack.
+- Already logged in on arrival (a stale link) → `leaveAuth(next)` immediately.
+- Signup can open login with `identifier` prefilled and `created=1` (account created but the automatic login failed) → success banner `errors.signupLoginFailed`.
 
-If `useSession().user`, immediately `router.replace(next ?? '/home')`. No need to show the form to an already-logged-in user.
+## Forgot password (`/(auth)/forgot-password`)
 
-## UX details
-
-- `<InputText>` `keyboardType` is `email-address` by default; toggle to `phone-pad` if the value starts with `+` or only digits.
-- Submit button disabled until form valid; shows spinner while pending.
-- Eye icon on password input.
-- "Forgot password?" opens a screen with a single email field that calls `POST /api/auth/forgot-password` `{ email }`. Always show the same success message (the API never reveals whether the email exists). The reset link in the email opens the **web** page `/auth/reset-password?token=…`; no in-app reset screen is needed. Phone-only accounts must contact the municipality (an admin sets a temporary password).
-- Footer link to `/auth/signup`.
+- Opened from «نسيت كلمة المرور؟» (pre-fills the email when the identifier contains `@`) or from signup's "account exists" banner.
+- One email field → `POST /api/auth/forgot-password { email }`. The API always answers `200` for a non-empty email, so the success state shows the same text whether or not an account exists (`auth.forgotPassword.sent`, the website's wording) plus «إعادة الإرسال» and «العودة إلى تسجيل الدخول».
+- The emailed link opens the **website** page `/auth/reset-password?token=…` (valid 1 hour); the new password must follow the [password rule](../02-api-integration.md#password-rule). The user then logs in in the app.
+- Phone-only accounts can't receive the link: a hint with call / email actions (`CONTACT` in `constants/contact.ts`); an admin sets a temporary password from the website's admin page.
+- `404`/`405` (a deployment without the endpoint) → `auth.forgotPassword.unavailable` and the contact actions.
 
 ## i18n keys
 
-`auth.login.{title,helper,email,emailPlaceholder,password,passwordPlaceholder,submit,success,forgotPassword,noAccount,signupCta,errors.invalid}`.
+`auth.login.{title,welcome,helper,identifier,password,submit,submitting,success,noAccount,signup,forgotPassword,errors.invalid}`, `auth.forgotPassword.*`, `errors.signupLoginFailed`.

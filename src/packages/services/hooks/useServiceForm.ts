@@ -65,9 +65,9 @@ export function useServiceForm({ category, serviceId }: UseServiceFormProps) {
     window.scrollTo({ top: 0, behavior: 'smooth' });
 
     createServiceSubmission(data, {
-      onSuccess: () => {
-        setMessage({ type: 'success', text: t('services.form.messages.submitSuccess') });
-        setTimeout(() => router.push('/services'), 1000);
+      // The confirmation page shows the request number, as the app does.
+      onSuccess: (created: { id?: string }) => {
+        router.push(created?.id ? `/services/submission-success?id=${encodeURIComponent(created.id)}` : '/services/submission-success');
       },
       onError: () => {
         setMessage({ type: 'error', text: t('services.form.messages.submitError') });

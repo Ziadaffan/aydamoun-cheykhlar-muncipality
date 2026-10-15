@@ -7,6 +7,8 @@ interface ContactInfo {
   icon: string;
   titleKey: string;
   valueKey: string;
+  /** Link for the value. Linked values (phone, email) are shown left-to-right so they keep their order in RTL. */
+  href?: (value: string) => string;
 }
 
 const contactInfo: ContactInfo[] = [
@@ -21,12 +23,14 @@ const contactInfo: ContactInfo[] = [
     icon: '📞',
     titleKey: 'home.contact.info.phone.title',
     valueKey: 'home.contact.info.phone.value',
+    href: value => `tel:${value.replace(/[^\d+]/g, '')}`,
   },
   {
     id: 3,
     icon: '✉️',
     titleKey: 'home.contact.info.email.title',
     valueKey: 'home.contact.info.email.value',
+    href: value => `mailto:${value}`,
   },
 ];
 
@@ -50,11 +54,19 @@ export default function HomeContactSection({ t }: HomeContactSectionProps) {
                 <div key={info.id} className="relative">
                   <div className="absolute -inset-4 rounded-2xl bg-gradient-to-r from-blue-400 to-green-400 opacity-10 blur-sm"></div>
                   <div className="relative rounded-2xl border border-white/20 bg-white/80 p-6 shadow-xl backdrop-blur-sm">
-                    <div className="flex items-start space-x-4">
+                    <div className="flex items-start gap-4">
                       <div className="text-3xl">{info.icon}</div>
                       <div className="flex-1">
                         <h3 className="mb-2 text-lg font-semibold text-gray-800">{t(info.titleKey)}</h3>
-                        <p className="leading-relaxed text-gray-700">{t(info.valueKey)}</p>
+                        <p className="leading-relaxed text-gray-700">
+                          {info.href ? (
+                            <a href={info.href(t(info.valueKey))} dir="ltr" className="text-blue-700 hover:underline">
+                              {t(info.valueKey)}
+                            </a>
+                          ) : (
+                            t(info.valueKey)
+                          )}
+                        </p>
                       </div>
                     </div>
                   </div>

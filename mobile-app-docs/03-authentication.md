@@ -1,5 +1,7 @@
 # 03 — Authentication
 
+> **Current implementation: Strategy B.** The app logs in with `POST /api/auth/mobile-login`, sends `Authorization: Bearer <token>`, and checks the session with `GET /api/user`, which also renews the token. Token lifetime, renewal and error codes are in [02-api-integration.md → Auth](02-api-integration.md#auth). The Strategy A cookie flow below (`/api/auth/session`, `/api/auth/signout`) is kept for background only and does not work with Bearer tokens.
+
 ## ⚠️ Important caveat — read first
 
 The web app uses **NextAuth with JWT-in-cookie** ([src/lib/auth.ts](../src/lib/auth.ts)). NextAuth issues an `HttpOnly` cookie named `next-auth.session-token` (or `__Secure-next-auth.session-token` in prod) and every protected API route reads it via `getServerSession()`.

@@ -1,10 +1,11 @@
 'use client';
 
 import { useTranslation } from 'react-i18next';
-import { Control, FieldErrors } from 'react-hook-form';
+import { Control, Controller, FieldErrors } from 'react-hook-form';
 import ControlledSelect from '@/packages/common/components/form/ControlledSelect';
 import ControlledRadio from '@/packages/common/components/form/ControlledRadio';
 import ControlledInputText from '@/packages/common/components/form/ControlledInputText';
+import { toDateOnly } from '@/packages/services/utils/form.utils';
 
 type AdditionalField = {
   name: string;
@@ -79,6 +80,38 @@ function AdditionalFieldRenderer({ field, control, errors }: AdditionalFieldRend
         error={errors.additionalInfo?.[field.name] as any}
         rules={{ required: field.required ? `${field.label} مطلوب` : false }}
       />
+    );
+  }
+
+  if (field.type === 'date') {
+    const error = errors.additionalInfo?.[field.name] as { message?: string } | undefined;
+    return (
+      <div className="mb-5">
+        <label className="mb-1 block text-right text-sm font-medium text-gray-700 md:text-base" htmlFor={field.name}>
+          {field.label}
+          {field.required && <span className="me-1 text-red-500">*</span>}
+        </label>
+        <Controller
+          name={`additionalInfo.${field.name}`}
+          control={control}
+          render={({ field: input }) => (
+            <input
+              id={field.name}
+              type="date"
+              name={input.name}
+              ref={input.ref}
+              onBlur={input.onBlur}
+              onChange={input.onChange}
+              // Older requests hold a full timestamp, which a date input can't show.
+              value={typeof input.value === 'string' ? toDateOnly(input.value) : ''}
+              className={`w-full rounded-lg border px-3 py-2 text-right text-sm transition focus:ring-2 focus:ring-blue-200 md:text-base ${
+                error ? 'border-red-300 focus:border-red-500' : 'border-gray-300 focus:border-blue-500'
+              }`}
+            />
+          )}
+        />
+        {error?.message && <span className="mt-1 block text-sm text-red-500">{error.message}</span>}
+      </div>
     );
   }
 

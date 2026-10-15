@@ -1,8 +1,7 @@
 'use client';
-// Fixed: BackButton import path
 
 import { useParams } from 'next/navigation';
-import { useGetNewsById } from '@/packages/news/hooks/useGetNewsById';
+import { NewsRequestError, useGetNewsById } from '@/packages/news/hooks/useGetNewsById';
 import { BackButton } from '@/packages/common/components/BackButton';
 import Spinner from '@/packages/common/components/Spinner';
 import ErrorMessage from '@/packages/common/components/ErrorMessage';
@@ -13,6 +12,7 @@ import { useEffect, useState } from 'react';
 import { NewHeader } from './NewHeader';
 import { useTranslation } from 'react-i18next';
 import { categoryColors, categoryLabels } from '@/packages/news/utils/news.utils';
+import { newsImageLoader, newsImageSrc } from '@/packages/news/utils/newsImage.utils';
 import { NewsFleshesImage } from '@/packages/common/components/NewsFleshImage';
 import { ImageIndicators } from '@/packages/common/components/ImageIndicators';
 
@@ -30,18 +30,22 @@ export default function NewsPage() {
     }
   }, [newsData]);
 
+  // Errors before the spinner, so a deleted article doesn't spin forever; a failed
+  // background refresh keeps showing the article already loaded.
+  if (error && !newsData) {
+    return error instanceof NewsRequestError && error.status === 404 ? (
+      <ErrorMessage message={t('news.page.notFound')} />
+    ) : (
+      <ErrorMessage />
+    );
+  }
+
   if (isLoading || !news) {
     return <Spinner className="min-h-screen" />;
   }
 
-  if (error) {
-    return <ErrorMessage />;
-  }
-
   const hasMultipleImages = news.imageUrl && news.imageUrl.length > 1;
-  const currentImage = news.imageUrl?.[currentImageIndex]
-    ? `data:image/jpeg;base64,${news.imageUrl[currentImageIndex]}`
-    : 'elementor-placeholder-image-3610342416_bys2q8';
+  const currentImage = newsImageSrc(news.imageUrl?.[currentImageIndex]);
 
   const nextImage = () => {
     if (hasMultipleImages) {
@@ -71,6 +75,7 @@ export default function NewsPage() {
             <div className="relative h-[300px] overflow-hidden sm:h-[400px] lg:h-[500px]">
               <Image
                 src={currentImage}
+                loader={newsImageLoader(currentImage)}
                 alt={news.title}
                 className="h-full w-full object-cover"
                 width={1200}
@@ -137,13 +142,13 @@ export default function NewsPage() {
             {/* Excerpt */}
             {news.excerpt && (
               <div className="mb-6">
-                <p className="border-r-4 border-blue-500 pr-4 text-lg leading-relaxed text-gray-700 italic">{news.excerpt}</p>
+                <p className="border-r-4 border-blue-500 pr-4 text-lg leading-relaxed text-gray-700">{news.excerpt}</p>
               </div>
             )}
 
             {/* Main Content */}
             <div className="prose prose-lg max-w-none">
-              <div className="leading-relaxed text-gray-800" dangerouslySetInnerHTML={{ __html: news.content }} />
+              <div className="leading-relaxed whitespace-pre-line text-gray-800" dangerouslySetInnerHTML={{ __html: news.content }} />
             </div>
           </div>
 

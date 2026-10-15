@@ -17,15 +17,17 @@ export const ApiErrorHandler =
 const handleErrors = (e: unknown): NextResponse => {
   let message: string;
   let status: number;
+  let code: string | undefined;
   if (e instanceof SyntaxError) {
     message = 'Invalid body';
     status = 400;
   } else if (e instanceof HttpError) {
     message = e.message;
     status = e.status;
+    code = e.code;
   } else {
     message = 'Error';
     status = 500;
   }
-  return NextResponse.json({ error: message }, { status });
+  return NextResponse.json({ error: message, ...(code && { code }) }, { status });
 };

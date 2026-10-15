@@ -5,7 +5,17 @@
 | **Route** | `/(tabs)/news` |
 | **Web parity** | [src/app/news/page.tsx](../../src/app/news/page.tsx) → [NewsPage.tsx](../../src/packages/news/components/NewsPage.tsx) |
 | **Auth** | Public |
-| **API** | `GET /api/news`, `GET /api/news/featured`, `GET /api/news/categories` |
+| **API** | `GET /api/news?category=ALL&summary=1` (one request; categories are filtered on the device) |
+
+## Current behaviour (release 1.2)
+
+The sections below describe the original port; where they differ, this list wins.
+
+- One request for every article (`?category=ALL&summary=1`; older backends ignore `summary`). The featured card is the newest article flagged `featured`, shown only under «الكل» or its own category and never repeated in the list. Categories are derived from the data in enum order.
+- Category labels are the website's (`news.categories` in its ar.json): أخبار البلدية، مشاريع تنموية، إعلانات، فعاليات مجتمعية، بنية تحتية، بيئية، خدمات اجتماعية، صحة وخدمات اجتماعية، أخرى. The website's `news.utils.ts categoryLabels` uses the same wording.
+- Search: the shared `components/ui/SearchField` with `lib/search` Arabic folding (hamza forms, ة/ه, ى/ي, diacritics, tatweel, Arabic-Indic digits) over title, excerpt, tags and category; combined with the selected category.
+- The selected category lives in the route (`/news?category=ENVIRONMENTAL`), so the article's category chip and links open a filtered list.
+- `https://aydamoun-cheykhlar-municipality.org/news` opens this screen when the app is installed (universal links / App Links).
 
 ## Purpose
 

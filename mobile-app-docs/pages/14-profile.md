@@ -1,107 +1,67 @@
-# 14 — Profile
+# 14 — Profile (and delete account)
 
-| | |
-|---|---|
-| **Route** | `/(account)/profile` |
-| **Web parity** | [src/app/profile/page.tsx](../../src/app/profile/page.tsx) → [ProfilePage.tsx](../../src/packages/profile/components/ProfilePage.tsx) |
-| **Auth** | **Required** |
-| **API** | `GET /api/user/service-submissions`, `DELETE /api/user/service-submissions/[id]` |
+|                |                                                                                                                                                                   |
+| -------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Route**      | `/(account)/profile`, `/(account)/profile/delete-account`                                                                                                         |
+| **Web parity** | [src/app/profile/page.tsx](../../src/app/profile/page.tsx) → [ProfilePage.tsx](../../src/packages/profile/components/ProfilePage.tsx), `DeleteAccountSection.tsx` |
+| **Auth**       | **Required** (guests see the login prompt in place)                                                                                                               |
+| **API**        | `GET /api/user/service-submissions`, `DELETE /api/user/service-submissions/[id]`, `DELETE /api/user`                                                              |
 
 ## Purpose
 
-Logged-in user's home base. Shows account info, lets them edit it or change password, and lists their service submissions with status and edit/delete actions.
+The signed-in resident's home base: their requests first, then account settings, logout and account deletion.
+
+## Account gate
+
+`app/(tabs)/(account)/_layout.tsx` wraps every account screen (Stack `screenLayout`): while the stored session loads → `LoadingScreen`; guest → `AuthNotice variant="full"` under the screen's own header, whose login/signup buttons push the auth screens with `next` = the current path, so the user comes back to the same screen. No redirect.
 
 ## Screen layout
 
 ```
 ┌─────────────────────────────────────┐
-│  [≡]  Profile            [globe]    │
+│  [<]  الملف الشخصي                  │
 ├─────────────────────────────────────┤
+│  ProfileHeader (avatar, name,       │
+│  email · phone)                     │
 │                                     │
-│  ┌── ProfileHeader ──────────────┐  │
-│  │     <avatar>                  │  │
-│  │     Full name (h2)            │  │
-│  │     email · phone             │  │
-│  └──────────────────────────────┘   │
+│  ─── طلباتي (n طلبات) ───           │
+│  ┌ SubmissionCard ──────────── › ┐  │
+│  │ service · رقم الطلب · date    │  │
+│  │ [status]   [تعديل] [حذف]      │  │
+│  └───────────────────────────────┘  │
 │                                     │
-│  [ Edit profile ]                   │
-│  [ Change password ]                │
-│  [ Log out ] (danger)               │
-│                                     │
-│  ─── My submissions ───             │
-│                                     │
-│  ┌─────────────────────────────┐    │
-│  │ Building permit             │    │
-│  │ Submitted May 22, 2026      │    │
-│  │ [ Pending ]                 │    │
-│  │ [ Edit ]   [ Delete ]       │    │
-│  └─────────────────────────────┘    │
-│  ┌─────────────────────────────┐    │
-│  │ …                           │    │
-│  └─────────────────────────────┘    │
-│                                     │
+│  ┌ settings card ────────────────┐  │
+│  │ تعديل الملف الشخصي          › │  │
+│  │ تغيير كلمة المرور           › │  │
+│  │ تسجيل الخروج                  │  │
+│  └───────────────────────────────┘  │
+│  حذف الحساب (danger row)            │
 └─────────────────────────────────────┘
 ```
 
-## Data fetching
+## Requests
 
-```ts
-const { user } = useSession();
+- `useMySubmissions()` (`features/user/queries.ts`, key `['my-submissions']`, enabled only when signed in, newest first), rendered through `QueryView`: cached data first, a banner when a refresh fails, skeleton cards while loading, `ErrorState` with retry.
+- Count: `tPlural('profile.submissions.total', n)`.
+- Empty → «تقديم طلب جديد» opens Services.
+- Every card opens `/profile/submissions/[id]/edit` ([17](17-edit-submission.md)), read-only unless `PENDING`. The card shows «رقم الطلب» = `submissionRef(id)` (first 8 characters of the id, upper-case, LTR) — the same reference as the success screen and the website/admin.
+- `PENDING` cards also have 44pt edit and delete buttons. Delete asks for confirmation; the card dims with a spinner until the server answers; the hook shows the success or error toast.
+- Pull-to-refresh refetches the list.
 
-const submissions = useQuery({
-  queryKey: ['my-submissions'],
-  queryFn: () => api<(ServiceSubmission & { service: Service })[]>('/api/user/service-submissions'),
-  staleTime: 0,
-});
-```
+## Settings
 
-## Sections
+- «تعديل الملف الشخصي» → [15](15-edit-profile.md); «تغيير كلمة المرور» → [16](16-change-password.md).
+- «تسجيل الخروج»: confirmation, then `signOut()` (local, instant), toast, `router.replace('/(tabs)/home')`.
 
-### Profile header
+## Delete account (`/profile/delete-account`)
 
-- Avatar (use `user.image` if present, else initials placeholder).
-- Name + email + phone rows. Long emails wrap.
+Required by the App Store and Google Play. Same flow and wording as the website's `DeleteAccountSection`:
 
-### Action buttons
+1. Explains what is deleted (`profile.deleteAccount.*`, including how many requests go with it).
+2. Password field (the current password: no strength rule).
+3. Destructive confirmation `Alert`.
+4. `DELETE /api/user { password }`. Success → `router.replace('/(tabs)/home')`, `clearSession()` (drops private caches), success toast.
 
-- "Edit profile" → `router.push('/profile/edit')` ([Edit profile](15-edit-profile.md))
-- "Change password" → `router.push('/profile/change-password')` ([Change password](16-change-password.md))
-- "Log out" (danger variant) → calls `signOut()` from session context, then `router.replace('/home')`.
+Errors: `400 INVALID_PASSWORD` (or the old message `Invalid password`) and `PASSWORD_REQUIRED` → on the password field; `401` → signed out, the login prompt replaces the screen; `404`/`405` (deployment without the endpoint) → banner with «مراسلة البلدية» (email to `CONTACT.email`); others → `userMessage(err)`.
 
-### Submissions section
-
-Heading "My submissions" + count.
-
-#### `SubmissionCard`
-
-| Element | Detail |
-|---|---|
-| Service name | `submission.service.name` |
-| Submitted date | `date-fns format(createdAt, 'PPP')` |
-| Status badge | `<StatusBadge status={submission.status} />` — see [01-design-system.md](../01-design-system.md#1-color-tokens) |
-| Edit button | Only if `status === 'PENDING'`. Navigates to `/profile/submissions/[id]/edit` ([Edit submission](17-edit-submission.md)) |
-| Delete button | Only if `status === 'PENDING'`. Opens confirmation `<Alert>`; on confirm → mutation below |
-
-#### Delete mutation
-
-```ts
-const del = useMutation({
-  mutationFn: (id: string) =>
-    api(`/api/user/service-submissions/${id}`, { method: 'DELETE' }),
-  onSuccess: () => queryClient.invalidateQueries(['my-submissions']),
-});
-```
-
-#### Empty / loading / error
-
-- Empty → `<EmptyState icon={Inbox}>` "No submissions yet — start one from Services".
-- Loading → inline spinner under the header.
-- Error → inline `<ErrorState onRetry={refetch} small />`.
-
-## Pull-to-refresh
-
-Yes — refetches submissions and session.
-
-## Excluded vs web
-
-Web shows an inline editable form on this page. We split that out to its own [Edit profile](15-edit-profile.md) screen for clarity on mobile.
+The request deletion relies on the `ON DELETE CASCADE` migration `20261013120000_cascade_delete_user_submissions`.

@@ -1,115 +1,62 @@
 # 19 — Signup
 
-| | |
-|---|---|
-| **Route** | `/(auth)/signup` |
-| **Web parity** | [src/app/auth/signup/page.tsx](../../src/app/auth/signup/page.tsx) → [SignUpPage.tsx](../../src/packages/auth/signup/SignUpPage.tsx) (broken into `SignUpCard`, `SignUpHeader`, `SignUpForm`, `SignUpFooter`) |
-| **Auth** | Public (redirects to home if already logged in) |
-| **API** | `POST /api/auth/signup`, then login (see [03-authentication.md](../03-authentication.md)) |
+|                |                                                                                                                                                                                                   |
+| -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Route**      | `/(auth)/signup`                                                                                                                                                                                  |
+| **Web parity** | [src/app/auth/signup/page.tsx](../../src/app/auth/signup/page.tsx) → [SignUpPage.tsx](../../src/packages/auth/signup/SignUpPage.tsx) (`SignUpCard`, `SignUpHeader`, `SignUpForm`, `SignUpFooter`) |
+| **Auth**       | Public (closes itself if already logged in)                                                                                                                                                       |
+| **API**        | `POST /api/auth/signup`, then `POST /api/auth/mobile-login` (see [02-api-integration.md](../02-api-integration.md#auth))                                                                          |
 
 ## Purpose
 
-Create a new resident account. Either email or phone (or both) must be provided.
+Create a resident account. Email or phone (or both) must be given.
 
 ## Screen layout
 
 ```
 ┌─────────────────────────────────────┐
-│  [<]                                │
+│  [<]  إنشاء حساب                    │
 ├─────────────────────────────────────┤
-│            ┌─────┐                  │
-│            │ logo│                  │
-│            └─────┘                  │
-│       Create account                │
-│       Welcome to the municipality   │
-│                                     │
-│  Full name *                        │
-│  [_____________________________]    │
-│                                     │
-│  Email                              │
-│  [_____________________________]    │
-│  Helper: email or phone is required │
-│                                     │
-│  Phone                              │
-│  [_____________________________]    │
-│                                     │
-│  Password *                         │
-│  [••••••••••••••••••]   [👁]        │
-│  Helper: min 6 characters           │
-│                                     │
-│  Confirm password *                 │
-│  [••••••••••••••••••]   [👁]        │
-│                                     │
-│  ▮ MessageBanner                    │
-│                                     │
-│  [          Sign up           ]     │
-│                                     │
-│  Already have an account? [Log in]  │
-│                                     │
+│            logo                     │
+│       إنشاء حساب جديد               │
+│       أهلاً بك في بلدية عيدمون شيخلار │
+│  ▮ MessageBanner (+ login / forgot) │
+│  الاسم الكامل *                     │
+│  البريد الإلكتروني  (helper: one of) │
+│  رقم الهاتف                         │
+│  كلمة المرور *  (helper: the rule)  │
+│  تأكيد كلمة المرور *                │
+│  [          إنشاء حساب          ]   │
+│  بإنشاء حساب، فإنك توافق على        │
+│  [شروط الاستخدام] و[سياسة الخصوصية] │
+│  لديك حساب بالفعل؟ [تسجيل الدخول]   │
 └─────────────────────────────────────┘
 ```
 
-## Form
+## Form (`signupSchema`, `features/auth/validation.ts`)
 
-```ts
-const phoneRegex = /^[0-9+\-\s]{6,20}$/;
+Same rules as the website's `auth.validation.ts` and the server:
 
-const schema = yup.object({
-  name: yup.string().trim().min(2, 'errors.name.short').max(50).required('errors.required'),
-  email: yup.string().email('errors.email.invalid').nullable().notRequired(),
-  phone: yup.string().matches(phoneRegex, 'errors.phone.invalid').nullable().notRequired(),
-  password: yup.string().min(6).required(),
-  confirmPassword: yup.string()
-    .oneOf([yup.ref('password')], 'errors.passwordMismatch')
-    .required(),
-})
-.test('at-least-one', 'errors.auth.atLeastOne', v => !!(v.email || v.phone));
-```
+- `name`: required, trimmed, 2–50 characters.
+- `email` / `phone`: optional, a blank field counts as absent (sent as `null`); at least one is required, reported on the email field (`errors.atLeastOne`). Emails trimmed; phones normalized (`lib/phone.ts`) and 6–15 digits.
+- `password`: the [password rule](../02-api-integration.md#password-rule): 6+ characters with a lower-case letter, an upper-case letter and a digit (`errors.password.min`, `errors.password.pattern`). iOS `passwordRules` make generated passwords meet it.
+- `confirmPassword`: must match.
 
-Watch `password` to live-validate `confirmPassword` on each keystroke.
+Mode `onTouched`; dependent errors (confirmation, "email or phone") wait until that field was visited or the form submitted.
 
 ## Submit
 
-```ts
-const submit = useMutation({
-  mutationFn: async (values) => {
-    await api('/api/auth/signup', {
-      method: 'POST',
-      body: JSON.stringify({
-        name: values.name,
-        email: values.email || undefined,
-        phone: values.phone || undefined,
-        password: values.password,
-      }),
-    });
-    // Auto-login
-    await auth.login({
-      identifier: values.email || values.phone!,
-      password: values.password,
-    });
-  },
-  onSuccess: () => {
-    showBanner('success', t('auth.signup.success'));
-    setTimeout(() => router.replace('/home'), 800);
-  },
-  onError: (err) => {
-    if (err.code === 'USER_EXISTS') showBanner('error', t('auth.signup.errors.exists'));
-    else showBanner('error', err.message);
-  },
-});
-```
+`useSession().signup(input)`: `POST /api/auth/signup`, then logs in with the email (else the phone).
 
-## UX details
+- Account exists: `409 USER_EXISTS` (current API) or `400 "User with this email or phone already exists"` (older deployments) → `auth.signup.errors.exists` with «تسجيل الدخول» (identifier prefilled) and «نسيت كلمة المرور؟» actions.
+- `SignupLoginError` (created, automatic login failed) → login screen with the identifier prefilled and «تم إنشاء حسابك، سجّل الدخول».
+- Other errors → `userMessage(err)` (`WEAK_PASSWORD`, `INVALID_PHONE`, `EMAIL_OR_PHONE_REQUIRED` have their own Arabic text).
+- Success → toast, then `leaveAuth(next)` (see [18-login.md](18-login.md#navigation-featuresauthnavigationts)).
 
-- Eye toggles on both password fields.
-- "Phone" field uses `keyboardType="phone-pad"`.
-- Submit button disabled until form valid; spinner while pending.
-- Footer link to `/auth/login`.
+## Consent line
 
-## On mount
-
-If already logged in, `router.replace('/home')`.
+«بإنشاء حساب، فإنك توافق على شروط الاستخدام وسياسة الخصوصية». The two links open the website's `/terms-of-use` and `/privacy-policy` (the same text as the app's legal pages) in an in-app browser (`openLegalPage()` in `features/auth/navigation.ts`, `expo-web-browser`), so the typed form stays as it is. Pushing the app's `/(tabs)/legal/*` from the auth stack would mount a second tabs navigator. Offline → `errors.network` toast. The website's signup form shows the same line (`auth.signup.consent.*`).
 
 ## i18n keys
 
-`auth.signup.{title,subtitle,fullName,fullNamePlaceholder,email,emailPlaceholder,phone,phonePlaceholder,password,passwordPlaceholder,confirmPassword,confirmPasswordPlaceholder,submit,success,haveAccount,loginCta,errors.exists}`.
+`auth.signup.{title,subtitle,name,email,phone,password,confirmPassword,emailOrPhoneHelper,passwordHelper,submit,submitting,success,hasAccount,login,errors.exists,consent,consentAnd}`, `nav.termsOfUse`, `nav.privacyPolicy`.

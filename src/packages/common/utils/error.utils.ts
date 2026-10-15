@@ -6,7 +6,7 @@ export const returnProperErrorMessage = (error: any) => {
   const erroMessage = 'internal server error';
   console.log('error', error);
   if (error instanceof HttpError) {
-    return NextResponse.json({ error: error.message }, { status: error.status });
+    return NextResponse.json({ error: error.message, ...(error.code && { code: error.code }) }, { status: error.status });
   }
 
   return NextResponse.json({ error: erroMessage }, { status: status });

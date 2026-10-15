@@ -7,6 +7,13 @@
 | **Auth** | Public |
 | **API** | `GET /api/council` |
 
+## Current behaviour (release 1.2)
+
+The sections below describe the original port; where they differ, this list wins.
+
+- Static sections render immediately; the council part is a `QueryView` with an inline skeleton and error state. A «تواصل معنا» button opens Home's contact section.
+- CouncilCard contact rows are 44pt, labelled «اتصال بـ…», with an image fallback.
+
 ## Purpose
 
 Introduce the municipality and its leadership. Three sections: municipality info (static), President (highlighted from council list), other council members.

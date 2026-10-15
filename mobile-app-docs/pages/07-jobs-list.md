@@ -7,6 +7,15 @@
 | **Auth** | Public |
 | **API** | `GET /api/jobs` |
 
+## Current behaviour (release 1.2)
+
+The sections below describe the original port; where they differ, this list wins.
+
+- Open jobs first; closed ones under «وظائف انتهى موعد التقديم عليها» with a «منتهي» text badge. Deadlines show date and time.
+- Search with the shared `SearchField` / `lib/search` over title, provider, location and description.
+- One touchable card per job (role button, full spoken label); data-first states via `QueryView`.
+- The website's job cards now link their title to the public job page `/jobs/<id>`.
+
 ## Purpose
 
 Browse open job postings in the municipality.

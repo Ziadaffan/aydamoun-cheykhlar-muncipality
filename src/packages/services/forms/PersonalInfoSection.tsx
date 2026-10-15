@@ -44,7 +44,6 @@ export default function PersonalInfoSection({ control, errors }: PersonalInfoSec
           control={control}
           name="email"
           error={errors.email}
-          required
         />
 
         <ControlledInputText

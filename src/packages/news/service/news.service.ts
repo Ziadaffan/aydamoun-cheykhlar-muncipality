@@ -1,9 +1,45 @@
 import { BasePrismaService } from '@/packages/common/services/prisma.service';
+import { BadRequestError, NotFoundError } from '@/packages/common/errors';
+import { NewsCategory as NewsCategoryEnum } from '@prisma/client';
 import { NewsRepository } from '../repository/news.repository';
 import { News, NewsCategory } from '../types/news.types';
-import { getResourceType } from '@/packages/document/utils/document.utils';
+import { destroyNewsImages, uploadNewsImages } from './newsImage.service';
 import { v2 as cloudinary } from 'cloudinary';
-import { v4 as uuidv4 } from 'uuid';
+
+type NewsInput = Omit<News, 'id' | 'createdAt' | 'updatedAt' | 'imageUrl'>;
+type NewsQueryOptions = { summary?: boolean };
+
+// Card fields: everything except the article body.
+const NEWS_SUMMARY_SELECT = {
+  id: true,
+  title: true,
+  excerpt: true,
+  imageUrl: true,
+  category: true,
+  author: true,
+  views: true,
+  featured: true,
+  tags: true,
+  createdBy: true,
+  createdAt: true,
+  updatedAt: true,
+} as const;
+
+const NEWS_CATEGORIES = new Set<string>(Object.values(NewsCategoryEnum));
+
+/** The `category` query param: missing or 'ALL' means every category, anything unknown is a 400. */
+export function parseNewsCategory(value: string | null): NewsCategory | 'ALL' {
+  if (!value || value === 'ALL') return 'ALL';
+  if (!NEWS_CATEGORIES.has(value)) {
+    throw new BadRequestError('Invalid category', 'INVALID_CATEGORY');
+  }
+  return value as NewsCategory;
+}
+
+/** `?summary=1` asks for card data: no `content` and only the cover image. */
+export const isSummaryRequest = (searchParams: URLSearchParams): boolean => ['1', 'true'].includes(searchParams.get('summary') ?? '');
+
+const toSummary = <T extends { imageUrl: string[] }>(news: T): T => ({ ...news, imageUrl: news.imageUrl.slice(0, 1) });
 
 export class NewsService extends BasePrismaService<'news'> {
   private static singlenton: NewsService;
@@ -29,31 +65,31 @@ export class NewsService extends BasePrismaService<'news'> {
     return NewsService.singlenton;
   }
 
-  public async getFeaturedNews() {
-    return this.repository.findFirst({
+  /** Several articles can be flagged featured (create doesn't clear the flag); the newest wins. */
+  public async getFeaturedNews({ summary = false }: NewsQueryOptions = {}) {
+    const news = await this.repository.findFirst({
       where: {
         featured: true,
-      },
-    });
-  }
-
-  public async getNewsByCategory(category: NewsCategory | 'ALL') {
-    if (category === 'ALL') {
-      return await this.repository.findMany({
-        orderBy: {
-          createdAt: 'desc',
-        },
-      });
-    }
-
-    return await this.repository.findMany({
-      where: {
-        category: category,
       },
       orderBy: {
         createdAt: 'desc',
       },
+      select: summary ? NEWS_SUMMARY_SELECT : undefined,
     });
+
+    return news && summary ? toSummary(news) : news;
+  }
+
+  public async getNewsByCategory(category: NewsCategory | 'ALL', { summary = false }: NewsQueryOptions = {}) {
+    const news = await this.repository.findMany({
+      where: category === 'ALL' ? undefined : { category },
+      orderBy: {
+        createdAt: 'desc',
+      },
+      select: summary ? NEWS_SUMMARY_SELECT : undefined,
+    });
+
+    return summary ? news.map(toSummary) : news;
   }
 
   public async getNewsCategories() {
@@ -82,27 +118,27 @@ export class NewsService extends BasePrismaService<'news'> {
       return false;
     }
 
-    for (const imageUrl of result.imageUrl) {
-      await cloudinary.uploader.destroy(imageUrl, { resource_type: 'image' });
-    }
+    await destroyNewsImages(result.imageUrl);
 
     return true;
   }
 
-  public async updateNews(id: string, newsData: Omit<News, 'id' | 'createdAt' | 'updatedAt' | 'imageUrl'> & { imageUrl: string[] }) {
-    try {
-      const newsToUpdate = {
-        title: newsData.title,
-        content: newsData.content,
-        excerpt: newsData.excerpt,
-        category: newsData.category,
-        author: newsData.author,
-        tags: newsData.tags,
-        featured: newsData.featured,
-        imageUrl: newsData.imageUrl,
-      };
+  /**
+   * Uploaded images replace the article's images, as the web edit form expects.
+   * An edit that sends no images keeps the current ones instead of wiping them.
+   */
+  public async updateNews(id: string, newsData: NewsInput, images: File[]) {
+    const existing = await this.repository.findUnique({ where: { id }, select: { imageUrl: true } });
 
-      if(newsToUpdate.featured){
+    if (!existing) {
+      throw new NotFoundError('News not found');
+    }
+
+    const uploaded = images.length ? await uploadNewsImages(images) : null;
+
+    let updated;
+    try {
+      if (newsData.featured) {
         await this.repository.updateMany({
           where: {
             featured: true,
@@ -113,31 +149,48 @@ export class NewsService extends BasePrismaService<'news'> {
         });
       }
 
-      return await this.repository.update({
+      updated = await this.repository.update({
         where: { id },
-        data: newsToUpdate,
+        data: {
+          title: newsData.title,
+          content: newsData.content,
+          excerpt: newsData.excerpt,
+          category: newsData.category,
+          author: newsData.author,
+          tags: newsData.tags,
+          featured: newsData.featured,
+          ...(uploaded && { imageUrl: uploaded }),
+        },
       });
     } catch (error) {
       console.error('Error updating news:', error);
+      if (uploaded) {
+        await destroyNewsImages(uploaded);
+      }
       throw error;
     }
+
+    if (uploaded) {
+      await destroyNewsImages(existing.imageUrl);
+    }
+
+    return updated;
   }
 
-  public async create(newsData: Omit<News, 'id' | 'createdAt' | 'updatedAt' | 'imageUrl'> & { imageUrl: string[] }) {
-    try {
-      const { imageUrl, ...newsDataWithoutImages } = newsData;
+  public async create(newsData: NewsInput, images: File[]) {
+    const imageUrl = await uploadNewsImages(images);
 
-      const news = await this.repository.create({
+    try {
+      return await this.repository.create({
         data: {
-          ...newsDataWithoutImages,
-          imageUrl: imageUrl,
+          ...newsData,
+          imageUrl,
           createdBy: 'ADMIN',
         },
       });
-
-      return news;
     } catch (error) {
       console.error(error);
+      await destroyNewsImages(imageUrl);
       throw error;
     }
   }

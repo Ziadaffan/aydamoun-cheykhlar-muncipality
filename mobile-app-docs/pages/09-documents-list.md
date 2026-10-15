@@ -7,6 +7,16 @@
 | **Auth** | Public |
 | **API** | `GET /api/documents` |
 
+## Current behaviour (release 1.2)
+
+The sections below describe the original port; where they differ, this list wins.
+
+- Single-column list with search (shared `SearchField` / `lib/search` over title, description and type).
+- `fileUrl` is an absolute URL on the current backend: `GET /api/documents` returns `https://…/api/documents/<id>/file` for uploads (stored as base64 in the database) and keeps real http(s) URLs as they are. `GET /api/documents/<id>/file` is public: base64 rows are served as the file (Content-Type from the extension, Content-Length, `Content-Disposition: inline` with the title, `Cache-Control: public, max-age=3600`, ETag); http(s) rows are a 302 redirect; unknown id → 404 `DOCUMENT_NOT_FOUND`.
+- Older backends still embed base64 in `fileUrl`; the app handles both.
+- Open: images in the in-app `ImageViewer`; iOS opens URL documents in the in-app Safari sheet; Android downloads once into the cache (progress, cancel) and opens with `ACTION_VIEW` + read permission. Share is a separate icon button.
+- The website's document card uses the URL directly (data: URI fallback for old responses).
+
 ## Purpose
 
 Browse and download official municipal documents (PDFs, forms, etc).

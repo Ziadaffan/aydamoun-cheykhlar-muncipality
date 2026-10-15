@@ -2,11 +2,24 @@
 
 import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'next/navigation';
-import React from 'react';
+import React, { Suspense } from 'react';
 import Link from 'next/link';
+import Spinner from '@/packages/common/components/Spinner';
+import { submissionReference } from '@/packages/serviceSubmissions/utils/reference';
 
+// useSearchParams() needs a Suspense boundary for static rendering.
 export default function SubmissionSuccessPage() {
+  return (
+    <Suspense fallback={<Spinner className="min-h-screen" />}>
+      <SubmissionSuccess />
+    </Suspense>
+  );
+}
+
+function SubmissionSuccess() {
   const { t } = useTranslation();
+  // Set by the request form: the new request's id, shown as the number the app shows.
+  const id = useSearchParams()?.get('id');
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-gradient-to-r from-blue-50 to-green-50">
@@ -27,17 +40,34 @@ export default function SubmissionSuccessPage() {
           {/* Message */}
           <p className="mb-6 text-lg text-gray-600">شكراً لك على تقديم طلبك. لقد تم استلامه وسيتم مراجعته من قبل فريق البلدية.</p>
 
+          {id && (
+            <div className="mb-6 rounded-lg border border-gray-200 p-4">
+              <p className="text-sm text-gray-600">{t('services.submissionSuccess.reference')}</p>
+              <p dir="ltr" className="my-1 select-all font-mono text-2xl font-bold tracking-widest text-gray-900">
+                {submissionReference(id)}
+              </p>
+              <p className="text-sm text-gray-500">{t('services.submissionSuccess.referenceHint')}</p>
+            </div>
+          )}
+
           {/* Instructions */}
           <div className="mb-8 rounded-lg bg-yellow-50 p-6">
             <h3 className="mb-2 text-lg font-semibold text-yellow-800">الخطوات التالية</h3>
             <ul className="space-y-1 text-right text-sm text-yellow-700">
               <li>• سيتم مراجعة طلبك خلال 3-5 أيام عمل</li>
-              <li>• ستتلقى إشعاراً عبر الهاتف أو البريد الإلكتروني</li>
+              <li>• {t('services.submissionSuccess.track')}</li>
             </ul>
           </div>
 
           {/* Boutons d'action */}
           <div className="flex flex-col justify-center gap-4 sm:flex-row">
+            <Link
+              href="/profile"
+              className="rounded-lg bg-gradient-to-r from-green-500 to-green-600 px-6 py-3 font-semibold text-white transition-opacity hover:opacity-90"
+            >
+              {t('services.submissionSuccess.trackButton')}
+            </Link>
+
             <Link
               href="/services"
               className="rounded-lg bg-gradient-to-r from-blue-500 to-blue-600 px-6 py-3 font-semibold text-white transition-opacity hover:opacity-90"

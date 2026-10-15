@@ -12,6 +12,14 @@ import Banner from '@/packages/common/components/Banner';
 import useSignUp from '@/packages/auth/hooks/useSignUp';
 import { signupSchema, SignupFormData } from '@/packages/auth/validation/auth.validation';
 
+// useSignUp's error codes → messages.
+const ERROR_KEYS: Record<string, string> = {
+  USER_EXISTS: 'auth.signup.messages.userExists',
+  WEAK_PASSWORD: 'auth.signup.messages.weakPassword',
+  INVALID_PHONE: 'auth.signup.messages.invalidPhone',
+  EMAIL_OR_PHONE_REQUIRED: 'auth.signup.messages.emailOrPhoneRequired',
+};
+
 type SignUpFormProps = {
   onSuccess?: () => void;
 };
@@ -63,15 +71,8 @@ export default function SignUpForm({ onSuccess }: SignUpFormProps) {
         }
       },
       onError: error => {
-        let errorMessage = t('auth.signup.messages.signupError');
-
-        if (error.message === 'USER_EXISTS') {
-          errorMessage = t('auth.signup.messages.userExists');
-        } else if (error.message && error.message !== 'Something went wrong') {
-          errorMessage = error.message;
-        }
-
-        setMessage({ type: 'error', text: errorMessage });
+        const errorKey = ERROR_KEYS[error.message] ?? 'auth.signup.messages.signupError';
+        setMessage({ type: 'error', text: t(errorKey) });
       },
       onSettled: () => {
         setIsLoading(false);
@@ -139,6 +140,18 @@ export default function SignUpForm({ onSuccess }: SignUpFormProps) {
       <Button type="submit" variant="primary" size="lg" loading={isLoading} disabled={isLoading} className="w-full">
         {t('auth.signup.submit')}
       </Button>
+
+      {/* Same consent line as the app's signup screen. */}
+      <p className="-mt-2 text-center text-xs leading-relaxed text-gray-600">
+        {t('auth.signup.consent.prefix')}{' '}
+        <a href="/terms-of-use" target="_blank" rel="noopener" className="text-blue-600 hover:underline">
+          {t('auth.signup.consent.terms')}
+        </a>{' '}
+        {t('auth.signup.consent.and')}
+        <a href="/privacy-policy" target="_blank" rel="noopener" className="text-blue-600 hover:underline">
+          {t('auth.signup.consent.privacy')}
+        </a>
+      </p>
     </form>
   );
 }

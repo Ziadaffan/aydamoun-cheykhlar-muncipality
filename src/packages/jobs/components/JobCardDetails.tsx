@@ -5,16 +5,18 @@ import { isDeadlinePassed } from '@/packages/jobs/utils/jobs.utils';
 
 interface JobCardDetailsProps {
   job: Jobs;
+  /** The job page shows the description in its own section. */
+  showDescription?: boolean;
 }
 
-export default function JobCardDetails({ job }: JobCardDetailsProps) {
+export default function JobCardDetails({ job, showDescription = true }: JobCardDetailsProps) {
   const { t } = useTranslation();
   const deadlinePassed = isDeadlinePassed(job.deadline);
 
   return (
     <div className="flex flex-col gap-4">
       {/* Description */}
-      {job.description && (
+      {showDescription && job.description && (
         <div className="text-sm leading-relaxed text-gray-700">
           <p>{job.description}</p>
         </div>
@@ -45,8 +47,8 @@ export default function JobCardDetails({ job }: JobCardDetailsProps) {
               d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
             />
           </svg>
-          <span className="font-medium">رقم الهاتف:</span>
-          <a href={`tel:${job.phone}`} className="text-blue-600 hover:underline">
+          <span className="font-medium">{t('jobs.phone')}:</span>
+          <a href={`tel:${job.phone}`} dir="ltr" className="text-blue-600 hover:underline">
             {job.phone}
           </a>
         </div>

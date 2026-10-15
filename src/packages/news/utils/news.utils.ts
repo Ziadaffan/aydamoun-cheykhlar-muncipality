@@ -13,15 +13,16 @@ export const categoryColors = {
   OTHER: 'bg-gray-100 text-gray-800 border-gray-200',
 };
 
+// Same wording as news.categories in public/language/ar.json (the forms) and the mobile app.
 export const categoryLabels = {
-  MUNICIPAL_NEWS: 'أخبار بلدية',
+  MUNICIPAL_NEWS: 'أخبار البلدية',
   DEVELOPMENT_PROJECTS: 'مشاريع تنموية',
   ANNOUNCEMENTS: 'إعلانات',
   COMMUNITY_EVENTS: 'فعاليات مجتمعية',
   INFRASTRUCTURE: 'بنية تحتية',
-  ENVIRONMENTAL: 'بيئي',
+  ENVIRONMENTAL: 'بيئية',
   SOCIAL_SERVICES: 'خدمات اجتماعية',
-  HEALTH_AND_SOCIAL_SERVICES: 'خدمات صحية واجتماعية',
+  HEALTH_AND_SOCIAL_SERVICES: 'صحة وخدمات اجتماعية',
   OTHER: 'أخرى',
   ALL: 'جميع الأخبار',
 };

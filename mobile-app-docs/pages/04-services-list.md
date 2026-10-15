@@ -2,148 +2,63 @@
 
 | | |
 |---|---|
-| **Route** | `/(tabs)/services` |
+| **Route** | `/(tabs)/services` (optional `?anchor=<ServiceType>&at=<timestamp>`) |
 | **Web parity** | [src/app/services/page.tsx](../../src/app/services/page.tsx) |
-| **Auth** | Public (but submitting a form requires login) |
+| **Auth** | Public (sending a request requires login, see [05](05-service-form.md)) |
 | **API** | `GET /api/services` |
+| **App files** | `app/(tabs)/services/index.tsx`, `components/services/*`, `features/services/meta.ts`, `features/services/queries.ts` |
 
 ## Purpose
 
-Show every service the municipality offers, grouped by category. Tapping a service starts a submission flow (gated by login).
+Every service the municipality offers, grouped by category. Tapping a service opens its
+request form, for guests too.
 
 ## Screen layout
 
 ```
 ┌─────────────────────────────────────┐
-│  [≡]  Services           [globe]    │
-├─────────────────────────────────────┤
+│  (status-bar scrim)                 │
+│  ┌── Hero (static, renders at once)┐│
+│  │  خدمات البلدية                    ││
+│  │  subtitle                        ││
+│  └──────────────────────────────────┘│
+│  ▮ AuthNotice compact (guests only, │
+│    hidden while the session loads)  │
+│  ▮ info note when a Home shortcut   │
+│    points to an empty category      │
 │                                     │
-│  ▮ AuthBanner (if guest)            │
-│    "Log in to submit requests"      │
-│    [ Log in ]   [ Sign up ]         │
-│                                     │
-│  ┌── Hero ─────────────────────┐    │
-│  │  Municipal services         │    │
-│  │  Submit licenses, …         │    │
-│  └────────────────────────────┘     │
-│                                     │
-│  ┌── Section header ─────────────┐  │
-│  │ 🏗️  Building licenses        │  │
-│  └──────────────────────────────┘   │
-│  ┌─────────────────────────────┐    │
-│  │ Construction permit          │    │
-│  │ Apply for a new build.       │    │
-│  │                  [ Apply › ] │    │
-│  └─────────────────────────────┘    │
-│  ┌─────────────────────────────┐    │
-│  │ Demolition permit            │    │
-│  │                  [ Apply › ] │    │
-│  └─────────────────────────────┘    │
-│                                     │
-│  ┌── Section header ─────────────┐  │
-│  │ 🌱  Environmental services    │  │
-│  └──────────────────────────────┘   │
+│  ┌── Category band (icon + name) ──┐│
+│  │ ServiceCard: name, description, ││
+│  │              [ تقدّم › ]          ││
+│  └──────────────────────────────────┘│
 │  …                                  │
-│                                     │
+│  تحميل النماذج الرسمية: always shown, │
+│  with a link card to Documents      │
+│  («تبحث عن نموذج للتحميل؟»)          │
 └─────────────────────────────────────┘
 ```
 
-## Data fetching
+## Data
 
-```ts
-const { data: services, isLoading, error } = useQuery({
-  queryKey: ['services'],
-  queryFn: () => api<Service[]>('/api/services'),
-});
-```
+`useServices()` → `['services']` (persisted for offline start). Grouped client-side in
+`SERVICE_CATEGORY_ORDER` (features/services/meta.ts), empty categories hidden except the
+official-forms one. The list goes through `QueryView`: skeleton on first load, inline
+error with a busy retry, refresh-failed banner over cached data, pull-to-refresh driven
+only by the user's pull.
 
-Group client-side by `service.type`:
+## Category metadata
 
-```ts
-const grouped = useMemo(() => {
-  const order: ServiceType[] = [
-    'LICENSEES_AND_CONSTRUCTION_SERVICES',
-    'ENVIRONMENTAL_SERVICES',
-    'ADMINISTRATIVE_SERVICES',
-    'DOWNLOAD_OFFICIAL_FORMS_SERVICES',
-    'COMPLAINTS_AND_SUGGESTIONS_SERVICES',
-    'OTHER',
-  ];
-  return order
-    .map(type => ({ type, items: (services ?? []).filter(s => s.type === type) }))
-    .filter(g => g.items.length > 0);
-}, [services]);
-```
+`serviceCategoryMeta(type)` in features/services/meta.ts: a lucide `Icon`, a pastel
+`color`, a dark `iconColor` and `titleKey` (`services.categories.<TYPE>`). Home's
+shortcut tiles use the same metadata. The website's equivalent is
+`getServiceCategoryMeta` (service.utils.ts), which also gives the request form's
+category (see [05](05-service-form.md#category-fields)).
 
-## Per-category metadata
+## Behaviour
 
-Centralize so the same icon/colour/title shows everywhere:
-
-```ts
-export function serviceCategoryMeta(type: ServiceType) {
-  switch (type) {
-    case 'LICENSEES_AND_CONSTRUCTION_SERVICES':
-      return { icon: 'Hammer',   color: '#fde68a', titleKey: 'services.categories.buildingLicenses' };
-    case 'ENVIRONMENTAL_SERVICES':
-      return { icon: 'Leaf',     color: '#bbf7d0', titleKey: 'services.categories.environmental' };
-    case 'ADMINISTRATIVE_SERVICES':
-      return { icon: 'FileText', color: '#bfdbfe', titleKey: 'services.categories.administrative' };
-    case 'DOWNLOAD_OFFICIAL_FORMS_SERVICES':
-      return { icon: 'Download', color: '#e9d5ff', titleKey: 'services.categories.officialForms' };
-    case 'COMPLAINTS_AND_SUGGESTIONS_SERVICES':
-      return { icon: 'MessageSquare', color: '#fecaca', titleKey: 'services.categories.complaints' };
-    case 'OTHER':
-      return { icon: 'Star', color: '#e5e7eb', titleKey: 'services.categories.other' };
-  }
-}
-```
-
-## Components
-
-### `AuthBanner`
-
-Shown only when `!user`. A blue-tinted alert card with two outlined buttons (login / signup). Hidden once authenticated.
-
-### `ServiceCategorySection`
-
-Pinned header with icon + label, background tint = `meta.color`. Children: vertical list of `<ServiceCard>`s.
-
-### `ServiceCard`
-
-```
-┌──────────────────────────────────┐
-│  <service.name>                  │
-│  <service.description>           │
-│                    [ Apply › ]   │
-└──────────────────────────────────┘
-```
-
-Tap or tap "Apply":
-
-```ts
-if (!user) router.push(`/auth/login?next=/services/forms/${service.id}`);
-else router.push(`/services/forms/${service.id}`);
-```
-
-## Loading / error / empty
-
-- Loading: `<LoadingScreen />`.
-- Error: `<ErrorState onRetry={refetch} />`.
-- Empty (no services from API): `<EmptyState />` with "No services yet" copy.
-
-## Pull-to-refresh
-
-Yes, on the outer `ScrollView`.
-
-## Excluded from web parity
-
-The anchor links (`#buildingLicenses`, etc.) from the home page don't work natively on RN scroll views. To approximate, accept a `?anchor=` param on this screen and:
-
-```tsx
-useEffect(() => {
-  if (anchor && sectionRefs[anchor]?.current) {
-    sectionRefs[anchor].current.measure(...);
-    scrollViewRef.current.scrollTo({ y, animated: true });
-  }
-}, [anchor, grouped]);
-```
+- ServiceCard is a single touchable (role button, label «name، description», hint
+  «يفتح نموذج الطلب»).
+- Guests: AuthNotice login/signup carry `next=/(tabs)/services`.
+- `?anchor=` (Home shortcuts): scrolls to the category band, offset by the top safe-area
+  inset; `at` makes a second tap on the same shortcut scroll again.
+- `useScrollToTop` on the tab; the refresh spinner is offset below the status-bar scrim.

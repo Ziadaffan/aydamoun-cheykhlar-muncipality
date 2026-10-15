@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { requireAdmin } from '@/lib/mobile-auth';
 import { returnProperErrorMessage } from '@/packages/common/utils/error.utils';
-import { NewsService } from '@/packages/news/service/news.service';
+import { NewsService, isSummaryRequest, parseNewsCategory } from '@/packages/news/service/news.service';
+import { readImageFiles } from '@/packages/news/service/newsImage.service';
 import { NewsCategory } from '@/packages/news/types/news.types';
 
 const newsService = NewsService.instance();
@@ -9,9 +10,9 @@ const newsService = NewsService.instance();
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
-    const category = searchParams.get('category');
+    const category = parseNewsCategory(searchParams.get('category'));
 
-    const news = await newsService.getNewsByCategory(category as NewsCategory);
+    const news = await newsService.getNewsByCategory(category, { summary: isSummaryRequest(searchParams) });
 
     return NextResponse.json(news);
   } catch (error) {
@@ -34,17 +35,6 @@ export async function POST(request: NextRequest) {
     const tagsString = formData.get('tags') as string;
     const tags = tagsString ? JSON.parse(tagsString) : [];
 
-    const imageUrl: string[] = [];
-    const imageFiles = formData.getAll('images') as File[];
-
-    for (const imageFile of imageFiles) {
-      if (imageFile && imageFile.size > 0) {
-        const buffer = await imageFile.arrayBuffer();
-        const base64 = Buffer.from(buffer).toString('base64');
-        imageUrl.push(base64);
-      }
-    }
-
     const newsData = {
       title,
       content,
@@ -53,10 +43,9 @@ export async function POST(request: NextRequest) {
       author,
       tags,
       featured,
-      imageUrl,
     };
 
-    const news = await newsService.create(newsData);
+    const news = await newsService.create(newsData, readImageFiles(formData));
 
     return NextResponse.json(news, { status: 201 });
   } catch (error) {

@@ -2,69 +2,55 @@
 
 | | |
 |---|---|
-| **Route** | `/(tabs)/services/submission-success` |
-| **Web parity** | [src/app/services/submission-success/page.tsx](../../src/app/services/submission-success/page.tsx) |
-| **Auth** | Required (only reachable post-submit) |
+| **Route** | `/(tabs)/services/submission-success?id=<submission id>&service=<name>` |
+| **Web parity** | [src/app/services/submission-success/page.tsx](../../src/app/services/submission-success/page.tsx) (`/services/submission-success?id=<submission id>`) |
+| **Auth** | Reached only after sending a request |
 | **API** | None |
 
 ## Purpose
 
-Confirmation screen after a service submission. Reassures the user, sets expectations on review time, offers next steps.
+Confirm the request, give its **request number** («رقم الطلب») and lead to «طلباتي».
 
-## Screen layout
+## Request number
+
+`id.slice(0, 8).toUpperCase()` — the app's `submissionRef` (features/user/queries.ts) and the
+website's `submissionReference` (src/packages/serviceSubmissions/utils/reference.ts). It is
+shown the same way in the app (success screen, «طلباتي» cards and request screen), on the
+website (success page, profile cards) and in the admin dashboard (list column, view page).
+Staff can search the admin list by it (case-insensitive, leading `#` and spaces ignored,
+a partial number matches from its start), or by name or phone. Always rendered
+left-to-right (`ltr()` in the app, `dir="ltr"` on the website).
+
+## Screen layout (app)
 
 ```
 ┌─────────────────────────────────────┐
-│                                     │
-│         ┌─────────┐                 │
-│         │   ✓     │   (green disc)  │
-│         └─────────┘                 │
-│                                     │
-│   Your request has been             │
-│   submitted successfully!           │
-│                                     │
-│   Thank you for your submission.    │
-│   We will review and contact you.   │
-│                                     │
-│   ┌── yellow tinted box ────────┐   │
-│   │ • Reviewed in 3–5 days      │   │
-│   │ • You'll be notified by     │   │
-│   │   phone or email            │   │
-│   └────────────────────────────┘    │
-│                                     │
-│   [ Return to services ]            │
-│   [ Go to home ]                    │
-│                                     │
-│   Need help? Contact us at …        │
-│                                     │
+│              ( ✓ )                   │
+│   تم تقديم طلبك بنجاح!                │
+│   message                           │
+│  ┌── رقم الطلب ──────────────────┐   │
+│  │        A1B2C3D4  (selectable)  │   │
+│  │        service name            │   │
+│  │        keep this number…       │   │
+│  └───────────────────────────────┘   │
+│   • reviewed in 3–5 working days    │
+│   • follow it in «طلباتي»           │
+│   [ متابعة طلباتي ]  (primary)        │
+│   [ العودة إلى الخدمات ]              │
+│   [ الذهاب إلى الرئيسية ]             │
+│   Need help? [اتصل] [راسل]           │
 └─────────────────────────────────────┘
 ```
 
-Centered vertically. Max content width `420`.
+- The number card is one accessibility element read character by character.
+- «متابعة طلباتي»: `router.dismissAll()` then the profile tab, so the Services tab is left
+  on its list.
+- Help buttons use `CONTACT` (constants/contact.ts) through `callPhone`/`sendEmail`; the
+  email subject carries the request number.
+- A success haptic on mount.
+- No promise of notifications: the backend sends none.
 
-## Components
+## Website
 
-- Big green check icon (`<Check size={72} color="#10b981">` inside a circle).
-- H2 title with the success message.
-- Body paragraph with thank-you text.
-- A `<Card>` with yellow tint (`#fef9c3` bg, `#a16207` text) listing the two next-step bullets.
-- Primary button: "Return to services" → `router.replace('/services')`.
-- Secondary button: "Go to home" → `router.replace('/home')`.
-- Optional contact footer with phone/email links.
-
-## Behavior
-
-- `router.replace` (not `push`) so back-button doesn't return to the form.
-- Trigger a celebratory haptic on mount: `Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success)`.
-
-## i18n keys
-
-`services.submissionSuccess.title`, `services.submissionSuccess.message`, `services.submissionSuccess.next.{review,notify}`, `services.submissionSuccess.cta.{services,home}`, `services.submissionSuccess.helpFooter`.
-
-## Edge case
-
-If a guest somehow lands here (e.g. via deep link), redirect to `/services` immediately:
-
-```ts
-useEffect(() => { if (!user) router.replace('/services'); }, [user]);
-```
+After a successful submit the website form now opens this page with `?id=`; it shows the
+same number, «متابعة طلباتي» (→ `/profile`), back to services and home.

@@ -7,6 +7,12 @@
 | **Auth** | Public |
 | **API** | `GET /api/taxi-stops` |
 
+## Current behaviour (release 1.2)
+
+The sections below describe the original port; where they differ, this list wins.
+
+- Cards spell out «من … إلى …» (route label for screen readers), «وقت المغادرة:» and «رقم الهاتف:» (left-to-right), and one Call button through `callPhone`.
+
 ## Purpose
 
 Browse known taxi/van stops, their routes, departure times, and contact numbers.

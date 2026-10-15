@@ -7,6 +7,13 @@
 | **Auth** | Public |
 | **API** | `GET /api/associations/[id]` |
 
+## Current behaviour (release 1.2)
+
+The sections below describe the original port; where they differ, this list wins.
+
+- Header title «الجمعيات» in every state; labelled share button in the header (shares `/associations/<id>` on the website, which has a public page). Seeded from the cached list; 404 → not-available state.
+- With the app installed, `https://aydamoun-cheykhlar-municipality.org/associations/<id>` opens this screen.
+
 ## Purpose
 
 Show all info about a single association.

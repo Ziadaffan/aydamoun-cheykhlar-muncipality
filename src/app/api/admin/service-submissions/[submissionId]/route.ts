@@ -3,6 +3,7 @@ import { ApiErrorHandler } from '@/packages/common/errors';
 import { returnProperErrorMessage } from '@/packages/common/utils/error.utils';
 import { ServiceSubmissionService } from '@/packages/serviceSubmissions/services/serviceSubmission.service';
 import { getAuthSession } from '@/lib/mobile-auth';
+import { parseSubmissionUpdate, readJsonObject } from '@/packages/serviceSubmissions/validation/submission.validation';
 
 const serviceSubmissionService = ServiceSubmissionService.instance();
 
@@ -43,10 +44,13 @@ export const PUT = ApiErrorHandler(async (req: NextRequest, context): Promise<Ne
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const body = await req.json();
+    const body = await readJsonObject(req);
     const { submissionId } = await context.params;
 
-    const updatedSubmission = await serviceSubmissionService.updateServiceSubmissionAsAdmin(submissionId, body);
+    const updatedSubmission = await serviceSubmissionService.updateServiceSubmissionAsAdmin(submissionId, {
+      ...parseSubmissionUpdate(body),
+      status: body.status,
+    });
 
     return NextResponse.json(updatedSubmission, { status: 200 });
   } catch (error) {

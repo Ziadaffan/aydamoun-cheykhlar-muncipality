@@ -7,6 +7,13 @@ import Button from '@/packages/common/components/Button';
 import Banner from '@/packages/common/components/Banner';
 import { useDeleteAccount } from '../hooks/useDeleteAccount';
 
+// useDeleteAccount's error codes → messages.
+const ERROR_KEYS: Record<string, string> = {
+  INVALID_PASSWORD: 'profile.deleteAccount.messages.invalidPassword',
+  PASSWORD_REQUIRED: 'profile.deleteAccount.messages.passwordRequired',
+  UNAUTHORIZED: 'common.sessionExpired',
+};
+
 export default function DeleteAccountSection() {
   const { t } = useTranslation();
   const { mutate: deleteAccount, isPending } = useDeleteAccount();
@@ -21,10 +28,7 @@ export default function DeleteAccountSection() {
       { password },
       {
         onSuccess: () => signOut({ callbackUrl: '/' }),
-        onError: err =>
-          setError(
-            err.message === 'INVALID_PASSWORD' ? t('profile.deleteAccount.messages.invalidPassword') : t('profile.deleteAccount.messages.error')
-          ),
+        onError: err => setError(t(ERROR_KEYS[err.message] ?? 'profile.deleteAccount.messages.error')),
       }
     );
   };

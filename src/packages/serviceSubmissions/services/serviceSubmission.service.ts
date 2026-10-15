@@ -1,7 +1,8 @@
 import { BasePrismaService } from '@/packages/common/services/prisma.service';
 import { Prisma, ServiceStatus, ServiceSubmission } from '@prisma/client';
 import { ServiceSubmissionRepository } from '../repository/serviceSubmission.repository';
-import { NotFoundError } from '@/packages/common/errors';
+import { ConflictError, NotFoundError } from '@/packages/common/errors';
+import { SubmissionInput } from '../validation/submission.validation';
 
 // Never send the password hash along with a submission's user.
 const SAFE_USER_SELECT = { id: true, name: true, email: true, phone: true, role: true, createdAt: true } as const;
@@ -62,7 +63,7 @@ export class ServiceSubmissionService extends BasePrismaService<'serviceSubmissi
   }
 
   public async getServiceSubmissionsByUserId(userId: string): Promise<ServiceSubmission[]> {
-    return this.repository.findMany({ where: { userId }, include: { service: true } });
+    return this.repository.findMany({ where: { userId }, include: { service: true }, orderBy: { createdAt: 'desc' } });
   }
 
   public async getAllServiceSubmissionsWithDetails(): Promise<ServiceSubmission[]> {
@@ -72,7 +73,8 @@ export class ServiceSubmissionService extends BasePrismaService<'serviceSubmissi
     });
   }
 
-  public async createServiceSubmissions(id: string, data: any): Promise<ServiceSubmission> {
+  /** `data` comes from parseSubmissionInput (validated, phone normalized). */
+  public async createServiceSubmissions(serviceId: string, userId: string, data: SubmissionInput): Promise<ServiceSubmission> {
     return this.repository.create({
       data: {
         fullName: data.fullName,
@@ -82,40 +84,41 @@ export class ServiceSubmissionService extends BasePrismaService<'serviceSubmissi
         description: data.description,
         additionalInfo: data.additionalInfo,
         status: ServiceStatus.PENDING,
-        userId: data.userId,
-        serviceId: id,
+        userId,
+        serviceId,
       },
     });
   }
 
-  public async updateServiceSubmission(id: string, userId: string, data: any): Promise<ServiceSubmission> {
-    const serviceSubmission = await this.repository.findUnique({ where: { id, userId: userId } });
+  /** The owner's edit; `data` comes from parseSubmissionUpdate. */
+  public async updateServiceSubmission(id: string, userId: string, data: Partial<SubmissionInput>): Promise<ServiceSubmission> {
+    await this.findPendingOwnSubmission(id, userId);
 
-    if (!serviceSubmission) {
-      throw new NotFoundError('Service Submission not found');
-    }
-
-    return this.repository.update({
-      where: { id },
-      data: {
-        fullName: data.fullName,
-        phone: data.phone,
-        email: data.email,
-        address: data.address,
-        description: data.description,
-        additionalInfo: data.additionalInfo,
-      },
-    });
+    return this.repository.update({ where: { id }, data });
   }
 
   public async deleteServiceSubmission(id: string, userId: string): Promise<void> {
-    const serviceSubmission = await this.repository.findUnique({ where: { id, userId: userId } });
+    await this.findPendingOwnSubmission(id, userId);
+
+    await this.repository.delete({ where: { id } });
+  }
+
+  /**
+   * Residents can change or withdraw a request only while it is pending (the app and
+   * the website offer it only then): once staff have started on it, it is theirs.
+   */
+  private async findPendingOwnSubmission(id: string, userId: string): Promise<ServiceSubmission> {
+    const serviceSubmission = await this.repository.findUnique({ where: { id, userId } });
 
     if (!serviceSubmission) {
       throw new NotFoundError('Service Submission not found');
     }
 
-    await this.repository.delete({ where: { id } });
+    if (serviceSubmission.status !== ServiceStatus.PENDING) {
+      throw new ConflictError('Only pending submissions can be changed', 'SUBMISSION_LOCKED');
+    }
+
+    return serviceSubmission;
   }
 
   public async getServiceSubmissionByIdAdmin(id: string): Promise<ServiceSubmission> {
@@ -128,24 +131,22 @@ export class ServiceSubmissionService extends BasePrismaService<'serviceSubmissi
     return serviceSubmission;
   }
 
-  public async updateServiceSubmissionAsAdmin(id: string, data: any): Promise<ServiceSubmission> {
+  /** `data` is the body's status plus fields from parseSubmissionUpdate. */
+  public async updateServiceSubmissionAsAdmin(
+    id: string,
+    data: Partial<SubmissionInput> & { status?: unknown }
+  ): Promise<ServiceSubmission> {
     const existingSubmission = await this.repository.findUnique({ where: { id } });
 
     if (!existingSubmission) {
       throw new NotFoundError('Service Submission not found');
     }
 
-    const updateData: Prisma.ServiceSubmissionUpdateInput = {};
+    const { status, ...fields } = data;
+    const updateData: Prisma.ServiceSubmissionUpdateInput = { ...fields };
 
-    if (data.fullName !== undefined) updateData.fullName = data.fullName;
-    if (data.phone !== undefined) updateData.phone = data.phone;
-    if (data.email !== undefined) updateData.email = data.email;
-    if (data.address !== undefined) updateData.address = data.address;
-    if (data.description !== undefined) updateData.description = data.description;
-    if (data.additionalInfo !== undefined) updateData.additionalInfo = data.additionalInfo as Prisma.InputJsonValue;
-
-    if (data.status && Object.values(ServiceStatus).includes(data.status as ServiceStatus)) {
-      updateData.status = data.status as ServiceStatus;
+    if (typeof status === 'string' && Object.values(ServiceStatus).includes(status as ServiceStatus)) {
+      updateData.status = status as ServiceStatus;
     }
 
     return this.repository.update({

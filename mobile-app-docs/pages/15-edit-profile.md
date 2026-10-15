@@ -1,76 +1,36 @@
 # 15 — Edit profile
 
-| | |
-|---|---|
-| **Route** | `/(account)/profile/edit` |
+|                |                                                                                                                                               |
+| -------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Route**      | `/(account)/profile/edit`                                                                                                                     |
 | **Web parity** | The inline form section of [ProfilePage.tsx](../../src/packages/profile/components/ProfilePage.tsx) (`ProfileFormSection` + `ProfileActions`) |
-| **Auth** | **Required** |
-| **API** | `PUT /api/user` |
+| **Auth**       | **Required**                                                                                                                                  |
+| **API**        | `PUT /api/user`                                                                                                                               |
 
 ## Purpose
 
-Edit the logged-in user's name, email, and phone.
+Edit the signed-in user's name, email and phone.
 
-## Screen layout
+## Form (`editProfileSchema`, `features/auth/validation.ts`)
 
-```
-┌─────────────────────────────────────┐
-│  [<]  Edit profile                  │
-├─────────────────────────────────────┤
-│                                     │
-│  Full name                          │
-│  [_____________________________]    │
-│                                     │
-│  Email                              │
-│  [_____________________________]    │
-│                                     │
-│  Phone                              │
-│  [_____________________________]    │
-│                                     │
-│  ▮ MessageBanner (success | error)  │
-│                                     │
-│  [ Cancel ]    [ Save ]             │
-│                                     │
-└─────────────────────────────────────┘
-```
+Same rules as the website's `profile.validation.ts` and the server:
 
-## Form
+- `name`: required, trimmed, 2–50 characters.
+- `email` / `phone`: optional, a blank field is sent as `null` (clears it); at least one must remain (`errors.atLeastOne`, shown on the email field; the phone Controller has `deps: ['email']`). Phones are normalized (`lib/phone.ts`) and must be 6–15 digits.
 
-```ts
-const schema = yup.object({
-  name:  yup.string().trim().min(2).max(50).required(),
-  email: yup.string().email().nullable().notRequired(),
-  phone: yup.string().matches(/^[0-9+\-\s]{6,20}$/).nullable().notRequired(),
-}).test('at-least-one', 'errors.atLeastOne', v => !!(v.email || v.phone));
-```
-
-Pre-fill from `useSession().user`.
+Pre-filled from `useSession().user`. Mode `onTouched`; Save is enabled once something changed and shows a spinner while saving. Return keys chain the fields; autofill hints `name`, `email`, `tel`.
 
 ## Submit
 
-```ts
-const update = useMutation({
-  mutationFn: (values) => api<{ user: User }>('/api/user', {
-    method: 'PUT', body: JSON.stringify(values),
-  }),
-  onSuccess: ({ user }) => {
-    session.refresh();         // pulls /api/auth/session
-    showBanner('success', t('profile.edit.success'));
-  },
-  onError: (err) => showBanner('error', err.message),
-});
-```
-
-## Buttons
-
-- **Save** — disabled until form is dirty AND valid. Shows spinner while pending.
-- **Cancel** — `router.back()`.
+`useUpdateProfile()` → `PUT /api/user { name, email, phone }` → `{ user }`. On success the session user is updated (merged with the cached user, since older servers omit `image`), a toast shows and the screen closes.
 
 ## Errors
 
-- Server returns `409` if the new email/phone is already taken by another user — show translated message.
-- Server returns `400` on validation issues — surface field-level errors if `details` is present.
+- Email/phone taken: `409 USER_EXISTS` (current API) or `400 "Email or phone already in use"` (older deployments) → on the changed field (`profile.edit.emailTaken` / `phoneTaken`), or a banner (`profile.edit.conflict`) when both changed.
+- `400 INVALID_PHONE` → on the phone field. A number that did not change is not re-validated by the server.
+- `401` → signed out; the login prompt replaces the screen.
+- Others → `userMessage(err)` in a banner.
 
 ## Excluded
 
-No avatar change in current API. If the backend adds an upload endpoint later, add a circular image picker above the name field.
+No avatar upload (no API).

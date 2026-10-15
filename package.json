@@ -17,6 +17,7 @@
     "prisma:studio": "prisma studio",
     "prisma:reset": "dotenv -e .env.local -- prisma migrate reset --force",
     "export:data": "tsx scripts/export-data.ts",
+    "migrate:news-images": "tsx scripts/migrate-news-images.ts",
     "seed:db": "tsx prisma/seed.ts",
     "postinstall": "prisma generate"
   },

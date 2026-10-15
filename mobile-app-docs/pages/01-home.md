@@ -5,7 +5,16 @@
 | **Route** | `/home` (tab root) |
 | **Web parity** | [src/app/page.tsx](../../src/app/page.tsx) → [HomePage.tsx](../../src/packages/home/components/HomePage.tsx) |
 | **Auth** | Public |
-| **API** | None — static |
+| **API** | `GET /api/news?category=ALL&summary=1` (latest news, shared with the News tab), `GET /api/user/service-submissions` (signed-in users' latest request) |
+
+## Current behaviour (release 1.2)
+
+The sections below describe the original port; where they differ, this list wins.
+
+- Hero, services grid (lucide icons from `features/services/meta.ts`; the official-forms tile opens `/documents`), «آخر الأخبار» (3 newest), the signed-in user's latest request, quick links (Jobs, Taxi stops, Associations), contact section.
+- Contact data comes only from `constants/contact.ts` (`CONTACT`): email `info@aydamoun-cheykhlar-municipality.org`, phone `+961 6 000 000` (placeholder until the owner confirms it), location 34.6003043, 36.2888408. The website shows the same email and phone (`home.contact.info.*` in its ar.json) as left-to-right `tel:`/`mailto:` links.
+- Phone/email cards use `callPhone`/`sendEmail`; the map card uses `openMaps()` (Apple Maps on iOS, `geo:` on Android). None of them throw.
+- Working hours differ between the app and the website and are waiting for the owner's answer.
 
 ## Purpose
 

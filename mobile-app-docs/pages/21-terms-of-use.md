@@ -3,9 +3,15 @@
 | | |
 |---|---|
 | **Route** | `/legal/terms-of-use` |
-| **Web parity** | [src/app/terms-of-use/page.tsx](../../src/app/terms-of-use/page.tsx) (currently a `<ComingSoon>` placeholder on web) |
+| **Web parity** | [src/app/terms-of-use/page.tsx](../../src/app/terms-of-use/page.tsx) → [TermsOfUsePage.tsx](../../src/packages/legal/components/TermsOfUsePage.tsx) |
 | **Auth** | Public |
 | **API** | None |
+
+## Current behaviour (release 1.2)
+
+The sections below describe the original port; where they differ, this list wins.
+
+- A real page with the website's text (`legal.terms`), rendered by `components/about/LegalDocument`; contact from `CONTACT`, matching the website's contact lines.
 
 ## Purpose
 

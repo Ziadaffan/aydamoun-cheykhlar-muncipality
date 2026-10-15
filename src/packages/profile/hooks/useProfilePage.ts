@@ -12,6 +12,14 @@ import { useUpdateProfile } from '@/packages/profile/hooks/useUpdateProfile';
 import { useAuth } from '@/packages/common/hooks/useAuth';
 import { profileUpdateSchema } from '@/packages/profile/validation/profile.validation';
 
+// useUpdateProfile's error codes → messages.
+const PROFILE_ERROR_KEYS: Record<string, string> = {
+  USER_EXISTS: 'profile.form.messages.conflict',
+  INVALID_PHONE: 'profile.form.messages.invalidPhone',
+  EMAIL_OR_PHONE_REQUIRED: 'profile.form.messages.emailOrPhoneRequired',
+  UNAUTHORIZED: 'common.sessionExpired',
+};
+
 export type ProfileFormData = {
   name: string;
   email: string;
@@ -65,8 +73,8 @@ export function useProfilePage() {
       onSuccess: () => {
         setUpdateMessage({ type: 'success', text: t('profile.form.messages.updateSuccess') });
       },
-      onError: () => {
-        setUpdateMessage({ type: 'error', text: t('profile.form.messages.updateError') });
+      onError: error => {
+        setUpdateMessage({ type: 'error', text: t(PROFILE_ERROR_KEYS[error.message] ?? 'profile.form.messages.updateError') });
       },
       onSettled: () => {
         setTimeout(() => {

@@ -1,0 +1,66 @@
+{
+  "applinks": {
+    "details": [
+      {
+        "appIDs": [
+          "43F5Y99YY3.com.ziadaffan.aydamouncheykhlar"
+        ],
+        "components": [
+          {
+            "/": "/news/create",
+            "exclude": true,
+            "comment": "Admin page: stays on the website"
+          },
+          {
+            "/": "/news/*/edit",
+            "exclude": true,
+            "comment": "Admin page: stays on the website"
+          },
+          {
+            "/": "/jobs/create",
+            "exclude": true,
+            "comment": "Admin page: stays on the website"
+          },
+          {
+            "/": "/jobs/*/edit",
+            "exclude": true,
+            "comment": "Admin page: stays on the website"
+          },
+          {
+            "/": "/associations/create",
+            "exclude": true,
+            "comment": "Admin page: stays on the website"
+          },
+          {
+            "/": "/associations/*/edit",
+            "exclude": true,
+            "comment": "Admin page: stays on the website"
+          },
+          {
+            "/": "/news"
+          },
+          {
+            "/": "/news/*"
+          },
+          {
+            "/": "/jobs"
+          },
+          {
+            "/": "/jobs/*"
+          },
+          {
+            "/": "/associations"
+          },
+          {
+            "/": "/associations/*"
+          }
+        ]
+      }
+    ]
+  },
+  "webcredentials": {
+    "apps": [
+      "43F5Y99YY3.com.ziadaffan.aydamouncheykhlar"
+    ]
+  }
+}

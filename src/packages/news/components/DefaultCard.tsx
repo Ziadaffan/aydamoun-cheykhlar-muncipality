@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import { categoryColors, categoryLabels, formatDate } from '@/packages/news/utils/news.utils';
+import { newsImageLoader, newsImageSrc } from '@/packages/news/utils/newsImage.utils';
 import { News } from '@/packages/news/types/news.types';
 import Button from '@/packages/common/components/Button';
 import { TFunction } from 'i18next';
@@ -20,9 +21,7 @@ export const DefaultCard = ({ news, t }: DefaultCardProps) => {
   const { role } = useAuth();
   const { mutate: deleteNews, isPending } = useDeleteNews();
   const hasMultipleImages = news.imageUrl && news.imageUrl.length > 1;
-  const currentImage = news.imageUrl?.[currentImageIndex]
-    ? `data:image/jpeg;base64,${news.imageUrl[currentImageIndex]}`
-    : 'elementor-placeholder-image-3610342416_bys2q8';
+  const currentImage = newsImageSrc(news.imageUrl?.[currentImageIndex]);
 
   const nextImage = () => {
     if (hasMultipleImages) {
@@ -40,7 +39,7 @@ export const DefaultCard = ({ news, t }: DefaultCardProps) => {
     <div className="group relative flex h-full flex-col overflow-hidden rounded-xl bg-white shadow-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
       {/* Image */}
       <div className="relative h-48 overflow-hidden">
-        <Image src={currentImage} alt={news.title} fill className="object-cover transition-transform duration-300 group-hover:scale-105" />
+        <Image src={currentImage} loader={newsImageLoader(currentImage)} alt={news.title} fill sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw" className="object-cover transition-transform duration-300 group-hover:scale-105" />
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
 
         {hasMultipleImages && <NewsFleshesImage nextImage={nextImage} prevImage={prevImage} />}

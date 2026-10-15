@@ -1,4 +1,5 @@
 import { useMutation } from '@tanstack/react-query';
+import { readApiError } from '@/packages/common/utils/api-error.utils';
 
 const resetPassword = async (data: { token: string; password: string }) => {
   const response = await fetch('/api/auth/reset-password', {
@@ -8,7 +9,9 @@ const resetPassword = async (data: { token: string; password: string }) => {
   });
 
   if (!response.ok) {
-    throw new Error(response.status === 400 ? 'INVALID_TOKEN' : 'RESET_PASSWORD_FAILED');
+    const { status, code } = await readApiError(response);
+    if (code === 'WEAK_PASSWORD') throw new Error('WEAK_PASSWORD');
+    throw new Error(status === 400 ? 'INVALID_TOKEN' : 'RESET_PASSWORD_FAILED');
   }
 
   return response.json();

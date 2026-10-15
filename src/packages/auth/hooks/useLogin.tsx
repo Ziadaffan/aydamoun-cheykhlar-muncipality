@@ -16,7 +16,8 @@ const login = async (data: LoginData) => {
   try {
     const identifier = data.identifier.trim();
     const result = await signIn('credentials', {
-      identifier: identifier.includes('@') ? identifier.toLowerCase() : identifier.replace(/\s|-/g, ''),
+      // Phones are sent as typed: the server normalizes them and still matches numbers stored before that.
+      identifier: identifier.includes('@') ? identifier.toLowerCase() : identifier,
       password: data.password,
       redirect: false,
     });

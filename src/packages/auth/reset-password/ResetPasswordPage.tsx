@@ -42,10 +42,13 @@ export default function ResetPasswordPage() {
           setTimeout(() => router.push('/auth/login'), 1500);
         },
         onError: error => {
-          setMessage({
-            type: 'error',
-            text: error.message === 'INVALID_TOKEN' ? t('auth.resetPassword.messages.invalidToken') : t('auth.resetPassword.messages.error'),
-          });
+          const errorKey =
+            error.message === 'INVALID_TOKEN'
+              ? 'auth.resetPassword.messages.invalidToken'
+              : error.message === 'WEAK_PASSWORD'
+                ? 'auth.resetPassword.messages.weakPassword'
+                : 'auth.resetPassword.messages.error';
+          setMessage({ type: 'error', text: t(errorKey) });
         },
       }
     );

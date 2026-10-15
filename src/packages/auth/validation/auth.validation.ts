@@ -1,5 +1,10 @@
 import * as yup from 'yup';
 import { commonValidations } from '../../common/validation/common.validation';
+import { isValidPhone, normalizePhone } from '../../common/utils/phone.utils';
+
+// The server's rule (and the app's): Arabic-Indic digits, spaces, dashes, dots, slashes and
+// parentheses are accepted and normalized away; 6 to 15 digits remain.
+const phoneOk = (value: string) => isValidPhone(normalizePhone(value));
 
 export const loginSchema = yup.object({
   identifier: yup
@@ -10,10 +15,10 @@ export const loginSchema = yup.object({
       if (!value) return false;
       const v = value.trim();
       const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
-      const phoneOk = /^[0-9+\-\s]{6,20}$/.test(v);
-      return emailOk || phoneOk;
+      return emailOk || phoneOk(v);
     }),
-  password: yup.string().min(6, 'كلمة المرور يجب أن تكون 6 أحرف على الأقل').required('كلمة المرور مطلوبة'),
+  // No length or pattern rule here: the server never enforced one before, so older passwords must still log in.
+  password: yup.string().required('كلمة المرور مطلوبة'),
 });
 
 export const signupSchema = yup.object({
@@ -41,7 +46,7 @@ export const signupSchema = yup.object({
       if (!value) return true;
       const v = value.trim();
       if (!v) return true;
-      return /^[0-9+\-\s]{6,20}$/.test(v);
+      return phoneOk(v);
     })
     .test('email-or-phone-required', 'يرجى إدخال البريد الإلكتروني أو رقم الهاتف (أحدهما مطلوب)', function (value) {
       const phone = value?.trim() || '';

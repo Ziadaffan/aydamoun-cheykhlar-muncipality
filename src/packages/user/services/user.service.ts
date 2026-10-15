@@ -1,11 +1,28 @@
 import { BasePrismaService } from '@/packages/common/services/prisma.service';
 import { Role, User } from '@prisma/client';
-import { commonValidations } from '@/packages/common/validation/common.validation';
 import { UserRepository } from '../repository/user.repository';
 import bcrypt from 'bcryptjs';
-import { BadRequestError } from '@/packages/common/errors';
+import { BadRequestError, ConflictError, UnauthorizedError } from '@/packages/common/errors';
+import { isValidPhone, normalizePhone, phoneLookupValues } from '@/packages/common/utils/phone.utils';
+import { assertStrongPassword } from '@/packages/common/utils/password.utils';
 
-export const PUBLIC_USER_SELECT = { id: true, name: true, email: true, phone: true, role: true, createdAt: true, updatedAt: true } as const;
+export const PUBLIC_USER_SELECT = {
+  id: true,
+  name: true,
+  email: true,
+  phone: true,
+  image: true,
+  role: true,
+  createdAt: true,
+  updatedAt: true,
+} as const;
+
+// The session still points at an account that is gone (e.g. deleted from another device):
+// 401 so clients drop the session instead of showing a form error.
+const accountNotFound = () => new UnauthorizedError('User not found', 'USER_NOT_FOUND');
+const invalidPassword = () => new BadRequestError('Invalid password', 'INVALID_PASSWORD');
+const passwordRequired = () => new BadRequestError('Password is required', 'PASSWORD_REQUIRED');
+const emailOrPhoneTaken = () => new ConflictError('Email or phone already in use', 'USER_EXISTS');
 
 export class UserService extends BasePrismaService<'user'> {
   private static singleton: UserService;
@@ -18,6 +35,11 @@ export class UserService extends BasePrismaService<'user'> {
       UserService.singleton = new UserService();
     }
     return UserService.singleton;
+  }
+
+  /** Public profile of the signed-in user, or null when the account no longer exists. */
+  public async getProfile(id: string) {
+    return this.repository.findUnique({ where: { id }, select: PUBLIC_USER_SELECT });
   }
 
   /**
@@ -41,57 +63,75 @@ export class UserService extends BasePrismaService<'user'> {
     }
 
     if (data.phone !== undefined) {
-      const phone = data.phone ? String(data.phone).trim().replace(/\s|-/g, '') : null;
-      updateData.phone = phone || null;
+      updateData.phone = data.phone ? normalizePhone(data.phone) || null : null;
     }
 
     const current = await this.repository.findUnique({ where: { id } });
     if (!current) {
-      throw new BadRequestError('User not found');
+      throw accountNotFound();
+    }
+
+    // Only a changed number is checked, so a legacy number that predates the rule doesn't block a name edit.
+    if (updateData.phone && updateData.phone !== current.phone && !isValidPhone(updateData.phone)) {
+      throw new BadRequestError('Invalid phone number', 'INVALID_PHONE');
     }
 
     const nextEmail = updateData.email !== undefined ? updateData.email : current.email;
     const nextPhone = updateData.phone !== undefined ? updateData.phone : current.phone;
 
     if (!nextEmail && !nextPhone) {
-      throw new BadRequestError('Email or phone is required');
+      throw new BadRequestError('Email or phone is required', 'EMAIL_OR_PHONE_REQUIRED');
     }
 
-    const conflicts = [...(nextEmail ? [{ email: nextEmail }] : []), ...(nextPhone ? [{ phone: nextPhone }] : [])];
+    // A changed phone is also compared as typed: numbers stored before normalization keep their spaces/dashes.
+    const phoneValues = updateData.phone ? phoneLookupValues(String(data.phone)) : nextPhone ? [nextPhone] : [];
+    const conflicts = [...(nextEmail ? [{ email: nextEmail }] : []), ...(phoneValues.length ? [{ phone: { in: phoneValues } }] : [])];
     if (conflicts.length) {
       const taken = await this.repository.findFirst({
         where: { id: { not: id }, OR: conflicts },
       });
       if (taken) {
-        throw new BadRequestError('Email or phone already in use');
+        throw emailOrPhoneTaken();
       }
     }
 
-    return this.repository.update({
-      where: { id },
-      data: updateData,
-      select: PUBLIC_USER_SELECT,
-    });
+    try {
+      return await this.repository.update({
+        where: { id },
+        data: updateData,
+        select: PUBLIC_USER_SELECT,
+      });
+    } catch (error) {
+      // Another account took the email/phone between the check above and this write.
+      if ((error as { code?: string })?.code === 'P2002') {
+        throw emailOrPhoneTaken();
+      }
+      throw error;
+    }
   }
 
   public async updatePassword(id: string, oldPassword: string, newPassword: string) {
-    const user = await this.repository.findUnique({ where: { id } });
-
-    if (!user || !user.password) {
-      throw new BadRequestError('User not found');
+    if (!oldPassword || !newPassword) {
+      throw passwordRequired();
     }
 
-    const isPasswordValid = await bcrypt.compare(oldPassword, user.password);
+    const user = await this.repository.findUnique({ where: { id } });
 
-    if (!isPasswordValid) {
-      throw new BadRequestError('Invalid password');
+    if (!user) {
+      throw accountNotFound();
+    }
+
+    if (!user.password || !(await bcrypt.compare(String(oldPassword), user.password))) {
+      throw invalidPassword();
     }
 
     if (oldPassword === newPassword) {
-      throw new BadRequestError('New password cannot be the same as the old password');
+      throw new BadRequestError('New password cannot be the same as the old password', 'SAME_PASSWORD');
     }
 
-    const hashedNewPassword = await bcrypt.hash(newPassword, 12);
+    assertStrongPassword(String(newPassword));
+
+    const hashedNewPassword = await bcrypt.hash(String(newPassword), 12);
 
     return this.repository.update({
       where: { id },
@@ -109,16 +149,16 @@ export class UserService extends BasePrismaService<'user'> {
     const user = await this.repository.findUnique({ where: { id } });
 
     if (!user) {
-      throw new BadRequestError('User not found');
+      throw accountNotFound();
     }
 
     if (user.password) {
       if (!password) {
-        throw new BadRequestError('Password is required');
+        throw passwordRequired();
       }
       const isPasswordValid = await bcrypt.compare(password, user.password);
       if (!isPasswordValid) {
-        throw new BadRequestError('Invalid password');
+        throw invalidPassword();
       }
     }
 
@@ -136,11 +176,7 @@ export class UserService extends BasePrismaService<'user'> {
 
   /** Admin sets a temporary password; used for phone-only accounts that can't receive a reset email. */
   public async adminSetPassword(id: string, newPassword: string) {
-    try {
-      commonValidations.password().validateSync(newPassword);
-    } catch (e) {
-      throw new BadRequestError((e as Error).message);
-    }
+    assertStrongPassword(newPassword);
 
     const user = await this.repository.findUnique({ where: { id } });
     if (!user) {
