@@ -1,11 +1,13 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest, NextResponse, after } from 'next/server';
 import { requireAdmin } from '@/lib/mobile-auth';
 import { returnProperErrorMessage } from '@/packages/common/utils/error.utils';
 import { NewsService, isSummaryRequest, parseNewsCategory } from '@/packages/news/service/news.service';
 import { readImageFiles } from '@/packages/news/service/newsImage.service';
 import { NewsCategory } from '@/packages/news/types/news.types';
+import { PushNotificationsService } from '@/packages/notifications/services/pushNotifications.service';
 
 const newsService = NewsService.instance();
+const pushNotificationsService = PushNotificationsService.instance();
 
 export async function GET(request: NextRequest) {
   try {
@@ -46,6 +48,11 @@ export async function POST(request: NextRequest) {
     };
 
     const news = await newsService.create(newsData, readImageFiles(formData));
+
+    // Sent after the response, so the admin isn't kept waiting.
+    after(() =>
+      pushNotificationsService.broadcast({ title: 'خبر جديد', body: news.title, path: `/news/${news.id}` })
+    );
 
     return NextResponse.json(news, { status: 201 });
   } catch (error) {

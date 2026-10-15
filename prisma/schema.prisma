@@ -208,3 +208,14 @@ model TaxiStop {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
+// Expo push tokens of app installs, signed in or not: every install hears
+// about new news, jobs and taxi stops.
+model PushToken {
+  id       String @id @default(uuid())
+  token    String @unique
+  platform String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

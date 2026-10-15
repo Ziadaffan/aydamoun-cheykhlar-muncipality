@@ -1,11 +1,13 @@
 import { ApiErrorHandler } from '@/packages/common/errors';
 import { requireAdmin } from '@/lib/mobile-auth';
 import { returnProperErrorMessage } from '@/packages/common/utils/error.utils';
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest, NextResponse, after } from 'next/server';
 import { JobsService } from '@/packages/jobs/services/jobs.service';
+import { PushNotificationsService } from '@/packages/notifications/services/pushNotifications.service';
 
 export const dynamic = 'force-dynamic';
 const jobsService = JobsService.instance();
+const pushNotificationsService = PushNotificationsService.instance();
 
 export const GET = ApiErrorHandler(async (): Promise<NextResponse> => {
   try {
@@ -48,6 +50,17 @@ export async function POST(request: NextRequest) {
     };
 
     const job = await jobsService.create(jobData);
+
+    // An inactive job isn't listed in the app, so nobody is told about it.
+    if (job.active) {
+      after(() =>
+        pushNotificationsService.broadcast({
+          title: 'فرصة عمل جديدة',
+          body: `${job.title} · ${job.provider}`,
+          path: `/jobs/${job.id}`,
+        })
+      );
+    }
 
     return NextResponse.json(job, { status: 201 });
   } catch (error) {
