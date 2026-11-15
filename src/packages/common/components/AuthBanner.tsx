@@ -9,7 +9,7 @@ export default function AuthBanner() {
         <div className="mb-4 rounded-lg border border-blue-200 bg-blue-50 p-4">
           <div className="flex flex-wrap items-center justify-between gap-4">
             <div className="flex flex-1 items-center">
-              <div className="mr-3 text-blue-400">
+              <div className="me-3 text-blue-400">
                 <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
                   <path
                     fillRule="evenodd"
@@ -18,7 +18,7 @@ export default function AuthBanner() {
                   />
                 </svg>
               </div>
-              <span className="mr-1 text-lg font-medium text-blue-800">{t('services.authRequired.message')}</span>
+              <span className="ms-1 text-lg font-medium text-blue-800">{t('services.authRequired.message')}</span>
             </div>
             <div className="flex items-center gap-3">
               <Link

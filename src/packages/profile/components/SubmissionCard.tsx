@@ -5,11 +5,14 @@ import { ServiceSubmission } from '@prisma/client';
 import { EditButton } from '@/packages/common/components/EditButton';
 import { DeleteButton } from '@/packages/common/components/DeleteButton';
 import { submissionReference } from '@/packages/serviceSubmissions/utils/reference';
+import { useLocalized } from '@/lib/localized';
+import { dateLocale } from '@/packages/common/utils/date.utils';
 
 type SubmissionCardProps = {
   submission: ServiceSubmission & {
     service?: {
       name: string;
+      nameEn?: string | null;
     };
   };
   deletingId: string | null;
@@ -18,7 +21,8 @@ type SubmissionCardProps = {
 };
 
 export default function SubmissionCard({ submission, deletingId, onEdit, onDelete }: SubmissionCardProps) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const loc = useLocalized();
 
   const getStatusStyles = (status: string) => {
     switch (status) {
@@ -50,12 +54,12 @@ export default function SubmissionCard({ submission, deletingId, onEdit, onDelet
     <div className="rounded-lg border border-gray-200 p-4">
       <div className="flex items-center justify-between">
         <div className="flex-1">
-          <h3 className="font-medium text-gray-900">{submission.service?.name || t('profile.submissions.unknownService')}</h3>
+          <h3 className="font-medium text-gray-900">{submission.service ? loc(submission.service.name, submission.service.nameEn) : t('profile.submissions.unknownService')}</h3>
           <p className="text-sm text-gray-600">
             {submission.description && submission.description.length > 30 ? `${submission.description.substring(0, 30)}...` : submission.description}
           </p>
           <p className="mt-1 text-xs text-gray-500">
-            {t('profile.submissions.submissionDate')}: {new Date(submission.createdAt).toLocaleDateString('ar-SA')}
+            {t('profile.submissions.submissionDate')}: {new Date(submission.createdAt).toLocaleDateString(dateLocale(i18n.language))}
           </p>
           <p className="mt-1 text-xs text-gray-500">
             {t('profile.submissions.reference')}:{' '}
@@ -73,9 +77,9 @@ export default function SubmissionCard({ submission, deletingId, onEdit, onDelet
 
           {/* Like the app: residents change or withdraw a request only while it is pending. */}
           {submission.status === 'PENDING' && (
-            <div className="flex space-x-2 space-x-reverse">
+            <div className="flex gap-2">
               <EditButton onClick={() => onEdit(submission.id)} />
-              <DeleteButton onClick={() => onDelete(submission.id)} isDeleting={deletingId === submission.id} className="mr-2" />
+              <DeleteButton onClick={() => onDelete(submission.id)} isDeleting={deletingId === submission.id} />
             </div>
           )}
         </div>

@@ -10,7 +10,7 @@ export default function CreateJobButton({ isSubmitting }: CreateJobButtonProps) 
 
   return (
     <Button type="submit" variant="primary" size="lg" loading={isSubmitting} disabled={isSubmitting} className="w-full">
-      {isSubmitting ? 'جاري الإنشاء...' : 'إنشاء وظيفة'}
+      {isSubmitting ? t('jobs.form.creating') : t('jobs.form.create')}
     </Button>
   );
 }

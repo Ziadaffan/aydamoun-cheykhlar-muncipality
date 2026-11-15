@@ -1,7 +1,7 @@
 import { ApiErrorHandler } from '@/packages/common/errors';
 import { requireAdmin } from '@/lib/mobile-auth';
 import { returnProperErrorMessage } from '@/packages/common/utils/error.utils';
-import { DocumentService } from '@/packages/document/services/document.service';
+import { DocumentService, readDocumentEnglish } from '@/packages/document/services/document.service';
 import { documentFileUrl } from '@/packages/document/utils/document.utils';
 import { NextRequest, NextResponse } from 'next/server';
 
@@ -32,6 +32,7 @@ export const POST = ApiErrorHandler(async (request: NextRequest): Promise<NextRe
       title,
       description,
       type: typeFile ?? '',
+      ...readDocumentEnglish(formData),
     };
 
     const saved = await documentService.createDocument(base64String, documentData);

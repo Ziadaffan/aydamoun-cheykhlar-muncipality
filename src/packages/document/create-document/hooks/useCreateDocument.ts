@@ -9,11 +9,12 @@ export const useCreateDocument = () => {
 };
 
 const createDocument = async (data: DocumentUploadFormData) => {
-  console.log(data);
-
   const formData = new FormData();
   formData.append('title', data.title);
   formData.append('description', data.description);
+  // English version: always sent, so clearing a field clears it on the server.
+  formData.append('titleEn', data.titleEn ?? '');
+  formData.append('descriptionEn', data.descriptionEn ?? '');
   if (data.file) {
     formData.append('file', data.file as File);
   }

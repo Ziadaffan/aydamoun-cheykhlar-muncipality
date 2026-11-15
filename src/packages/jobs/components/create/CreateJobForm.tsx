@@ -12,6 +12,7 @@ import { useState } from 'react';
 import { useCreateJob } from '@/packages/jobs/hooks/useCreateJob';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useRouter } from 'next/navigation';
+import { EnglishInput, EnglishSection } from '@/packages/admin/common/EnglishFields';
 
 export default function CreateJobForm() {
   const { t } = useTranslation();
@@ -26,6 +27,10 @@ export default function CreateJobForm() {
   } = useForm<CreateJobFormData>({
     defaultValues: {
       title: '',
+      titleEn: '',
+      descriptionEn: '',
+      providerEn: '',
+      locationEn: '',
       description: '',
       provider: '',
       phone: '',
@@ -58,13 +63,13 @@ export default function CreateJobForm() {
 
     createJob(jobData, {
       onSuccess: () => {
-        setMessage({ type: 'success', text: 'تم إنشاء الوظيفة بنجاح' });
+        setMessage({ type: 'success', text: t('jobs.form.messages.createSuccess') });
         setTimeout(() => {
           router.push('/jobs');
         }, 1000);
       },
       onError: () => {
-        setMessage({ type: 'error', text: 'فشل في إنشاء الوظيفة' });
+        setMessage({ type: 'error', text: t('jobs.form.messages.createError') });
       },
       onSettled: () => {
         setIsPending(false);
@@ -77,83 +82,92 @@ export default function CreateJobForm() {
       <FormMessage message={message} onClose={() => setMessage(null)} />
 
       <div className="mb-8">
-        <h3 className="mb-6 border-b pb-2 text-xl font-bold text-gray-800">إنشاء وظيفة جديدة</h3>
+        <h3 className="mb-6 border-b pb-2 text-xl font-bold text-gray-800">{t('jobs.form.createTitle')}</h3>
       </div>
 
       <div className="space-y-6">
         <ControlledInputText
           id="title"
-          label="عنوان الوظيفة"
+          label={t('jobs.form.title')}
           type="text"
           control={control}
           name="title"
           error={errors.title}
-          placeholder="أدخل عنوان الوظيفة"
+          placeholder={t('jobs.form.titlePlaceholder')}
           required
         />
 
         <ControlledTextArea
           id="description"
-          label="الوصف"
+          label={t('jobs.form.description')}
           control={control}
           name="description"
           error={errors.description}
-          placeholder="أدخل وصف الوظيفة"
+          placeholder={t('jobs.form.descriptionPlaceholder')}
           rows={5}
         />
 
         <ControlledInputText
           id="provider"
-          label="اسم المزود"
+          label={t('jobs.form.provider')}
           type="text"
           control={control}
           name="provider"
           error={errors.provider}
-          placeholder="أدخل اسم المزود"
+          placeholder={t('jobs.form.providerPlaceholder')}
           required
         />
 
         <ControlledInputText
           id="phone"
-          label="رقم هاتف المزود"
+          label={t('jobs.form.phone')}
           type="tel"
           control={control}
           name="phone"
           error={errors.phone}
-          placeholder="أدخل رقم هاتف المزود (اختياري)"
+          placeholder={t('jobs.form.phonePlaceholder')}
         />
 
         <ControlledInputText
           id="location"
-          label="الموقع"
+          label={t('jobs.form.location')}
           type="text"
           control={control}
           name="location"
           error={errors.location}
-          placeholder="أدخل موقع الوظيفة"
+          placeholder={t('jobs.form.locationPlaceholder')}
           required
         />
 
         <ControlledInputText
           id="salary"
-          label="الراتب"
+          label={t('jobs.form.salary')}
           type="text"
           control={control}
           name="salary"
           error={errors.salary}
-          placeholder="أدخل الراتب (اختياري)"
+          placeholder={t('jobs.form.salaryPlaceholder')}
         />
 
         <ControlledInputText
           id="deadline"
-          label="آخر موعد للتقديم"
+          label={t('jobs.form.deadline')}
           type="datetime-local"
           control={control}
           name="deadline"
           error={errors.deadline}
         />
 
-        <ControlledCheckbox id="active" label="نشط" control={control} name="active" error={errors.active} />
+        <ControlledCheckbox id="active" label={t('jobs.form.active')} control={control} name="active" error={errors.active} />
+      </div>
+
+      <div className="mt-6">
+        <EnglishSection>
+          <EnglishInput id="titleEn" name="titleEn" control={control} label={t('jobs.form.title')} error={errors.titleEn} />
+          <EnglishInput id="descriptionEn" name="descriptionEn" control={control} label={t('jobs.form.description')} error={errors.descriptionEn} rows={5} />
+          <EnglishInput id="providerEn" name="providerEn" control={control} label={t('jobs.form.provider')} error={errors.providerEn} />
+          <EnglishInput id="locationEn" name="locationEn" control={control} label={t('jobs.form.location')} error={errors.locationEn} />
+        </EnglishSection>
       </div>
 
       <div className="mt-8">

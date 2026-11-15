@@ -1,12 +1,25 @@
 import { BasePrismaService } from '@/packages/common/services/prisma.service';
 import { DocumentRepository } from '../repository/document.repository';
-import { Document } from '@prisma/client';
+import { Document, Prisma } from '@prisma/client';
+import { fieldReaders } from '@/packages/common/utils/request-body.utils';
 import { v2 as cloudinary } from 'cloudinary';
 import { NotFoundError } from '@/packages/common/errors';
 import { documentFileUrl } from '../utils/document.utils';
 
 /** The fields needed to serve a document's file. */
 export type DocumentFile = Pick<Document, 'id' | 'title' | 'type' | 'fileUrl' | 'updatedAt'>;
+
+/**
+ * The optional English fields of a document form: trimmed, '' → null,
+ * absent → undefined. Same limits as the Arabic fields.
+ */
+export function readDocumentEnglish(formData: FormData) {
+  const fields = fieldReaders(Object.fromEntries(formData), 'INVALID_DOCUMENT');
+  return {
+    titleEn: fields.optionalText('titleEn', 100),
+    descriptionEn: fields.optionalText('descriptionEn', 500),
+  };
+}
 
 export class DocumentService extends BasePrismaService<'document'> {
   private static singleton: DocumentService;
@@ -43,7 +56,7 @@ export class DocumentService extends BasePrismaService<'document'> {
     // list without fileUrl, then fileUrl only for the rows that hold a web address.
     const [documents, linked] = await Promise.all([
       this.repository.findMany({
-        select: { id: true, title: true, description: true, type: true, createdAt: true, updatedAt: true },
+        select: { id: true, title: true, description: true, titleEn: true, descriptionEn: true, type: true, createdAt: true, updatedAt: true },
         orderBy: { createdAt: 'desc' },
       }),
       this.repository.findMany({
@@ -71,7 +84,7 @@ export class DocumentService extends BasePrismaService<'document'> {
     return doc;
   }
 
-  public async createDocument(filePath: string, document: Omit<Document, 'id' | 'fileUrl' | 'createdAt' | 'updatedAt'>) {
+  public async createDocument(filePath: string, document: Omit<Prisma.DocumentCreateInput, 'fileUrl'>) {
     const savedDoc = await this.repository.create({
       data: {
         ...document,

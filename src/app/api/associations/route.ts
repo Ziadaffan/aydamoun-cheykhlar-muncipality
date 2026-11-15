@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { requireAdmin } from '@/lib/mobile-auth';
 import { ApiErrorHandler } from '@/packages/common/errors';
 import { returnProperErrorMessage } from '@/packages/common/utils/error.utils';
-import { AssociationsService } from '@/packages/associations/services/associations.service';
+import { AssociationsService, readAssociationEnglish } from '@/packages/associations/services/associations.service';
 
 export const dynamic = 'force-dynamic';
 const associationsService = AssociationsService.instance();
@@ -42,6 +42,7 @@ export async function POST(request: NextRequest) {
       {
         name,
         description,
+        ...readAssociationEnglish(formData),
       },
       imageBase64,
       imageFile.type

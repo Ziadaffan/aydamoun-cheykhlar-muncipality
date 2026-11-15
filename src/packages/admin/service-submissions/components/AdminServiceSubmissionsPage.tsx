@@ -10,6 +10,7 @@ import Button from '@/packages/common/components/Button';
 import { DeleteButton } from '@/packages/common/components/DeleteButton';
 import { EditButton } from '@/packages/common/components/EditButton';
 import { useAuth } from '@/packages/common/hooks/useAuth';
+import { dateLocale } from '@/packages/common/utils/date.utils';
 import { useAdminServiceSubmissions } from '../hooks/useAdminServiceSubmissions';
 import { useAdminDeleteServiceSubmission } from '../hooks/useAdminDeleteServiceSubmission';
 import { useAdminUpdateServiceSubmission } from '../hooks/useAdminUpdateServiceSubmission';
@@ -30,7 +31,7 @@ function matchesSearch(submission: AdminServiceSubmission, query: string): boole
 export default function AdminServiceSubmissionsPage() {
   const { role, isLoading: authLoading } = useAuth();
   const router = useRouter();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const { data: submissions, isLoading, error } = useAdminServiceSubmissions();
   const { mutate: deleteSubmission, isPending: isDeleting } = useAdminDeleteServiceSubmission();
@@ -121,7 +122,7 @@ export default function AdminServiceSubmissionsPage() {
               value={search}
               onChange={e => setSearch(e.target.value)}
               placeholder={t('admin.serviceSubmissions.searchPlaceholder')}
-              className="w-full rounded-md border border-gray-300 px-3 py-2 text-right text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
+              className="w-full rounded-md border border-gray-300 px-3 py-2 text-start text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
               autoComplete="off"
               spellCheck={false}
             />
@@ -142,18 +143,18 @@ export default function AdminServiceSubmissionsPage() {
               <table className="min-w-full divide-y divide-gray-200">
                 <thead className="bg-gray-50">
                   <tr>
-                    <th className="px-6 py-3 text-right text-xs font-medium uppercase tracking-wider text-gray-500">{t('admin.serviceSubmissions.reference')}</th>
-                    <th className="px-6 py-3 text-right text-xs font-medium uppercase tracking-wider text-gray-500">{t('services.form.fields.fullName')}</th>
-                    <th className="px-6 py-3 text-right text-xs font-medium uppercase tracking-wider text-gray-500">{t('profile.submissions.submissionDate')}</th>
-                    <th className="px-6 py-3 text-right text-xs font-medium uppercase tracking-wider text-gray-500">{t('admin.serviceSubmissions.status')}</th>
-                    <th className="px-6 py-3 text-right text-xs font-medium uppercase tracking-wider text-gray-500">{t('admin.serviceSubmissions.serviceName')}</th>
-                    <th className="px-6 py-3 text-right text-xs font-medium uppercase tracking-wider text-gray-500">{t('admin.serviceSubmissions.actions')}</th>
+                    <th className="px-6 py-3 text-start text-xs font-medium uppercase tracking-wider text-gray-500">{t('admin.serviceSubmissions.reference')}</th>
+                    <th className="px-6 py-3 text-start text-xs font-medium uppercase tracking-wider text-gray-500">{t('services.form.fields.fullName')}</th>
+                    <th className="px-6 py-3 text-start text-xs font-medium uppercase tracking-wider text-gray-500">{t('profile.submissions.submissionDate')}</th>
+                    <th className="px-6 py-3 text-start text-xs font-medium uppercase tracking-wider text-gray-500">{t('admin.serviceSubmissions.status')}</th>
+                    <th className="px-6 py-3 text-start text-xs font-medium uppercase tracking-wider text-gray-500">{t('admin.serviceSubmissions.serviceName')}</th>
+                    <th className="px-6 py-3 text-start text-xs font-medium uppercase tracking-wider text-gray-500">{t('admin.serviceSubmissions.actions')}</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200 bg-white">
                   {visibleSubmissions.map((submission: AdminServiceSubmission) => (
                     <tr key={submission.id}>
-                      <td className="whitespace-nowrap px-6 py-4 text-right text-sm text-gray-900">
+                      <td className="whitespace-nowrap px-6 py-4 text-start text-sm text-gray-900">
                         <span dir="ltr" className="font-mono font-semibold">
                           {submissionReference(submission.id)}
                         </span>
@@ -163,7 +164,7 @@ export default function AdminServiceSubmissionsPage() {
                         <div className="text-gray-500">{submission.address}</div>
                       </td>
                       <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-900">
-                        {new Date(submission.createdAt).toLocaleDateString('ar-SA')}
+                        {new Date(submission.createdAt).toLocaleDateString(dateLocale(i18n.language))}
                       </td>
                       <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-900">
                         <div className="flex flex-col gap-2 md:min-w-[240px] md:flex-row md:items-center">
@@ -192,7 +193,7 @@ export default function AdminServiceSubmissionsPage() {
                       </td>
                       <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-900">{submission.service?.name || t('profile.submissions.unknownService')}</td>
                       <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-900">
-                        <div className="flex items-center space-x-2 space-x-reverse">
+                        <div className="flex items-center gap-2">
                           <Button size="sm" variant="secondary" onClick={() => router.push(`/admin/service-submissions/${submission.id}/view`)}>
                             {t('admin.serviceSubmissions.view')}
                           </Button>
@@ -200,7 +201,6 @@ export default function AdminServiceSubmissionsPage() {
                           <DeleteButton
                             onClick={() => handleDelete(submission.id)}
                             isDeleting={isDeleting && deletingId === submission.id}
-                            className="mr-2"
                           />
                         </div>
                       </td>

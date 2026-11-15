@@ -1,5 +1,6 @@
 'use client';
 
+import { useTranslation } from 'react-i18next';
 import { Jobs } from '@prisma/client';
 import JobCard from '@/packages/jobs/components/JobCard';
 import JobsEmptyState from '@/packages/jobs/components/JobsEmptyState';
@@ -13,6 +14,7 @@ import { useRouter } from 'next/navigation';
 import { useAuth } from '@/packages/common/hooks/useAuth';
 
 export default function JobsPage() {
+  const { t } = useTranslation();
   const [jobs, setJobs] = useState<Jobs[]>([]);
   const router = useRouter();
   const { role } = useAuth();
@@ -44,7 +46,7 @@ export default function JobsPage() {
           {role === 'ADMIN' && (
             <div className="mb-8 flex justify-center">
               <Button variant="primary" size="lg" onClick={() => router.push('/jobs/create')}>
-                إنشاء وظيفة جديدة
+                {t('jobs.form.createTitle')}
               </Button>
             </div>
           )}

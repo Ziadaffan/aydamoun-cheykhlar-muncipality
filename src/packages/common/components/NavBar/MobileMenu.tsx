@@ -2,6 +2,7 @@ import { TFunction } from 'i18next';
 import React, { useEffect } from 'react';
 import Image from 'next/image';
 import NavigationItems from './NavigationItems';
+import LanguageSwitcher from './LanguageSwitcher';
 
 type MobileMenuProps = {
   t: TFunction<'translation', undefined>;
@@ -26,10 +27,10 @@ export default function MobileMenu({ t, isMobileMenuOpen, setIsMobileMenuOpen }:
 
   return (
     <>
-      {/* Menu mobile qui slide depuis la droite */}
+      {/* Drawer that slides in from the start side (right in Arabic, left in English) */}
       <div
-        className={`fixed top-0 right-0 z-60 h-full w-80 transform bg-white shadow-xl transition-transform duration-300 ease-in-out hidden max-[1600px]:block ${
-          isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
+        className={`fixed top-0 start-0 z-60 h-full w-80 transform bg-white shadow-xl transition-transform duration-300 ease-in-out hidden max-[1600px]:block ${
+          isMobileMenuOpen ? 'translate-x-0' : 'rtl:translate-x-full ltr:-translate-x-full'
         }`}
       >
         <div className="flex h-full flex-col">
@@ -48,6 +49,9 @@ export default function MobileMenu({ t, isMobileMenuOpen, setIsMobileMenuOpen }:
           {/* Contenu du menu */}
           <div className="flex-1 overflow-y-auto">
             <div className="px-4 py-6">
+              <div className="mb-4 px-4">
+                <LanguageSwitcher isMobile onChange={() => setIsMobileMenuOpen(false)} />
+              </div>
               <NavigationItems t={t} setIsMobileMenuOpen={setIsMobileMenuOpen} isMobile={true} />
             </div>
           </div>

@@ -4,7 +4,7 @@ export default function Spinner({ className }: { className?: string }) {
   return (
     <div className={`flex items-center justify-center ${className}`}>
       <div className="pointer-events-none m-auto flex h-full w-full items-center justify-center select-none">
-        <svg className="pointer-events-none mr-3 size-8 animate-spin" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <svg className="pointer-events-none me-3 size-8 animate-spin" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
           <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
           <path
             className="opacity-75"

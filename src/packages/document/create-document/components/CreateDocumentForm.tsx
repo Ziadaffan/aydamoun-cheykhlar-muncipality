@@ -10,6 +10,7 @@ import { useState } from 'react';
 import { useCreateDocument } from '@/packages/document/create-document/hooks/useCreateDocument';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useRouter } from 'next/navigation';
+import { EnglishInput, EnglishSection } from '@/packages/admin/common/EnglishFields';
 
 export default function CreateDocumentForm() {
   const { t } = useTranslation();
@@ -24,6 +25,8 @@ export default function CreateDocumentForm() {
   } = useForm<DocumentUploadFormData>({
     defaultValues: {
       title: '',
+      titleEn: '',
+      descriptionEn: '',
       description: '',
       file: undefined,
     },
@@ -62,7 +65,7 @@ export default function CreateDocumentForm() {
       <div className="space-y-6">
         <ControlledInputText
           id="title"
-          label={t('documents.form.title')}
+          label={t('documents.form.documentTitle')}
           type="text"
           control={control}
           name="title"
@@ -91,6 +94,13 @@ export default function CreateDocumentForm() {
           accept={t('documents.form.fileAccept')}
           required
         />
+      </div>
+
+      <div className="mt-6">
+        <EnglishSection>
+          <EnglishInput id="titleEn" name="titleEn" control={control} label={t('documents.form.documentTitle')} error={errors.titleEn} />
+          <EnglishInput id="descriptionEn" name="descriptionEn" control={control} label={t('documents.form.description')} error={errors.descriptionEn} rows={4} />
+        </EnglishSection>
       </div>
 
       <div className="mt-8">

@@ -20,6 +20,11 @@ export const createTaxiStopSchema = yup.object({
     .max(150, validationMessages.maxLength('إلى', 150))
     .required(validationMessages.required('إلى')),
 
+  // English version (optional; the Arabic text is shown when it is empty).
+  nameEn: yup.string().trim().max(150, validationMessages.maxLength('الاسم بالإنجليزية', 150)).default(''),
+  fromLocationEn: yup.string().trim().max(150, validationMessages.maxLength('من (بالإنجليزية)', 150)).default(''),
+  toLocationEn: yup.string().trim().max(150, validationMessages.maxLength('إلى (بالإنجليزية)', 150)).default(''),
+
   hour: yup
     .string()
     .min(2, validationMessages.minLength('الساعة', 2))
@@ -28,7 +33,7 @@ export const createTaxiStopSchema = yup.object({
 
   phone: yup
     .string()
-    .matches(/^[0-9+\s-]{7,20}$/, 'يرجى إدخال رقم هاتف صحيح')
+    .matches(/^[0-9+\s-]{7,20}$/, validationMessages.enterValidPhone)
     .required(validationMessages.required('رقم الهاتف')),
 });
 
@@ -53,6 +58,11 @@ export const updateTaxiStopSchema = yup.object({
     .max(150, validationMessages.maxLength('إلى', 150))
     .required(validationMessages.required('إلى')),
 
+  // English version (optional; the Arabic text is shown when it is empty).
+  nameEn: yup.string().trim().max(150, validationMessages.maxLength('الاسم بالإنجليزية', 150)).default(''),
+  fromLocationEn: yup.string().trim().max(150, validationMessages.maxLength('من (بالإنجليزية)', 150)).default(''),
+  toLocationEn: yup.string().trim().max(150, validationMessages.maxLength('إلى (بالإنجليزية)', 150)).default(''),
+
   hour: yup
     .string()
     .min(2, validationMessages.minLength('الساعة', 2))
@@ -61,7 +71,7 @@ export const updateTaxiStopSchema = yup.object({
 
   phone: yup
     .string()
-    .matches(/^[0-9+\s-]{7,20}$/, 'يرجى إدخال رقم هاتف صحيح')
+    .matches(/^[0-9+\s-]{7,20}$/, validationMessages.enterValidPhone)
     .required(validationMessages.required('رقم الهاتف')),
 });
 

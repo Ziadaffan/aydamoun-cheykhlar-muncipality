@@ -1,8 +1,10 @@
 import { BasePrismaService } from '@/packages/common/services/prisma.service';
-import { Prisma, ServiceStatus, ServiceSubmission } from '@prisma/client';
+import { Prisma, Service, ServiceStatus, ServiceSubmission } from '@prisma/client';
 import { ServiceSubmissionRepository } from '../repository/serviceSubmission.repository';
 import { ConflictError, NotFoundError } from '@/packages/common/errors';
-import { SubmissionInput } from '../validation/submission.validation';
+import { assertAdditionalInfoMatchesFields, SubmissionInput } from '../validation/submission.validation';
+import { resolveServiceFields } from '@/packages/services/utils/serviceFields';
+import prisma from '@/packages/lib/db';
 
 // Never send the password hash along with a submission's user.
 const SAFE_USER_SELECT = { id: true, name: true, email: true, phone: true, role: true, createdAt: true } as const;
@@ -92,7 +94,10 @@ export class ServiceSubmissionService extends BasePrismaService<'serviceSubmissi
 
   /** The owner's edit; `data` comes from parseSubmissionUpdate. */
   public async updateServiceSubmission(id: string, userId: string, data: Partial<SubmissionInput>): Promise<ServiceSubmission> {
-    await this.findPendingOwnSubmission(id, userId);
+    const submission = await this.findPendingOwnSubmission(id, userId);
+    if (data.additionalInfo) {
+      assertAdditionalInfoMatchesFields(data.additionalInfo, await this.fieldsOfService(submission.serviceId));
+    }
 
     return this.repository.update({ where: { id }, data });
   }
@@ -131,12 +136,18 @@ export class ServiceSubmissionService extends BasePrismaService<'serviceSubmissi
     return serviceSubmission;
   }
 
-  /** `data` is the body's status plus fields from parseSubmissionUpdate. */
+  /**
+   * `data` is the body's status plus fields from parseSubmissionUpdate. Returns the
+   * updated request (with its service) and the status it had before, so the caller
+   * can tell the resident when it changed.
+   */
   public async updateServiceSubmissionAsAdmin(
     id: string,
     data: Partial<SubmissionInput> & { status?: unknown }
-  ): Promise<ServiceSubmission> {
-    const existingSubmission = await this.repository.findUnique({ where: { id } });
+  ): Promise<{ submission: ServiceSubmission & { service: Service }; previousStatus: ServiceStatus }> {
+    const existingSubmission = (await this.repository.findUnique({ where: { id }, include: { service: true } })) as
+      | (ServiceSubmission & { service: Service })
+      | null;
 
     if (!existingSubmission) {
       throw new NotFoundError('Service Submission not found');
@@ -145,14 +156,25 @@ export class ServiceSubmissionService extends BasePrismaService<'serviceSubmissi
     const { status, ...fields } = data;
     const updateData: Prisma.ServiceSubmissionUpdateInput = { ...fields };
 
+    if (fields.additionalInfo) {
+      assertAdditionalInfoMatchesFields(fields.additionalInfo, resolveServiceFields(existingSubmission.service), { requireAll: false });
+    }
+
     if (typeof status === 'string' && Object.values(ServiceStatus).includes(status as ServiceStatus)) {
       updateData.status = status as ServiceStatus;
     }
 
-    return this.repository.update({
+    const submission = (await this.repository.update({
       where: { id },
       data: updateData,
-    });
+      include: { service: true },
+    })) as ServiceSubmission & { service: Service };
+
+    return { submission, previousStatus: existingSubmission.status };
+  }
+
+  private async fieldsOfService(serviceId: string) {
+    return resolveServiceFields(await prisma.service.findUnique({ where: { id: serviceId } }));
   }
 
   public async deleteServiceSubmissionAsAdmin(id: string): Promise<void> {

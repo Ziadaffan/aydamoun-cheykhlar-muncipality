@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { requireAdmin } from '@/lib/mobile-auth';
 import { returnProperErrorMessage } from '@/packages/common/utils/error.utils';
-import { AssociationsService } from '@/packages/associations/services/associations.service';
+import { AssociationsService, readAssociationEnglish } from '@/packages/associations/services/associations.service';
 
 const associationsService = AssociationsService.instance();
 
@@ -68,6 +68,7 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
       {
         name,
         description,
+        ...readAssociationEnglish(formData),
       },
       imageBase64,
       imageMimeType

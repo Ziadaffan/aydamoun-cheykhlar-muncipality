@@ -10,7 +10,7 @@ export default function EditJobButton({ isSubmitting }: EditJobButtonProps) {
 
   return (
     <Button type="submit" variant="primary" size="lg" loading={isSubmitting} disabled={isSubmitting} className="w-full">
-      {isSubmitting ? 'جاري التحديث...' : 'تحديث الوظيفة'}
+      {isSubmitting ? t('jobs.form.updating') : t('jobs.form.update')}
     </Button>
   );
 }

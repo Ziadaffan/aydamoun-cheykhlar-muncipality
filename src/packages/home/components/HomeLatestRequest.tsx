@@ -2,12 +2,15 @@
 
 import { TFunction } from 'i18next';
 import Link from 'next/link';
+import { useTranslation } from 'react-i18next';
 import { ChevronLeft, ClipboardList } from 'lucide-react';
 import { ServiceSubmission } from '@prisma/client';
 import { useGetUserSubmissions } from '@/packages/serviceSubmissions/hooks/useGetUserSubmissions';
+import { useLocalized } from '@/lib/localized';
+import { dateLocale } from '@/packages/common/utils/date.utils';
 import HomeSectionHeader from './HomeSectionHeader';
 
-type Submission = ServiceSubmission & { service?: { name: string } };
+type Submission = ServiceSubmission & { service?: { name: string; nameEn?: string | null } };
 
 type HomeLatestRequestProps = {
   t: TFunction<'translation', undefined>;
@@ -24,6 +27,8 @@ const STATUS: Record<string, { key: string; className: string }> = {
 /** The signed-in resident's request whose status changed last, like the app's home screen. Mount only when signed in. */
 export default function HomeLatestRequest({ t }: HomeLatestRequestProps) {
   const { data } = useGetUserSubmissions();
+  const loc = useLocalized();
+  const { i18n } = useTranslation();
   const submissions = (data ?? []) as Submission[];
   if (!submissions.length) return null;
 
@@ -47,18 +52,18 @@ export default function HomeLatestRequest({ t }: HomeLatestRequestProps) {
           <div className="min-w-0 flex-1">
             <p className="text-sm text-gray-500">{t('home.requests.latest')}</p>
             <h3 className="line-clamp-2 font-bold text-gray-900">
-              {latest.service?.name || t('profile.submissions.unknownService')}
+              {latest.service ? loc(latest.service.name, latest.service.nameEn) : t('profile.submissions.unknownService')}
             </h3>
             <div className="mt-2 flex flex-wrap items-center gap-2">
               <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${status.className}`}>
                 {t(status.key)}
               </span>
               <span className="text-sm text-gray-500">
-                {t('home.requests.updatedOn', { date: new Date(latest.updatedAt).toLocaleDateString('ar-LB') })}
+                {t('home.requests.updatedOn', { date: new Date(latest.updatedAt).toLocaleDateString(dateLocale(i18n.language)) })}
               </span>
             </div>
           </div>
-          <ChevronLeft className="h-5 w-5 flex-shrink-0 text-gray-400" aria-hidden />
+          <ChevronLeft className="h-5 w-5 flex-shrink-0 text-gray-400 ltr:rotate-180" aria-hidden />
         </Link>
       </div>
     </section>

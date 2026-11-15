@@ -1,4 +1,17 @@
-import { Association } from '@prisma/client';
+import { Association, Prisma } from '@prisma/client';
+import { fieldReaders } from '@/packages/common/utils/request-body.utils';
+
+/**
+ * The optional English fields of an association form: trimmed, '' → null (clears it),
+ * absent → undefined (an update leaves the stored value alone).
+ */
+export function readAssociationEnglish(formData: FormData) {
+  const fields = fieldReaders(Object.fromEntries(formData), 'INVALID_ASSOCIATION');
+  return {
+    nameEn: fields.optionalText('nameEn', 150),
+    descriptionEn: fields.optionalText('descriptionEn', 5000),
+  };
+}
 import { BasePrismaService } from '@/packages/common/services/prisma.service';
 import { AssociationsRepository } from '../repository/associations.repository';
 import { v2 as cloudinary } from 'cloudinary';
@@ -46,7 +59,7 @@ export class AssociationsService extends BasePrismaService<'association'> {
   }
 
   public async create(
-    associationData: Omit<Association, 'id' | 'createdAt' | 'updatedAt' | 'picaURL'>,
+    associationData: Omit<Prisma.AssociationCreateInput, 'picaURL'>,
     imageBase64: string,
     imageMimeType: string
   ): Promise<Association> {
@@ -62,7 +75,7 @@ export class AssociationsService extends BasePrismaService<'association'> {
 
   public async updateAssociation(
     id: string,
-    associationData: Omit<Association, 'id' | 'createdAt' | 'updatedAt' | 'picaURL'>,
+    associationData: Omit<Prisma.AssociationUpdateInput, 'picaURL'>,
     imageBase64?: string,
     imageMimeType?: string
   ): Promise<Association> {

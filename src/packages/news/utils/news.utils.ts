@@ -1,5 +1,8 @@
 import { formatDistanceToNow } from 'date-fns';
-import { ar } from 'date-fns/locale';
+import { ar, enUS } from 'date-fns/locale';
+import { useTranslation } from 'react-i18next';
+import { siteLanguage } from '@/lib/localized';
+import { NewsCategory } from '../types/news.types';
 
 export const categoryColors = {
   MUNICIPAL_NEWS: 'bg-blue-100 text-blue-800 border-blue-200',
@@ -27,13 +30,41 @@ export const categoryLabels = {
   ALL: 'جميع الأخبار',
 };
 
-export const formatDate = (date: Date) => {
+// i18n keys of the category names (news.categories.* in public/language/*.json).
+const categoryKeys: Record<NewsCategory | 'ALL', string> = {
+  MUNICIPAL_NEWS: 'news.categories.municipalNews',
+  DEVELOPMENT_PROJECTS: 'news.categories.developmentProjects',
+  ANNOUNCEMENTS: 'news.categories.announcements',
+  COMMUNITY_EVENTS: 'news.categories.communityEvents',
+  INFRASTRUCTURE: 'news.categories.infrastructure',
+  ENVIRONMENTAL: 'news.categories.environmental',
+  SOCIAL_SERVICES: 'news.categories.socialServices',
+  HEALTH_AND_SOCIAL_SERVICES: 'news.categories.healthAndSocialServices',
+  OTHER: 'news.categories.other',
+  ALL: 'news.page.allNews',
+};
+
+/** The category's name in the visitor's language. */
+export function useNewsCategoryLabel() {
+  const { t } = useTranslation();
+  return (category: NewsCategory | 'ALL') => t(categoryKeys[category], { defaultValue: categoryLabels[category] });
+}
+
+/** "3 days ago", in the site's language (Arabic unless the visitor chose English). */
+export const formatDate = (date: Date, language?: string) => {
+  const en = siteLanguage(language) === 'en';
   try {
     return formatDistanceToNow(new Date(date), {
       addSuffix: true,
-      locale: ar,
+      locale: en ? enUS : ar,
     });
   } catch {
-    return 'منذ فترة';
+    return en ? 'a while ago' : 'منذ فترة';
   }
 };
+
+/** formatDate bound to the active site language. */
+export function useRelativeDate() {
+  const { i18n } = useTranslation();
+  return (date: Date) => formatDate(date, i18n.language);
+}

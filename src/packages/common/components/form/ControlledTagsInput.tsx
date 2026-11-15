@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { Control, Controller, FieldError } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 
 interface ControlledTagsInputProps {
   id: string;
@@ -26,6 +27,7 @@ export default function ControlledTagsInput({
   disabled = false,
   required = false,
 }: ControlledTagsInputProps) {
+  const { t } = useTranslation();
   const [inputValue, setInputValue] = useState('');
 
   const handleKeyDown = (e: React.KeyboardEvent, tags: string[], onChange: (tags: string[]) => void) => {
@@ -54,9 +56,9 @@ export default function ControlledTagsInput({
 
   return (
     <div className="mb-5">
-      <label className="mb-1 block text-right text-sm font-medium text-gray-700 md:text-base" htmlFor={id}>
+      <label className="mb-1 block text-start text-sm font-medium text-gray-700 md:text-base" htmlFor={id}>
         {label}
-        {required && <span className="mr-1 text-red-500">*</span>}
+        {required && <span className="ms-1 text-red-500">*</span>}
       </label>
       <Controller
         name={name}
@@ -90,7 +92,7 @@ export default function ControlledTagsInput({
                 }}
                 placeholder={value.length === 0 ? placeholder : ''}
                 disabled={disabled}
-                className={`min-w-[120px] flex-1 text-right text-sm outline-none md:text-base ${disabled ? 'cursor-not-allowed bg-gray-100' : ''}`}
+                className={`min-w-[120px] flex-1 text-start text-sm outline-none md:text-base ${disabled ? 'cursor-not-allowed bg-gray-100' : ''}`}
               />
               {/* Bouton d'ajout pour mobile */}
               {inputValue.trim() && (
@@ -100,15 +102,15 @@ export default function ControlledTagsInput({
                   disabled={disabled || value.length >= 10}
                   className="rounded-md bg-blue-500 px-3 py-1 text-sm text-white hover:bg-blue-600 focus:ring-2 focus:ring-blue-200 focus:outline-none disabled:cursor-not-allowed disabled:bg-gray-300"
                 >
-                  إضافة
+                  {t('common.tags.add')}
                 </button>
               )}
             </div>
-            <div className="text-right text-xs text-gray-500">
-              <span className="block sm:inline">{value.length}/10 علامات</span>
+            <div className="text-start text-xs text-gray-500">
+              <span className="block sm:inline">{t('common.tags.count', { count: value.length, max: 10 })}</span>
               <span className="hidden sm:inline"> - </span>
-              <span className="block sm:inline">اضغط Enter أو , لإضافة علامة</span>
-              <span className="block sm:hidden">أو اضغط على زر &quot;إضافة&quot;</span>
+              <span className="block sm:inline">{t('common.tags.hint')}</span>
+              <span className="block sm:hidden">{t('common.tags.hintMobile')}</span>
             </div>
           </div>
         )}

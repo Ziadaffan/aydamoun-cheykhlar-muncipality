@@ -21,7 +21,7 @@ export default function HomeSectionHeader({ title, action }: HomeSectionHeaderPr
           className="flex items-center gap-1 font-bold text-blue-600 transition-colors hover:text-blue-800"
         >
           {action.label}
-          <ChevronLeft className="h-4 w-4" aria-hidden />
+          <ChevronLeft className="h-4 w-4 ltr:rotate-180" aria-hidden />
         </Link>
       )}
     </div>

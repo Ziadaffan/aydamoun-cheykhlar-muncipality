@@ -1,4 +1,7 @@
+'use client';
+
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 interface EditButtonProps {
   onClick: () => void;
@@ -6,9 +9,10 @@ interface EditButtonProps {
   className?: string;
 }
 
-export const EditButton: React.FC<EditButtonProps> = ({ onClick, title = 'تعديل', className = '' }) => {
+export const EditButton: React.FC<EditButtonProps> = ({ onClick, title, className = '' }) => {
+  const { t } = useTranslation();
   return (
-    <button onClick={onClick} className={`rounded-md bg-blue-100 p-2 text-blue-600 transition-colors hover:bg-blue-200 ${className}`} title={title}>
+    <button onClick={onClick} className={`rounded-md bg-blue-100 p-2 text-blue-600 transition-colors hover:bg-blue-200 ${className}`} title={title ?? t('common.edit')}>
       <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path
           strokeLinecap="round"

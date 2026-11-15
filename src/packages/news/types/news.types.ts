@@ -10,6 +10,10 @@ export interface News {
   title: string;
   content: string;
   excerpt: string;
+  /** English versions (null when unset; the Arabic text is shown instead). */
+  titleEn?: string | null;
+  contentEn?: string | null;
+  excerptEn?: string | null;
   imageUrl: string[]; // base64 string
   category: NewsCategory;
   author: string;

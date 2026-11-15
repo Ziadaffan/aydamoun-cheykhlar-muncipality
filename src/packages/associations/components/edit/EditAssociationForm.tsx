@@ -1,5 +1,6 @@
 'use client';
 
+import { useTranslation } from 'react-i18next';
 import { useEffect, useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import { useForm } from 'react-hook-form';
@@ -14,8 +15,10 @@ import { updateAssociationSchema, UpdateAssociationFormData } from '@/packages/a
 import useGetAssociationById from '@/packages/associations/hooks/useGetAssociationById';
 import { useUpdateAssociation } from '@/packages/associations/hooks/useUpdateAssociation';
 import EditAssociationButton from './EditAssociationButton';
+import { EnglishInput, EnglishSection } from '@/packages/admin/common/EnglishFields';
 
 export default function EditAssociationForm() {
+  const { t } = useTranslation();
   const [isPending, setIsPending] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
   const router = useRouter();
@@ -33,6 +36,8 @@ export default function EditAssociationForm() {
   } = useForm<UpdateAssociationFormData>({
     defaultValues: {
       name: '',
+      nameEn: '',
+      descriptionEn: '',
       description: '',
       image: null,
     },
@@ -43,6 +48,8 @@ export default function EditAssociationForm() {
     if (data) {
       reset({
         name: data.name || '',
+        nameEn: data.nameEn ?? '',
+        descriptionEn: data.descriptionEn ?? '',
         description: data.description || '',
         image: null,
       });
@@ -60,13 +67,13 @@ export default function EditAssociationForm() {
       },
       {
         onSuccess: () => {
-          setMessage({ type: 'success', text: 'تم تحديث المؤسسة بنجاح' });
+          setMessage({ type: 'success', text: t('associations.form.messages.updateSuccess') });
           setTimeout(() => {
             router.push('/associations');
           }, 1000);
         },
         onError: () => {
-          setMessage({ type: 'error', text: 'فشل في تحديث المؤسسة' });
+          setMessage({ type: 'error', text: t('associations.form.messages.updateError') });
         },
         onSettled: () => {
           setIsPending(false);
@@ -90,34 +97,41 @@ export default function EditAssociationForm() {
       <div className="space-y-6">
         <ControlledInputText
           id="name"
-          label="اسم المؤسسة"
+          label={t('associations.form.name')}
           type="text"
           control={control}
           name="name"
           error={errors.name}
-          placeholder="أدخل اسم المؤسسة"
+          placeholder={t('associations.form.namePlaceholder')}
           required
         />
 
         <ControlledTextArea
           id="description"
-          label="الوصف"
+          label={t('associations.form.description')}
           control={control}
           name="description"
           error={errors.description}
-          placeholder="أدخل وصف المؤسسة"
+          placeholder={t('associations.form.descriptionPlaceholder')}
           rows={6}
           required
         />
 
         <ControlledFileInput
           id="image"
-          label="صورة جديدة (اختياري)"
+          label={t('associations.form.newImage')}
           control={control}
           name="image"
           error={errors.image}
           accept="image/jpeg,image/png,image/gif,image/webp"
         />
+      </div>
+
+      <div className="mt-6">
+        <EnglishSection>
+          <EnglishInput id="nameEn" name="nameEn" control={control} label={t('associations.form.name')} error={errors.nameEn} />
+          <EnglishInput id="descriptionEn" name="descriptionEn" control={control} label={t('associations.form.description')} error={errors.descriptionEn} rows={6} />
+        </EnglishSection>
       </div>
 
       <div className="mt-8">

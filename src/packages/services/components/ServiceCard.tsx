@@ -1,11 +1,16 @@
+'use client';
+
 import { useRouter } from 'next/navigation';
 import React from 'react';
 import { TFunction } from 'i18next';
+import { useLocalized } from '@/lib/localized';
 
 type Service = {
   id: string;
   name: string;
   description: string;
+  nameEn?: string | null;
+  descriptionEn?: string | null;
 };
 
 type ServiceCardProps = {
@@ -17,6 +22,7 @@ type ServiceCardProps = {
 
 export default function ServiceCard({ service, bgColor, num, t }: ServiceCardProps) {
   const router = useRouter();
+  const loc = useLocalized();
   return (
     <div className="relative h-70 w-100">
       <div className={`absolute -inset-4 rounded-2xl bg-gradient-to-r ${bgColor} opacity-10 blur-sm`}></div>
@@ -25,8 +31,8 @@ export default function ServiceCard({ service, bgColor, num, t }: ServiceCardPro
           <div className="text-2xl font-bold text-gray-600">#{num}</div>
           <div className="text-3xl">📋</div>
         </div>
-        <h3 className="mb-3 text-xl font-bold text-gray-800">{service.name}</h3>
-        <p className="flex-1 leading-relaxed text-gray-700">{service.description}</p>
+        <h3 className="mb-3 text-xl font-bold text-gray-800">{loc(service.name, service.nameEn)}</h3>
+        <p className="flex-1 leading-relaxed text-gray-700">{loc(service.description, service.descriptionEn)}</p>
 
         {/* Action Button */}
         <div className="mt-6">

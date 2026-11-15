@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { requireAdmin } from '@/lib/mobile-auth';
 import { returnProperErrorMessage } from '@/packages/common/utils/error.utils';
-import { TaxiStopsService } from '@/packages/taxiStops/services/taxiStops.service';
+import { TaxiStopsService, readTaxiStopEnglish } from '@/packages/taxiStops/services/taxiStops.service';
 
 const taxiStopsService = TaxiStopsService.instance();
 
@@ -58,6 +58,7 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
       toLocation,
       hour,
       phone,
+      ...readTaxiStopEnglish(formData),
     });
 
     if (!result) {

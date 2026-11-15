@@ -20,6 +20,10 @@ const createTaxiStop = async (data: CreateTaxiStopFormData) => {
   formData.append('toLocation', data.toLocation);
   formData.append('hour', data.hour);
   formData.append('phone', data.phone);
+  // English version: always sent, so clearing a field clears it on the server.
+  formData.append('nameEn', data.nameEn ?? '');
+  formData.append('fromLocationEn', data.fromLocationEn ?? '');
+  formData.append('toLocationEn', data.toLocationEn ?? '');
 
   const response = await fetch('/api/taxi-stops', {
     method: 'POST',

@@ -1,5 +1,6 @@
 import { TFunction } from 'i18next';
 import React from 'react';
+import HistoryTimeline from '@/packages/history/components/HistoryTimeline';
 
 type AboutUsMunicipalityInfoSectionProps = {
   t: TFunction;
@@ -25,6 +26,9 @@ export default function AboutUsMunicipalityInfoSection({ t }: AboutUsMunicipalit
                 </div>
               </div>
             </div>
+
+            {/* Village history timeline (managed from /admin/history) */}
+            <HistoryTimeline t={t} />
 
             {/* Message and Vision Cards */}
             <div className="grid gap-8 md:grid-cols-2">

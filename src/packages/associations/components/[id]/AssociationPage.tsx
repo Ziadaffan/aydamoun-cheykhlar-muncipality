@@ -6,23 +6,24 @@ import Spinner from '@/packages/common/components/Spinner';
 import ErrorMessage from '@/packages/common/components/ErrorMessage';
 import { BackButton } from '@/packages/common/components/BackButton';
 import useGetAssociationById from '@/packages/associations/hooks/useGetAssociationById';
-import { formatDate } from '@/packages/common/utils/date.utils';
 import { useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useLocalized } from '@/lib/localized';
+import { formatDate } from '@/packages/common/utils/date.utils';
 
 export default function AssociationPage() {
   const params = useParams();
   const id = params?.id as string;
   const [isExpanded, setIsExpanded] = useState(false);
+  const { t, i18n } = useTranslation();
+  const loc = useLocalized();
+  const formatAssociationDate = (date: Date | string) => formatDate(date, i18n.language);
 
   const { data: association, isLoading, error } = useGetAssociationById(id);
 
-  const shouldCollapseDescription = useMemo(() => {
-    if (!association?.description) {
-      return false;
-    }
+  const description = association ? loc(association.description, association.descriptionEn) : '';
 
-    return association.description.length > 700;
-  }, [association?.description]);
+  const shouldCollapseDescription = useMemo(() => description.length > 700, [description]);
 
   if (isLoading) {
     return <Spinner className="min-h-screen" />;
@@ -41,11 +42,11 @@ export default function AssociationPage() {
 
         <div className="mx-auto max-w-5xl overflow-hidden rounded-2xl bg-white shadow-lg">
           <div className="relative h-64 w-full bg-gray-100 sm:h-80 lg:h-[430px]">
-            <CldImage src={association.picaURL} alt={association.name} fill className="object-cover" />
+            <CldImage src={association.picaURL} alt={loc(association.name, association.nameEn)} fill className="object-cover" />
           </div>
 
           <div className="p-6 md:p-8">
-            <h1 className="mb-4 text-3xl font-bold text-gray-900 md:text-4xl">{association.name}</h1>
+            <h1 className="mb-4 text-3xl font-bold text-gray-900 md:text-4xl">{loc(association.name, association.nameEn)}</h1>
 
             <div className="mb-6 flex items-center gap-3 text-sm text-gray-600">
               <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -56,7 +57,7 @@ export default function AssociationPage() {
                   d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
                 />
               </svg>
-              <span>تم النشر: {formatDate(association.createdAt)}</span>
+              <span>{t('associations.publishedAt', { date: formatAssociationDate(association.createdAt) })}</span>
             </div>
 
             <div className="rounded-xl bg-gray-50 p-5">
@@ -66,11 +67,11 @@ export default function AssociationPage() {
                     shouldCollapseDescription && !isExpanded ? 'line-clamp-8' : ''
                   }`}
                 >
-                  {association.description}
+                  {description}
                 </p>
 
                 {shouldCollapseDescription && !isExpanded && (
-                  <div className="pointer-events-none absolute right-0 bottom-0 left-0 h-14 bg-gradient-to-t from-gray-50 to-transparent"></div>
+                  <div className="pointer-events-none absolute inset-x-0 bottom-0 h-14 bg-gradient-to-t from-gray-50 to-transparent"></div>
                 )}
               </div>
 
@@ -80,7 +81,7 @@ export default function AssociationPage() {
                   className="mt-3 cursor-pointer text-sm font-semibold text-blue-700 transition-colors hover:text-blue-800"
                   onClick={() => setIsExpanded(prev => !prev)}
                 >
-                  {isExpanded ? 'عرض أقل' : 'عرض المزيد'}
+                  {isExpanded ? t('associations.showLess') : t('associations.showMore')}
                 </button>
               )}
             </div>

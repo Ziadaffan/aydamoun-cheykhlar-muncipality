@@ -17,6 +17,9 @@ const createAssociation = async (data: CreateAssociationFormData) => {
 
   formData.append('name', data.name);
   formData.append('description', data.description);
+  // English version: always sent, so clearing a field clears it on the server.
+  formData.append('nameEn', data.nameEn ?? '');
+  formData.append('descriptionEn', data.descriptionEn ?? '');
   if (data.image) {
     formData.append('image', data.image);
   }

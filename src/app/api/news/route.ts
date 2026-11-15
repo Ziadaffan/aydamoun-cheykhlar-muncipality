@@ -1,10 +1,11 @@
 import { NextRequest, NextResponse, after } from 'next/server';
 import { requireAdmin } from '@/lib/mobile-auth';
 import { returnProperErrorMessage } from '@/packages/common/utils/error.utils';
-import { NewsService, isSummaryRequest, parseNewsCategory } from '@/packages/news/service/news.service';
+import { NewsService, isSummaryRequest, parseNewsCategory, readNewsEnglish } from '@/packages/news/service/news.service';
 import { readImageFiles } from '@/packages/news/service/newsImage.service';
 import { NewsCategory } from '@/packages/news/types/news.types';
 import { PushNotificationsService } from '@/packages/notifications/services/pushNotifications.service';
+import { newsPush } from '@/packages/notifications/services/pushMessages';
 
 const newsService = NewsService.instance();
 const pushNotificationsService = PushNotificationsService.instance();
@@ -45,14 +46,13 @@ export async function POST(request: NextRequest) {
       author,
       tags,
       featured,
+      ...readNewsEnglish(formData),
     };
 
     const news = await newsService.create(newsData, readImageFiles(formData));
 
     // Sent after the response, so the admin isn't kept waiting.
-    after(() =>
-      pushNotificationsService.broadcast({ title: 'خبر جديد', body: news.title, path: `/news/${news.id}` })
-    );
+    after(() => pushNotificationsService.broadcast('news', newsPush(news)));
 
     return NextResponse.json(news, { status: 201 });
   } catch (error) {

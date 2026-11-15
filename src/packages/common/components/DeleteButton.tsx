@@ -1,4 +1,7 @@
+'use client';
+
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 interface DeleteButtonProps {
   onClick: () => void;
@@ -8,7 +11,8 @@ interface DeleteButtonProps {
 }
 
 export const DeleteButton: React.FC<DeleteButtonProps> = ({ onClick, isDeleting = false, title, className = '' }) => {
-  const defaultTitle = isDeleting ? 'جاري الحذف...' : 'حذف';
+  const { t } = useTranslation();
+  const defaultTitle = isDeleting ? t('common.deleting') : t('common.delete');
 
   return (
     <button

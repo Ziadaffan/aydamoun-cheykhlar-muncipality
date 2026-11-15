@@ -18,3 +18,28 @@ export function getServiceCategoryMeta(type: ServiceType) {
       return { icon: '❓', bgColor: 'from-gray-400 to-gray-600', categoryKey: 'other' };
   }
 }
+
+/** Each service type's name in Arabic and English (the same text as services.<categoryKey>.title). */
+export const SERVICE_TYPE_LABELS: Record<ServiceType, { ar: string; en: string }> = {
+  LICENSEES_AND_CONSTRUCTION_SERVICES: { ar: 'خدمات الرخص والإنشاءات', en: 'Licenses and construction' },
+  ENVIRONMENTAL_SERVICES: { ar: 'خدمات النظافة والبيئة', en: 'Cleaning and environment' },
+  ADMINISTRATIVE_SERVICES: { ar: 'المعاملات الإدارية', en: 'Administrative transactions' },
+  DOWNLOAD_OFFICIAL_FORMS_SERVICES: { ar: 'تحميل النماذج الرسمية', en: 'Official forms' },
+  COMPLAINTS_AND_SUGGESTIONS_SERVICES: { ar: 'الشكاوى والاقتراحات', en: 'Complaints and suggestions' },
+  OTHER: { ar: 'خدمات إضافية', en: 'Additional services' },
+};
+
+type SearchableService = { name: string; nameEn?: string | null; description: string; descriptionEn?: string | null; type: ServiceType };
+
+/**
+ * Whether a service matches a search: its name or description in Arabic or English,
+ * or its type's name in either language. Case-insensitive; an empty query matches all.
+ */
+export function serviceMatchesSearch(service: SearchableService, query: string): boolean {
+  const needle = query.trim().toLocaleLowerCase();
+  if (!needle) return true;
+  const typeLabel = SERVICE_TYPE_LABELS[service.type];
+  return [service.name, service.nameEn, service.description, service.descriptionEn, typeLabel?.ar, typeLabel?.en].some(
+    text => !!text && text.toLocaleLowerCase().includes(needle)
+  );
+}

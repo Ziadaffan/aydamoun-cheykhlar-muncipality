@@ -5,7 +5,7 @@ export default function ServiceNotFound() {
   const { t } = useTranslation();
 
   return (
-    <div className="flex min-h-screen items-start justify-center p-4 pt-32" dir="rtl">
+    <div className="flex min-h-screen items-start justify-center p-4 pt-32">
       <div className="rounded-lg border border-red-200 bg-red-50 p-8 text-center shadow-lg">
         <div className="mb-4">
           <svg className="mx-auto h-12 w-12 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">

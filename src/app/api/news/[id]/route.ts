@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { requireAdmin } from '@/lib/mobile-auth';
 import { returnProperErrorMessage } from '@/packages/common/utils/error.utils';
-import { NewsService } from '@/packages/news/service/news.service';
+import { NewsService, readNewsEnglish } from '@/packages/news/service/news.service';
 import { readImageFiles } from '@/packages/news/service/newsImage.service';
 import { NewsCategory } from '@/packages/news/types/news.types';
 
@@ -65,6 +65,7 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
       author,
       tags,
       featured,
+      ...readNewsEnglish(formData),
     };
 
     const result = await newsService.updateNews(id, newsData, readImageFiles(formData));

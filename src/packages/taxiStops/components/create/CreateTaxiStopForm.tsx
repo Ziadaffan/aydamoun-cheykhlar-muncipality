@@ -1,5 +1,6 @@
 'use client';
 
+import { useTranslation } from 'react-i18next';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
@@ -9,8 +10,10 @@ import FormMessage from '@/packages/common/components/form/InfoMessage';
 import { createTaxiStopSchema, CreateTaxiStopFormData } from '@/packages/taxiStops/validation/taxiStops.validation';
 import { useCreateTaxiStop } from '@/packages/taxiStops/hooks/useCreateTaxiStop';
 import CreateTaxiStopButton from './CreateTaxiStopButton';
+import { EnglishInput, EnglishSection } from '@/packages/admin/common/EnglishFields';
 
 export default function CreateTaxiStopForm() {
+  const { t } = useTranslation();
   const [isPending, setIsPending] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
   const router = useRouter();
@@ -22,6 +25,9 @@ export default function CreateTaxiStopForm() {
   } = useForm<CreateTaxiStopFormData>({
     defaultValues: {
       name: '',
+      nameEn: '',
+      fromLocationEn: '',
+      toLocationEn: '',
       fromLocation: '',
       toLocation: '',
       hour: '',
@@ -38,13 +44,13 @@ export default function CreateTaxiStopForm() {
 
     createTaxiStop(data, {
       onSuccess: () => {
-        setMessage({ type: 'success', text: 'تم إنشاء موقف التاكسي بنجاح' });
+        setMessage({ type: 'success', text: t('taxiStops.form.messages.createSuccess') });
         setTimeout(() => {
           router.push('/taxi-stops');
         }, 1000);
       },
       onError: () => {
-        setMessage({ type: 'error', text: 'فشل في إنشاء موقف التاكسي' });
+        setMessage({ type: 'error', text: t('taxiStops.form.messages.createError') });
       },
       onSettled: () => {
         setIsPending(false);
@@ -59,58 +65,66 @@ export default function CreateTaxiStopForm() {
       <div className="space-y-6">
         <ControlledInputText
           id="name"
-          label="الاسم"
+          label={t('taxiStops.form.name')}
           type="text"
           control={control}
           name="name"
           error={errors.name}
-          placeholder="أدخل اسم موقف التاكسي"
+          placeholder={t('taxiStops.form.namePlaceholder')}
           required
         />
 
         <ControlledInputText
           id="fromLocation"
-          label="من"
+          label={t('taxiStops.form.fromLocation')}
           type="text"
           control={control}
           name="fromLocation"
           error={errors.fromLocation}
-          placeholder="نقطة الانطلاق"
+          placeholder={t('taxiStops.form.fromLocationPlaceholder')}
           required
         />
 
         <ControlledInputText
           id="toLocation"
-          label="إلى"
+          label={t('taxiStops.form.toLocation')}
           type="text"
           control={control}
           name="toLocation"
           error={errors.toLocation}
-          placeholder="الوجهة"
+          placeholder={t('taxiStops.form.toLocationPlaceholder')}
           required
         />
 
         <ControlledInputText
           id="hour"
-          label="الساعة"
+          label={t('taxiStops.form.hour')}
           type="text"
           control={control}
           name="hour"
           error={errors.hour}
-          placeholder="مثال: 08:30 صباحا"
+          placeholder={t('taxiStops.form.hourPlaceholder')}
           required
         />
 
         <ControlledInputText
           id="phone"
-          label="رقم الهاتف"
+          label={t('taxiStops.form.phone')}
           type="tel"
           control={control}
           name="phone"
           error={errors.phone}
-          placeholder="أدخل رقم الهاتف"
+          placeholder={t('taxiStops.form.phonePlaceholder')}
           required
         />
+      </div>
+
+      <div className="mt-6">
+        <EnglishSection>
+          <EnglishInput id="nameEn" name="nameEn" control={control} label={t('taxiStops.form.name')} error={errors.nameEn} />
+          <EnglishInput id="fromLocationEn" name="fromLocationEn" control={control} label={t('taxiStops.form.fromLocation')} error={errors.fromLocationEn} />
+          <EnglishInput id="toLocationEn" name="toLocationEn" control={control} label={t('taxiStops.form.toLocation')} error={errors.toLocationEn} />
+        </EnglishSection>
       </div>
 
       <div className="mt-8">

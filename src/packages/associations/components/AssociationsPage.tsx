@@ -1,5 +1,6 @@
 'use client';
 
+import { useTranslation } from 'react-i18next';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/packages/common/hooks/useAuth';
@@ -12,12 +13,15 @@ import AssociationCard from './AssociationCard';
 import AssociationsEmptyState from './AssociationsEmptyState';
 
 export default function AssociationsPage() {
+  const { t } = useTranslation();
   const [associations, setAssociations] = useState<
     {
       id: string;
       name: string;
       description: string;
       picaURL: string;
+      nameEn?: string | null;
+      descriptionEn?: string | null;
     }[]
   >([]);
   const router = useRouter();
@@ -48,7 +52,7 @@ export default function AssociationsPage() {
           {role === 'ADMIN' && (
             <div className="mb-8 flex justify-center">
               <Button variant="primary" size="lg" onClick={() => router.push('/associations/create')}>
-                إضافة مؤسسة جديدة
+                {t('associations.add')}
               </Button>
             </div>
           )}
