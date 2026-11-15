@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { getAdditionalFields } from '../utils/form.utils';
+import type { ServiceField } from '../utils/serviceFields';
 import { useServiceForm } from '../hooks/useServiceForm';
 import PersonalInfoSection from './PersonalInfoSection';
 import AdditionalFieldsSection from './AdditionalFieldsSection';
@@ -10,13 +10,14 @@ import FormSubmitButton from './FormSubmitButton';
 import InfoMessage from '@/packages/common/components/form/InfoMessage';
 
 type ServiceFormProps = {
-  category: string;
   serviceId: string;
+  /** The service's form fields (sent resolved by the API). */
+  fields: ServiceField[];
 };
 
-export default function ServiceForm({ category, serviceId }: ServiceFormProps) {
+export default function ServiceForm({ serviceId, fields }: ServiceFormProps) {
   const { form, isSubmitting, message, onSubmit, closeMessage } = useServiceForm({
-    category,
+    fields,
     serviceId,
   });
 
@@ -25,7 +26,6 @@ export default function ServiceForm({ category, serviceId }: ServiceFormProps) {
     control,
     formState: { errors, isDirty, isValid },
   } = form;
-  const additionalFields = getAdditionalFields(category, serviceId);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="rounded-2xl bg-white p-8 shadow-xl">
@@ -33,7 +33,7 @@ export default function ServiceForm({ category, serviceId }: ServiceFormProps) {
 
       <PersonalInfoSection control={control} errors={errors} />
 
-      <AdditionalFieldsSection additionalFields={additionalFields} control={control} errors={errors} />
+      <AdditionalFieldsSection additionalFields={fields} control={control} errors={errors} />
 
       <RequestDetailsSection control={control} errors={errors} />
 

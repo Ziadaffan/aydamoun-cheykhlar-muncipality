@@ -9,8 +9,9 @@ import Button from '@/packages/common/components/Button';
 import { DeleteButton } from '@/packages/common/components/DeleteButton';
 import { BackButton } from '@/packages/common/components/BackButton';
 import { useAuth } from '@/packages/common/hooks/useAuth';
+import { dateLocale } from '@/packages/common/utils/date.utils';
 import { describeAdditionalInfo } from '@/packages/services/utils/form.utils';
-import { mapServiceTypeToCategory } from '@/packages/services/utils/category.utils';
+import { resolveServiceFields } from '@/packages/services/utils/serviceFields';
 import { submissionReference } from '@/packages/serviceSubmissions/utils/reference';
 import { useAdminServiceSubmission } from '../hooks/useAdminSubmission';
 import { useAdminDeleteServiceSubmission } from '../hooks/useAdminDeleteServiceSubmission';
@@ -19,7 +20,7 @@ export default function AdminViewSubmissionPage() {
   const params = useParams();
   const submissionId = params?.submissionId as string;
   const router = useRouter();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { role, isLoading: authLoading } = useAuth();
 
   const { data: submission, isLoading, error } = useAdminServiceSubmission(submissionId);
@@ -74,14 +75,12 @@ export default function AdminViewSubmissionPage() {
     return <ErrorMessage />;
   }
 
-  const additionalInfoEntries = describeAdditionalInfo(
-    submission.additionalInfo,
-    mapServiceTypeToCategory(submission.service?.type || ''),
-    submission.serviceId
-  );
+  const additionalInfoEntries = describeAdditionalInfo(submission.additionalInfo, resolveServiceFields(submission.service), {
+    english: i18n.language?.startsWith('en'),
+  });
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12" dir="rtl">
+    <div className="min-h-screen bg-gray-50 py-12">
       <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
         <div className="mb-6">
           <BackButton />
@@ -122,7 +121,7 @@ export default function AdminViewSubmissionPage() {
               <InfoRow label={t('services.form.fields.address')} value={submission.address} />
               <InfoRow
                 label={t('profile.submissions.submissionDate')}
-                value={new Date(submission.createdAt).toLocaleDateString('ar-SA')}
+                value={new Date(submission.createdAt).toLocaleDateString(dateLocale(i18n.language))}
               />
             </div>
           </div>
@@ -156,8 +155,8 @@ function InfoRow({ label, value, dir }: { label: string; value: string; dir?: 'l
   return (
     <div className="rounded-lg border border-gray-100 bg-gray-50 p-4">
       <div className="text-sm font-semibold text-gray-700">{label}</div>
-      <div className="mt-1 text-right text-gray-900" dir={dir}>
-        {value}
+      <div className="mt-1 text-start text-gray-900">
+        <span dir={dir}>{value}</span>
       </div>
     </div>
   );

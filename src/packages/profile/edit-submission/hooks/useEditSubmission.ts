@@ -7,7 +7,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useTranslation } from 'react-i18next';
 import { Service, ServiceStatus, ServiceSubmission } from '@prisma/client';
 import { createServiceSubmissionSchema } from '@/packages/services/validation/services.validation';
-import { mapServiceTypeToCategory } from '@/packages/services/utils/category.utils';
+import { resolveServiceFields, ServiceField } from '@/packages/services/utils/serviceFields';
 import { useGetServiceSubmission } from './useGetServiceSubmission';
 import { useUpdateServiceSubmission } from './useUpdateServiceSubmission';
 
@@ -38,11 +38,11 @@ export function useEditSubmission({ submissionId, serviceId, category }: UseEdit
   const { data: submissionData, isLoading: isLoadingSubmission, error: errorSubmission } = useGetServiceSubmission(submissionId);
   const { mutate: updateServiceSubmission, isPending: isLoadingUpdate, error: errorUpdate } = useUpdateServiceSubmission(submissionId);
 
-  const [mappedCategory, setMappedCategory] = useState<string>('');
-  const [mappedServiceId, setMappedServiceId] = useState<string>('');
+  // The service's form fields, known once the request has loaded.
+  const [fields, setFields] = useState<ServiceField[]>([]);
 
   const form = useForm<FormData>({
-    resolver: yupResolver(createServiceSubmissionSchema(mappedCategory, mappedServiceId)) as any,
+    resolver: yupResolver(createServiceSubmissionSchema(fields)) as any,
     defaultValues: {
       fullName: '',
       phone: '',
@@ -59,11 +59,7 @@ export function useEditSubmission({ submissionId, serviceId, category }: UseEdit
     if (submissionData) {
       setSubmission(submissionData);
 
-      const category = mapServiceTypeToCategory(submissionData.service?.type || '');
-      const serviceId = submissionData.serviceId;
-
-      setMappedCategory(category);
-      setMappedServiceId(serviceId);
+      setFields(resolveServiceFields(submissionData.service));
 
       form.reset({
         fullName: submissionData.fullName || '',
@@ -111,7 +107,6 @@ export function useEditSubmission({ submissionId, serviceId, category }: UseEdit
     message,
     onSubmit,
     closeMessage,
-    mappedCategory,
-    mappedServiceId,
+    fields,
   };
 }

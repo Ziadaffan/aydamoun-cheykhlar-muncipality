@@ -8,6 +8,7 @@ import { useTranslation } from 'react-i18next';
 import { useCreateServiceSubmission } from '@/packages/services/hooks/useCreateServiceSubmission';
 import { createServiceSubmissionSchema } from '@/packages/services/validation/services.validation';
 import { ServiceStatus } from '@prisma/client';
+import type { ServiceField } from '@/packages/services/utils/serviceFields';
 
 type FormData = {
   // Informations personnelles
@@ -31,11 +32,11 @@ type FormData = {
 };
 
 type UseServiceFormProps = {
-  category: string;
+  fields: ServiceField[];
   serviceId: string;
 };
 
-export function useServiceForm({ category, serviceId }: UseServiceFormProps) {
+export function useServiceForm({ fields, serviceId }: UseServiceFormProps) {
   const { t } = useTranslation();
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -44,7 +45,7 @@ export function useServiceForm({ category, serviceId }: UseServiceFormProps) {
   const { mutate: createServiceSubmission } = useCreateServiceSubmission(serviceId);
 
   const form = useForm<FormData>({
-    resolver: yupResolver(createServiceSubmissionSchema(category, serviceId)) as any,
+    resolver: yupResolver(createServiceSubmissionSchema(fields)) as any,
     defaultValues: {
       fullName: '',
       phone: '',

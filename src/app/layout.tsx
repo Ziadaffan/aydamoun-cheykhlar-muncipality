@@ -31,14 +31,20 @@ export const metadata: Metadata = {
   description: 'موقع بلدية عيدمون شيخلار الرسمي - خدمات بلدية شاملة للمواطنين',
 };
 
+// 'i18nextLng' = LANGUAGE_STORAGE_KEY in src/i18n.ts (not imported: that module is client-side).
+const languageBootstrapScript = `try{var l=localStorage.getItem('i18nextLng');if(l&&l.indexOf('en')===0){document.documentElement.lang='en';document.documentElement.dir='ltr';}}catch(e){}`;
+
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ar" dir="rtl">
+    // The server always renders Arabic/RTL; the inline script switches lang/dir before first paint when the
+    // visitor chose English (i18next caches the choice in localStorage), so there is no RTL→LTR flash.
+    <html lang="ar" dir="rtl" suppressHydrationWarning>
       <head>
+        <script dangerouslySetInnerHTML={{ __html: languageBootstrapScript }} />
         <meta
           name="keywords"
           content="بلدية عيدمون شيخلار, عيدمون شيخلار, بلدية عيدمون, شيخلار, خدمات بلدية عيدمون, بلدية شيخلار الرسمية, خدمات المواطنين في عيدمون, بلدية عيدمون شيخلار الرسمية, خدمات بلدية عيدمون شيخلار, municipality services, Aydamoun Cheikh Lahr,  Aydamoun municipality, Cheikh Lahr municipality"

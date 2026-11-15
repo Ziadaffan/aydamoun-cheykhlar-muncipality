@@ -110,22 +110,22 @@ export default function AdminUsersPage() {
               <table className="min-w-full divide-y divide-gray-200">
                 <thead className="bg-gray-50">
                   <tr>
-                    <th className="px-6 py-3 text-right text-xs font-medium tracking-wider text-gray-500 uppercase">
+                    <th className="px-6 py-3 text-start text-xs font-medium tracking-wider text-gray-500 uppercase">
                       {t('admin.users.columns.name')}
                     </th>
-                    <th className="px-6 py-3 text-right text-xs font-medium tracking-wider text-gray-500 uppercase">
+                    <th className="px-6 py-3 text-start text-xs font-medium tracking-wider text-gray-500 uppercase">
                       {t('admin.users.columns.contact')}
                     </th>
-                    <th className="px-6 py-3 text-right text-xs font-medium tracking-wider text-gray-500 uppercase">
+                    <th className="px-6 py-3 text-start text-xs font-medium tracking-wider text-gray-500 uppercase">
                       {t('admin.users.columns.role')}
                     </th>
-                    <th className="px-6 py-3 text-right text-xs font-medium tracking-wider text-gray-500 uppercase">
+                    <th className="px-6 py-3 text-start text-xs font-medium tracking-wider text-gray-500 uppercase">
                       {t('admin.users.columns.submissions')}
                     </th>
-                    <th className="px-6 py-3 text-right text-xs font-medium tracking-wider text-gray-500 uppercase">
+                    <th className="px-6 py-3 text-start text-xs font-medium tracking-wider text-gray-500 uppercase">
                       {t('admin.users.columns.createdAt')}
                     </th>
-                    <th className="px-6 py-3 text-right text-xs font-medium tracking-wider text-gray-500 uppercase">
+                    <th className="px-6 py-3 text-start text-xs font-medium tracking-wider text-gray-500 uppercase">
                       {t('admin.serviceSubmissions.actions')}
                     </th>
                   </tr>

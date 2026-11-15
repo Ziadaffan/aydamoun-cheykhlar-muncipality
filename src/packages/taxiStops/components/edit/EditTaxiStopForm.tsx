@@ -1,5 +1,6 @@
 'use client';
 
+import { useTranslation } from 'react-i18next';
 import { useEffect, useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import { useForm } from 'react-hook-form';
@@ -12,8 +13,10 @@ import { updateTaxiStopSchema, UpdateTaxiStopFormData } from '@/packages/taxiSto
 import useGetTaxiStopById from '@/packages/taxiStops/hooks/useGetTaxiStopById';
 import { useUpdateTaxiStop } from '@/packages/taxiStops/hooks/useUpdateTaxiStop';
 import EditTaxiStopButton from './EditTaxiStopButton';
+import { EnglishInput, EnglishSection } from '@/packages/admin/common/EnglishFields';
 
 export default function EditTaxiStopForm() {
+  const { t } = useTranslation();
   const [isPending, setIsPending] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
   const router = useRouter();
@@ -31,6 +34,9 @@ export default function EditTaxiStopForm() {
   } = useForm<UpdateTaxiStopFormData>({
     defaultValues: {
       name: '',
+      nameEn: '',
+      fromLocationEn: '',
+      toLocationEn: '',
       fromLocation: '',
       toLocation: '',
       hour: '',
@@ -43,6 +49,9 @@ export default function EditTaxiStopForm() {
     if (data) {
       reset({
         name: data.name || '',
+        nameEn: data.nameEn ?? '',
+        fromLocationEn: data.fromLocationEn ?? '',
+        toLocationEn: data.toLocationEn ?? '',
         fromLocation: data.fromLocation || '',
         toLocation: data.toLocation || '',
         hour: data.hour || '',
@@ -62,13 +71,13 @@ export default function EditTaxiStopForm() {
       },
       {
         onSuccess: () => {
-          setMessage({ type: 'success', text: 'تم تحديث موقف التاكسي بنجاح' });
+          setMessage({ type: 'success', text: t('taxiStops.form.messages.updateSuccess') });
           setTimeout(() => {
             router.push('/taxi-stops');
           }, 1000);
         },
         onError: () => {
-          setMessage({ type: 'error', text: 'فشل في تحديث موقف التاكسي' });
+          setMessage({ type: 'error', text: t('taxiStops.form.messages.updateError') });
         },
         onSettled: () => {
           setIsPending(false);
@@ -92,58 +101,66 @@ export default function EditTaxiStopForm() {
       <div className="space-y-6">
         <ControlledInputText
           id="name"
-          label="الاسم"
+          label={t('taxiStops.form.name')}
           type="text"
           control={control}
           name="name"
           error={errors.name}
-          placeholder="أدخل اسم موقف التاكسي"
+          placeholder={t('taxiStops.form.namePlaceholder')}
           required
         />
 
         <ControlledInputText
           id="fromLocation"
-          label="من"
+          label={t('taxiStops.form.fromLocation')}
           type="text"
           control={control}
           name="fromLocation"
           error={errors.fromLocation}
-          placeholder="نقطة الانطلاق"
+          placeholder={t('taxiStops.form.fromLocationPlaceholder')}
           required
         />
 
         <ControlledInputText
           id="toLocation"
-          label="إلى"
+          label={t('taxiStops.form.toLocation')}
           type="text"
           control={control}
           name="toLocation"
           error={errors.toLocation}
-          placeholder="الوجهة"
+          placeholder={t('taxiStops.form.toLocationPlaceholder')}
           required
         />
 
         <ControlledInputText
           id="hour"
-          label="الساعة"
+          label={t('taxiStops.form.hour')}
           type="text"
           control={control}
           name="hour"
           error={errors.hour}
-          placeholder="مثال: 08:30 صباحا"
+          placeholder={t('taxiStops.form.hourPlaceholder')}
           required
         />
 
         <ControlledInputText
           id="phone"
-          label="رقم الهاتف"
+          label={t('taxiStops.form.phone')}
           type="tel"
           control={control}
           name="phone"
           error={errors.phone}
-          placeholder="أدخل رقم الهاتف"
+          placeholder={t('taxiStops.form.phonePlaceholder')}
           required
         />
+      </div>
+
+      <div className="mt-6">
+        <EnglishSection>
+          <EnglishInput id="nameEn" name="nameEn" control={control} label={t('taxiStops.form.name')} error={errors.nameEn} />
+          <EnglishInput id="fromLocationEn" name="fromLocationEn" control={control} label={t('taxiStops.form.fromLocation')} error={errors.fromLocationEn} />
+          <EnglishInput id="toLocationEn" name="toLocationEn" control={control} label={t('taxiStops.form.toLocation')} error={errors.toLocationEn} />
+        </EnglishSection>
       </div>
 
       <div className="mt-8">

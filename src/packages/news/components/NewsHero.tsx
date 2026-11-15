@@ -33,7 +33,7 @@ export default function NewsHero({ featuredNews, className = '', t, role }: News
 
         {/* Featured News */}
         <div className="mb-8">
-          <h2 className="mb-6 text-right text-2xl font-bold text-gray-800">{t('news.page.featuredNews')}</h2>
+          <h2 className="mb-6 text-start text-2xl font-bold text-gray-800">{t('news.page.featuredNews')}</h2>
           <NewsCard news={featuredNews} variant="featured" t={t} />
         </div>
       </div>

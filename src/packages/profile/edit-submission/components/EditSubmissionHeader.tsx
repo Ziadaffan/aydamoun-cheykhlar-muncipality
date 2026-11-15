@@ -2,6 +2,7 @@
 
 import { useTranslation } from 'react-i18next';
 import { Service, ServiceSubmission } from '@prisma/client';
+import { useLocalized } from '@/lib/localized';
 
 type EditSubmissionHeaderProps = {
   submission: (ServiceSubmission & { service: Service }) | null;
@@ -9,6 +10,7 @@ type EditSubmissionHeaderProps = {
 
 export default function EditSubmissionHeader({ submission }: EditSubmissionHeaderProps) {
   const { t } = useTranslation();
+  const loc = useLocalized();
 
   return (
     <div className="mb-8">
@@ -18,7 +20,7 @@ export default function EditSubmissionHeader({ submission }: EditSubmissionHeade
         {submission && (
           <span className="font-medium text-gray-800">
             {' '}
-            {submission.fullName} - {submission.service?.name}
+            {submission.fullName} - {submission.service && loc(submission.service.name, submission.service.nameEn)}
           </span>
         )}
       </p>

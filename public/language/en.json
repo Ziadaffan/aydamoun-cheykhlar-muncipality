@@ -1,0 +1,1083 @@
+{
+  "navigation": {
+    "top": {
+      "transactionInquiry": "Transaction inquiry",
+      "complaintInquiry": "Complaint inquiry",
+      "searchForDecisions": "Decisions inquiry"
+    },
+    "main": {
+      "home": "Home",
+      "aboutUs": "About us",
+      "services": "Services",
+      "news": "News",
+      "documents": "Documents",
+      "emplois": "Jobs",
+      "adminSubmissions": "Service requests",
+      "contactUs": "Contact us",
+      "auth": "Log in",
+      "signup": "Sign up",
+      "associations": "Associations",
+      "taxiStops": "Taxi stops",
+      "municipality": {
+        "name": "Municipality",
+        "mission": "Municipal mission",
+        "purchases": "Purchases",
+        "officialTransactions": "Official transactions"
+      },
+      "presidentNews": "Mayor's news",
+      "advertisements": "Announcements",
+      "budget": "Budget",
+      "developmentProjects": "Development projects",
+      "council": {
+        "name": "Municipal council",
+        "actualMembers": "Current members",
+        "cvMunicipalCouncilMembers": "Council members' biographies",
+        "previousCouncils": "Previous municipal councils"
+      },
+      "submitComplaint": "Submit a complaint",
+      "objectionToTheMunicipality": "Objection to the municipality",
+      "jobs": "Jobs",
+      "profile": "Profile",
+      "logout": "Log out",
+      "login": "Log in",
+      "adminUsers": "Users",
+      "adminAnnouncements": "Announcements",
+      "adminServices": "Manage services",
+      "adminCouncil": "Municipal council",
+      "adminHistory": "Town history",
+      "language": "Language"
+    }
+  },
+  "aboutUs": {
+    "hero": {
+      "title": "About us",
+      "subtitle": "Aydamoun Cheykhlar Municipality - serving the community for decades"
+    },
+    "municipality": {
+      "title": "About the municipality",
+      "description": "Aydamoun Cheykhlar Municipality is a local government body that has served its citizens and developed the area since its founding. We are committed to providing the best municipal services and ensuring sustainable development for our community.",
+      "message": "Our mission",
+      "messageText": "We are committed to delivering high-quality municipal services with transparency and efficiency, with a focus on community participation and sustainable development.",
+      "vision": "Our vision",
+      "visionText": "Building a safe, clean and thriving town whose citizens take part in decision-making.",
+      "villageTitle": "About our town",
+      "villageDescription": "Aydamoun is a Lebanese town in the Akkar district of North Lebanon, 700 meters above sea level, known for its green mountain landscape and peaceful atmosphere. Its people include both residents and members of the diaspora, and the town is known for its long history and natural beauty. Through its municipality, it works to strengthen local development and essential services for its people."
+    },
+    "president": {
+      "title": "Mayor",
+      "name": "Kamal Nour El Din Maksoud",
+      "position": "Aydamoun Cheykhlar",
+      "description": "He has led Aydamoun Cheykhlar Municipality since 2025 and has broad experience in local administration and community development.",
+      "message": "To my fellow people of Aydamoun: we promise to work tirelessly to improve services and achieve administrative fairness. The municipality's doors are open to everyone."
+    },
+    "council": {
+      "title": "Municipal council members",
+      "subtitle": "The dedicated team serving the community",
+      "phone": "Phone:",
+      "phoneUnavailable": "Not available"
+    },
+    "positions": {
+      "PRESIDENT": "Mayor",
+      "VICE_PRESIDENT": "Deputy mayor",
+      "COUNCIL_MEMBER": "Council member"
+    },
+    "history": {
+      "title": "Our town's history"
+    }
+  },
+  "home": {
+    "hero": {
+      "title": "Welcome to the official website of Aydamoun Cheykhlar Municipality",
+      "subtitle": "Working for you to provide the best municipal services",
+      "ctaButton": "Discover our services"
+    },
+    "services": {
+      "title": "Our services",
+      "subtitle": "We offer a comprehensive range of municipal services",
+      "cards": {
+        "submitRequest": {
+          "title": "Submit a request",
+          "description": "Submit requests for various municipal services"
+        },
+        "payBills": {
+          "title": "Pay bills",
+          "description": "Pay municipal bills easily and securely"
+        },
+        "buildingLicense": {
+          "title": "Building permit",
+          "description": "Issue and renew building and construction permits"
+        },
+        "submitComplaint": {
+          "title": "Submit a complaint",
+          "description": "Send complaints and suggestions to the municipality"
+        },
+        "bookAppointment": {
+          "title": "Book an appointment",
+          "description": "Book appointments for municipal services"
+        },
+        "downloadForms": {
+          "title": "Download forms",
+          "description": "Download the required forms and documents"
+        },
+        "environmentalServices": {
+          "title": "Cleanliness & environment",
+          "description": "Submit requests about cleanliness, waste collection or any environmental service."
+        },
+        "administrativeTransactions": {
+          "title": "Administrative transactions",
+          "description": "Request tax statements, permits or any other administrative transaction."
+        },
+        "additionalServices": {
+          "title": "Additional services",
+          "description": "Other municipal services of interest to citizens."
+        }
+      }
+    },
+    "contact": {
+      "title": "Contact information",
+      "subtitle": "Get in touch with us anytime",
+      "info": {
+        "timing": {
+          "title": "Opening hours",
+          "value": "Sunday - Thursday: 8:00 AM - 4:00 PM"
+        },
+        "phone": {
+          "title": "Phone number",
+          "value": "+961 6 000 000"
+        },
+        "email": {
+          "title": "Email",
+          "value": "info@aydamoun-cheykhlar-municipality.org"
+        },
+        "address": {
+          "title": "Address",
+          "value": "Aydamoun Cheykhlar Municipality, Lebanon"
+        }
+      },
+      "map": {
+        "title": "Map",
+        "subtitle": "Interactive map of the municipality's location"
+      }
+    },
+    "viewAll": "View all",
+    "news": {
+      "title": "Latest news",
+      "viewAllLabel": "View all news"
+    },
+    "quickLinks": {
+      "title": "Quick links"
+    },
+    "requests": {
+      "latest": "Latest request",
+      "updatedOn": "Last updated: {{date}}",
+      "viewAllLabel": "View all my requests"
+    },
+    "announcements": {
+      "title": "Municipal announcements",
+      "viewAllLabel": "View all announcements"
+    }
+  },
+  "services": {
+    "hero": {
+      "title": "Online services",
+      "subtitle": "Aydamoun Municipality offers a range of online services that let citizens submit requests, download forms and track their transactions easily, without having to visit the municipality building."
+    },
+    "form": {
+      "personalInfo": "Personal information",
+      "additionalInfo": "Additional information",
+      "requestDetails": "Request details",
+      "attachments": "Attachments (optional)",
+      "fields": {
+        "fullName": "Full name",
+        "fullNameRequired": "Full name is required",
+        "phone": "Phone number",
+        "phoneRequired": "Phone number is required",
+        "phoneInvalid": "Please enter a valid phone number",
+        "email": "Email",
+        "emailInvalid": "Please enter a valid email address",
+        "address": "Address",
+        "addressRequired": "Address is required",
+        "description": "Detailed description of the request",
+        "descriptionRequired": "Description is required",
+        "descriptionMinLength": "The description must be at least 10 characters",
+        "descriptionPlaceholder": "Please give a detailed description of your request...",
+        "documents": "Attach documents",
+        "documentsHelp": "You can attach PDF or Word files or images (maximum: 5 files)"
+      },
+      "buttons": {
+        "submit": "Submit request",
+        "choose": "Choose"
+      },
+      "messages": {
+        "submitSuccess": "Your request was submitted successfully",
+        "submitError": "An error occurred while submitting the request",
+        "fieldRequired": "This field is required"
+      }
+    },
+    "buildingLicenses": {
+      "title": "Permits & construction services"
+    },
+    "environmentalServices": {
+      "title": "Cleanliness & environment services"
+    },
+    "administrativeTransactions": {
+      "title": "Administrative transactions"
+    },
+    "officialForms": {
+      "title": "Download official forms"
+    },
+    "complaintsAndSuggestions": {
+      "title": "Complaints & suggestions"
+    },
+    "additionalServices": {
+      "title": "Additional services"
+    },
+    "submitRequest": {
+      "title": "Submit a request"
+    },
+    "authRequired": {
+      "message": "You need an account and must be logged in to access the services",
+      "loginButton": "Log in",
+      "signupButton": "Sign up"
+    },
+    "notFoundTitle": "Service not found",
+    "notFoundMessage": "Sorry, this service is not available",
+    "formInstructions": "Fill in the form below to submit your request",
+    "submissionSuccess": {
+      "reference": "Request number",
+      "referenceHint": "Keep this number and mention it when contacting the municipality about your request",
+      "track": "You can follow the status of your request at any time from \"My requests\"",
+      "trackButton": "Track my requests",
+      "title": "Your request was submitted successfully!",
+      "message": "Thank you for submitting your request. It has been received and will be reviewed by the municipality team.",
+      "nextSteps": "Next steps",
+      "reviewTime": "Your request will be reviewed within 3-5 business days",
+      "backToServices": "Back to services",
+      "home": "Home",
+      "contact": "If you have any questions, you can contact us by phone or email"
+    },
+    "search": {
+      "label": "Search services",
+      "placeholder": "Search for a service by name, description or category",
+      "empty": "No services match your search"
+    }
+  },
+  "common": {
+    "back": "Back",
+    "cancel": "Cancel",
+    "sessionExpired": "Your session has expired. Please log in again",
+    "edit": "Edit",
+    "delete": "Delete",
+    "deleting": "Deleting...",
+    "error": {
+      "title": "Sorry, something went wrong",
+      "message": "We ran into an error in the system. Please let us know and we will fix it as soon as possible."
+    },
+    "tags": {
+      "add": "Add",
+      "count": "{{count}}/{{max}} tags",
+      "hint": "Press Enter or , to add a tag",
+      "hintMobile": "or tap the \"Add\" button"
+    }
+  },
+  "footer": {
+    "title": "Aydamoun Cheykhlar Municipality 2025",
+    "privacyPolicy": "Privacy policy",
+    "termsOfUse": "Terms of use",
+    "copyright": "© 2025 All rights reserved"
+  },
+  "auth": {
+    "login": {
+      "title": "Log in",
+      "helper": "Log in with your phone number and password",
+      "email": "Phone number",
+      "emailPlaceholder": "Enter your phone number",
+      "password": "Password",
+      "passwordPlaceholder": "Password",
+      "submit": "Log in",
+      "loading": "Logging in...",
+      "forgotPassword": "Forgot your password?",
+      "noAccount": "Don't have an account?",
+      "createAccount": "Create a new account",
+      "validation": {
+        "emailRequired": "Phone number is required",
+        "passwordRequired": "Password is required"
+      },
+      "messages": {
+        "invalidCredentials": "Incorrect phone number or password",
+        "loginError": "An error occurred while logging in",
+        "loginSuccess": "Logged in successfully"
+      }
+    },
+    "signup": {
+      "title": "Create a new account",
+      "helper": "Create your account with your phone number and a password",
+      "fullName": "Full name",
+      "fullNamePlaceholder": "Full name",
+      "email": "Email",
+      "emailPlaceholder": "Email (optional)",
+      "phone": "Phone number",
+      "phonePlaceholder": "Phone number",
+      "password": "Password",
+      "passwordPlaceholder": "Password",
+      "confirmPassword": "Confirm password",
+      "confirmPasswordPlaceholder": "Confirm password",
+      "submit": "Sign up",
+      "loading": "Creating account...",
+      "alreadyHaveAccount": "Already have an account?",
+      "loginLink": "Log in",
+      "validation": {
+        "nameRequired": "Name is required",
+        "emailRequired": "Email is required",
+        "emailInvalid": "Invalid email address",
+        "phoneRequired": "Phone number is required",
+        "passwordRequired": "Password is required",
+        "passwordMinLength": "Password must be at least 6 characters",
+        "confirmPasswordRequired": "Please confirm your password",
+        "passwordsNotMatch": "Passwords do not match"
+      },
+      "messages": {
+        "accountCreated": "Account created successfully! You can now log in.",
+        "signupError": "An error occurred while creating the account",
+        "loginAfterSignupError": "Your account was created but automatic login failed. Please log in manually.",
+        "userExists": "This user already exists",
+        "emailOrPhoneRequired": "Please enter an email or a phone number (one of them is required)",
+        "invalidPhone": "Invalid phone number",
+        "weakPassword": "Password must be at least 6 characters and contain at least one uppercase letter, one lowercase letter and one number",
+        "phoneRequired": "Phone number is required"
+      },
+      "consent": {
+        "and": "and",
+        "prefix": "By creating an account, you agree to the",
+        "privacy": "Privacy policy",
+        "terms": "Terms of use"
+      }
+    },
+    "forgotPassword": {
+      "title": "Forgot your password?",
+      "helper": "Enter your email and we will send you a link to reset your password",
+      "email": "Email",
+      "emailPlaceholder": "Enter your registered email",
+      "submit": "Send reset link",
+      "backToLogin": "Back to login",
+      "phoneOnlyHint": "If your account is registered with a phone number only, please contact the municipality to reset your password.",
+      "messages": {
+        "sent": "If an account is linked to this email, a reset link has been sent. Check your inbox (and your spam folder).",
+        "error": "An error occurred while sending the link. Please try again later."
+      }
+    },
+    "resetPassword": {
+      "title": "Reset password",
+      "helper": "Choose a new password for your account",
+      "password": "New password",
+      "passwordPlaceholder": "Enter your new password",
+      "confirmPassword": "Confirm password",
+      "confirmPasswordPlaceholder": "Re-enter your new password",
+      "submit": "Save password",
+      "requestNewLink": "Request a new link",
+      "messages": {
+        "success": "Your password was changed successfully. Redirecting you to the login page...",
+        "invalidToken": "The reset link is invalid or has expired. Please request a new link.",
+        "missingToken": "The reset link is incomplete. Please open the link sent to your email or request a new one.",
+        "error": "An error occurred while changing the password. Please try again later.",
+        "weakPassword": "Password must be at least 6 characters and contain at least one uppercase letter, one lowercase letter and one number"
+      }
+    },
+    "google": {
+      "continue": "Continue with Google",
+      "or": "or",
+      "error": "Could not sign in with Google. Please try again."
+    }
+  },
+  "profile": {
+    "header": {
+      "memberSince": "Member since",
+      "defaultUser": "User"
+    },
+    "accountInfo": {
+      "title": "Account information",
+      "name": "Name",
+      "email": "Email",
+      "emailPlaceholder": "Email (optional)",
+      "phone": "Phone number",
+      "phonePlaceholder": "Phone number (optional)"
+    },
+    "actions": {
+      "editProfile": "Edit profile",
+      "changePassword": "Change password"
+    },
+    "submissions": {
+      "title": "My requests",
+      "noSubmissions": "No requests yet",
+      "newRequest": "Submit a new request",
+      "submissionDate": "Submission date",
+      "status": {
+        "pending": "Pending",
+        "inProgress": "In progress",
+        "completed": "Completed",
+        "rejected": "Rejected"
+      },
+      "deleteConfirmation": "Are you sure you want to delete this request?",
+      "unknownService": "Unspecified service",
+      "reference": "Request number"
+    },
+    "form": {
+      "messages": {
+        "updateSuccess": "Profile updated successfully",
+        "updateError": "An error occurred while updating the profile",
+        "conflict": "This email or phone number is already used by another user",
+        "emailOrPhoneRequired": "Please enter an email or a phone number (one of them is required)",
+        "invalidPhone": "Invalid phone number"
+      }
+    },
+    "changePassword": {
+      "title": "Change password",
+      "description": "Change your password to keep your account secure",
+      "oldPassword": "Current password",
+      "oldPasswordPlaceholder": "Enter your current password",
+      "newPassword": "New password",
+      "newPasswordPlaceholder": "Enter your new password",
+      "confirmPassword": "Confirm new password",
+      "confirmPasswordPlaceholder": "Re-enter your new password",
+      "passwordRequirements": "Password requirements",
+      "requirements": {
+        "minLength": "At least 8 characters",
+        "uppercase": "At least one uppercase letter",
+        "lowercase": "At least one lowercase letter",
+        "number": "At least one number",
+        "special": "At least one special character"
+      },
+      "updateButton": "Update password",
+      "errors": {
+        "passwordMismatch": "The new passwords do not match",
+        "passwordRequired": "Password is required",
+        "samePassword": "The new password cannot be the same as the current password"
+      },
+      "messages": {
+        "success": "Password changed successfully",
+        "error": "An error occurred while changing the password",
+        "invalidOldPassword": "The current password is incorrect",
+        "weakPassword": "Password must be at least 6 characters and contain at least one uppercase letter, one lowercase letter and one number"
+      }
+    },
+    "editSubmission": {
+      "title": "Edit request",
+      "description": "Edit your request",
+      "submit": "Update request",
+      "errors": {
+        "fetchError": "An error occurred while loading the request"
+      },
+      "messages": {
+        "updateSuccess": "Request updated successfully",
+        "updateError": "An error occurred while updating the request"
+      }
+    },
+    "deleteAccount": {
+      "title": "Delete account",
+      "description": "Permanently delete your account from the municipality website.",
+      "button": "Delete my account",
+      "warning": "Warning: your account and all its service requests will be permanently deleted. This action cannot be undone. If you have a request in progress, please contact the municipality before deleting.",
+      "passwordLabel": "Enter your password to confirm",
+      "passwordPlaceholder": "Password",
+      "confirmButton": "Confirm permanent deletion",
+      "messages": {
+        "invalidPassword": "Incorrect password",
+        "error": "An error occurred while deleting the account. Please try again later.",
+        "passwordRequired": "Please enter your password"
+      }
+    }
+  },
+  "admin": {
+    "serviceSubmissions": {
+      "title": "Service requests",
+      "description": "Manage all service requests submitted by users",
+      "empty": "There are no service requests at the moment",
+      "status": "Status",
+      "statusLabel": "Update request status",
+      "serviceName": "Service",
+      "actions": "Actions",
+      "updateStatus": "Update status",
+      "view": "View",
+      "viewTitle": "View request",
+      "edit": "Edit",
+      "applicantInfo": "Applicant information",
+      "noAdditionalInfo": "No additional information",
+      "unauthorized": "You are not authorized to access the admin panel",
+      "noResults": "No requests match your search",
+      "reference": "Request number",
+      "searchLabel": "Search requests",
+      "searchPlaceholder": "Request number, name or phone number"
+    },
+    "users": {
+      "title": "User management",
+      "description": "View registered users, change their roles, and reset passwords for accounts registered with a phone number",
+      "empty": "No registered users",
+      "columns": {
+        "name": "Name",
+        "contact": "Email / phone",
+        "role": "Role",
+        "submissions": "Requests",
+        "createdAt": "Registration date"
+      },
+      "roles": {
+        "user": "User",
+        "admin": "Admin"
+      },
+      "resetPassword": "Reset password",
+      "resetPasswordHint": "Enter a temporary password and share it with the user. It must be at least 6 characters with an uppercase letter, a lowercase letter and a number.",
+      "tempPasswordPlaceholder": "Temporary password",
+      "confirmReset": "Confirm",
+      "roleConfirmation": "Are you sure you want to change this user's role?",
+      "messages": {
+        "passwordReset": "Temporary password set successfully",
+        "roleUpdated": "Role updated successfully",
+        "error": "An error occurred while updating"
+      }
+    },
+    "common": {
+      "edit": "Edit",
+      "save": "Save changes",
+      "order": "Order",
+      "removeImage": "Remove current image",
+      "english": {
+        "section": "English version (optional)",
+        "hint": "Shown to visitors using the website or the app in English. If left empty, the Arabic text is shown.",
+        "label": "{{label}} in English"
+      },
+      "deleteConfirmation": "Are you sure you want to delete this? This cannot be undone.",
+      "messages": {
+        "saved": "Saved successfully",
+        "saveError": "Could not save. Please check the data and try again.",
+        "deleted": "Deleted successfully",
+        "deleteError": "Could not delete. Please try again.",
+        "invalidImage": "Invalid image: JPEG, PNG, GIF or WebP up to 5 MB"
+      }
+    },
+    "announcements": {
+      "title": "Manage announcements",
+      "description": "Municipal announcements shown on the website and the app, with an instant notification to app users",
+      "create": "New announcement",
+      "createTitle": "Create announcement",
+      "editTitle": "Edit announcement",
+      "empty": "No announcements yet",
+      "pinned": "Pinned",
+      "expired": "Expired",
+      "expiresAt": "Expires on",
+      "pushHint": "A notification about this announcement will reach all app users subscribed to announcements as soon as it is published.",
+      "priority": {
+        "NORMAL": "Normal",
+        "IMPORTANT": "Important",
+        "URGENT": "Urgent"
+      },
+      "fields": {
+        "title": "Title",
+        "body": "Announcement text",
+        "priority": "Priority",
+        "pinned": "Pin the announcement to the top",
+        "expiresAt": "Expiry date (optional)",
+        "expiresAtHint": "After this date the announcement disappears from the website and the app.",
+        "image": "Image (optional)"
+      }
+    },
+    "history": {
+      "title": "Town history",
+      "description": "Historical milestones shown on the \"About us\" page and in the app",
+      "create": "Add milestone",
+      "createTitle": "Add a historical milestone",
+      "editTitle": "Edit historical milestone",
+      "empty": "No milestones added yet",
+      "fields": {
+        "period": "Period",
+        "periodPlaceholder": "e.g. 1920 or the 19th century",
+        "title": "Title",
+        "description": "Description",
+        "image": "Image (optional)",
+        "orderHint": "Milestones are shown from the lowest to the highest order (chronologically)."
+      }
+    },
+    "council": {
+      "title": "Municipal council members",
+      "description": "Members shown on the \"About us\" page and in the app",
+      "create": "Add member",
+      "createTitle": "Add member",
+      "editTitle": "Edit member details",
+      "empty": "No members added yet",
+      "fields": {
+        "name": "Full name",
+        "position": "Position",
+        "role": "Role in the municipality",
+        "rolePlaceholder": "e.g. Head of the public works committee",
+        "major": "Specialty / profession",
+        "majorPlaceholder": "e.g. Civil engineer",
+        "phone": "Phone number",
+        "email": "Email",
+        "image": "Photo",
+        "orderHint": "The mayor and deputy mayor appear first, then members by order."
+      }
+    },
+    "services": {
+      "title": "Manage services",
+      "description": "The services citizens can request, and each service's form",
+      "create": "New service",
+      "createTitle": "Create service",
+      "editTitle": "Edit service",
+      "empty": "No services yet",
+      "active": "Active",
+      "inactive": "Suspended",
+      "defaultsShort": "Default fields",
+      "formTitle": "Request form fields",
+      "usingDefaults": "This service uses the default fields of its category:",
+      "noExtraFields": "This category has no additional fields.",
+      "customize": "Customize fields",
+      "customHint": "These fields are added to the name, phone, address and description in the request form, in the order shown here.",
+      "fieldNumber": "Field {{number}}",
+      "moveUp": "Move up",
+      "moveDown": "Move down",
+      "removeField": "Remove",
+      "addField": "Add field",
+      "backToDefaults": "Back to default fields",
+      "keyHint": "The key is the field's name in the saved data: don't change it for a field that already has requests, or its values won't appear under the new label.",
+      "messages": {
+        "hasSubmissions": "A service that has requests cannot be deleted. You can suspend it instead."
+      },
+      "fields": {
+        "name": "Service name",
+        "description": "Description",
+        "type": "Category",
+        "formFields": "Form fields",
+        "active": "Status",
+        "activeHint": "Service is active (visible to citizens and can be requested)",
+        "key": "Key (in English)",
+        "label": "Label",
+        "labelEn": "Label in English",
+        "kind": "Type",
+        "options": "Options (one per line)",
+        "optionsEn": "Options in English (optional)",
+        "optionsEnHint": "Translate each option on its own line, in the same order. Only shown to visitors in English; the value saved in the request is the Arabic option.",
+        "required": "Required"
+      },
+      "kinds": {
+        "text": "Short text",
+        "textarea": "Long text",
+        "number": "Number",
+        "select": "Dropdown list",
+        "date": "Date"
+      },
+      "types": {
+        "LICENSEES_AND_CONSTRUCTION_SERVICES": "Permits & construction",
+        "ENVIRONMENTAL_SERVICES": "Cleanliness & environment",
+        "ADMINISTRATIVE_SERVICES": "Administrative transactions",
+        "DOWNLOAD_OFFICIAL_FORMS_SERVICES": "Official forms",
+        "COMPLAINTS_AND_SUGGESTIONS_SERVICES": "Complaints & suggestions",
+        "OTHER": "Additional services"
+      }
+    }
+  },
+  "news": {
+    "page": {
+      "allNews": "All news",
+      "newsInCategory": "{{category}} news",
+      "newsCount": "{{count}} news items found",
+      "newsCountInCategory": "{{count}} news items found in {{category}}",
+      "viewModes": {
+        "grid": "Grid view",
+        "list": "List view"
+      },
+      "noNews": "No news",
+      "noNewsInCategory": "No news found in this category at the moment",
+      "latestNews": "Latest news and updates",
+      "latestNewsDescription": "Follow the latest news and developments at Aydamoun Cheykhlar Municipality, our development projects and community events",
+      "featuredNews": "Featured news",
+      "readMore": "Read more",
+      "createNews": {
+        "title": "Create news item"
+      },
+      "updateNews": "Edit news item",
+      "deleteNews": "Delete news item",
+      "editNews": {
+        "title": "Edit news item"
+      },
+      "notFound": "This news item is not available; it may have been deleted or its link changed",
+      "lastUpdated": "Last updated: {{date}}"
+    },
+    "form": {
+      "title": "Create news item",
+      "newsTitle": "News title",
+      "titlePlaceholder": "Enter the news title",
+      "excerpt": "News summary",
+      "excerptPlaceholder": "Enter a short summary of the news",
+      "content": "News content",
+      "contentPlaceholder": "Enter the full content of the news",
+      "category": "News category",
+      "categoryPlaceholder": "Choose the news category",
+      "author": "Author name",
+      "authorPlaceholder": "Enter the author's name",
+      "tags": "Tags",
+      "tagsPlaceholder": "Enter tags separated by commas",
+      "images": "Images",
+      "featured": "Featured news",
+      "createNews": "Create news item",
+      "creating": "Creating...",
+      "editTitle": "Edit news item",
+      "updating": "Updating...",
+      "messages": {
+        "createSuccess": "News item created successfully",
+        "createError": "An error occurred while creating the news item",
+        "updateSuccess": "News item updated successfully",
+        "updateError": "An error occurred while updating the news item"
+      }
+    },
+    "categories": {
+      "municipalNews": "Municipal news",
+      "developmentProjects": "Development projects",
+      "announcements": "Announcements",
+      "communityEvents": "Community events",
+      "infrastructure": "Infrastructure",
+      "environmental": "Environment",
+      "socialServices": "Social services",
+      "healthAndSocialServices": "Health & social services",
+      "other": "Other"
+    }
+  },
+  "new": {
+    "page": {
+      "title": "News details",
+      "description": "Read the full details of the news and learn about the latest developments and important events at Aydamoun Cheykhlar Municipality"
+    }
+  },
+  "documents": {
+    "title": "Documents",
+    "description": "Browse and download official documents published by Aydamoun Cheykhlar Municipality",
+    "added": "Added on",
+    "download": "Download document",
+    "noDocuments": "No documents",
+    "noDocumentsDescription": "Aydamoun Cheykhlar Municipality has not published any documents",
+    "createAdminDocument": "Upload a new document",
+    "deleteDocument": "Delete document",
+    "form": {
+      "title": "Upload a new document",
+      "documentTitle": "Document title",
+      "titlePlaceholder": "Enter the document title",
+      "description": "Document description",
+      "descriptionPlaceholder": "Enter the document description",
+      "type": "Document type",
+      "typePlaceholder": "Choose the document type",
+      "file": "File",
+      "fileAccept": ".pdf,.doc,.docx,.jpg,.jpeg,.png,.gif,.mp4,.avi,.mov",
+      "uploading": "Uploading...",
+      "upload": "Upload document",
+      "messages": {
+        "uploadSuccess": "Document uploaded successfully",
+        "uploadError": "An error occurred while uploading the document"
+      }
+    }
+  },
+  "jobs": {
+    "title": "Available jobs",
+    "subtitle": "Discover the career opportunities available at Aydamoun Cheykhlar Municipality",
+    "addJobMessage": "If you would like to post a job, please contact the municipality",
+    "noJobs": "No jobs available at the moment",
+    "noJobsDescription": "Check back later for new opportunities",
+    "inactive": "Inactive",
+    "deadline": "Deadline",
+    "expired": "Expired",
+    "viewDetails": "View details",
+    "apply": "Apply",
+    "location": "Location",
+    "salary": "Salary",
+    "provider": "Provider",
+    "createdAt": "Posted on",
+    "aboutRole": "About the job",
+    "allJobs": "All jobs",
+    "edit": "Edit job",
+    "notFound": "Job not available",
+    "notFoundDescription": "This job may have been deleted or is no longer listed",
+    "phone": "Phone number",
+    "actions": {
+      "edit": "Edit",
+      "delete": "Delete",
+      "confirmDelete": "Are you sure you want to delete this job?"
+    },
+    "form": {
+      "createTitle": "Create a new job",
+      "editTitle": "Edit job",
+      "title": "Job title",
+      "titlePlaceholder": "Enter the job title",
+      "description": "Description",
+      "descriptionPlaceholder": "Enter the job description",
+      "provider": "Provider name",
+      "providerPlaceholder": "Enter the provider's name",
+      "phone": "Provider phone number",
+      "phonePlaceholder": "Enter the provider's phone number (optional)",
+      "location": "Location",
+      "locationPlaceholder": "Enter the job location",
+      "salary": "Salary",
+      "salaryPlaceholder": "Enter the salary (optional)",
+      "deadline": "Application deadline",
+      "active": "Active",
+      "create": "Create job",
+      "creating": "Creating...",
+      "update": "Update job",
+      "updating": "Updating...",
+      "messages": {
+        "createSuccess": "Job created successfully",
+        "createError": "Failed to create the job",
+        "updateSuccess": "Job updated successfully",
+        "updateError": "Failed to update the job"
+      }
+    }
+  },
+  "associations": {
+    "title": "Associations",
+    "subtitle": "Discover the associations active in our town and learn about their activities and services.",
+    "empty": "No associations available at the moment.",
+    "add": "Add a new association",
+    "publishedAt": "Published: {{date}}",
+    "showMore": "Show more",
+    "showLess": "Show less",
+    "actions": {
+      "edit": "Edit",
+      "delete": "Delete",
+      "confirmDelete": "Are you sure you want to delete this association?"
+    },
+    "form": {
+      "createTitle": "Create a new association",
+      "editTitle": "Edit association",
+      "name": "Association name",
+      "namePlaceholder": "Enter the association name",
+      "description": "Description",
+      "descriptionPlaceholder": "Enter the association description",
+      "image": "Association image",
+      "newImage": "New image (optional)",
+      "create": "Create association",
+      "save": "Save changes",
+      "messages": {
+        "createSuccess": "Association created successfully",
+        "createError": "Failed to create the association",
+        "updateSuccess": "Association updated successfully",
+        "updateError": "Failed to update the association"
+      }
+    }
+  },
+  "taxiStops": {
+    "title": "Taxi stops",
+    "subtitle": "Browse the available transport routes and find departure times and contact details.",
+    "empty": "No taxi stops available at the moment.",
+    "add": "Add a new taxi stop",
+    "card": {
+      "from": "From:",
+      "to": "To:",
+      "hour": "Time:",
+      "phone": "Phone:"
+    },
+    "actions": {
+      "edit": "Edit",
+      "delete": "Delete",
+      "confirmDelete": "Are you sure you want to delete this taxi stop?"
+    },
+    "form": {
+      "createTitle": "Create a new taxi stop",
+      "editTitle": "Edit taxi stop",
+      "name": "Name",
+      "namePlaceholder": "Enter the taxi stop name",
+      "fromLocation": "From",
+      "fromLocationPlaceholder": "Departure point",
+      "toLocation": "To",
+      "toLocationPlaceholder": "Destination",
+      "hour": "Time",
+      "hourPlaceholder": "e.g. 08:30 AM",
+      "phone": "Phone number",
+      "phonePlaceholder": "Enter the phone number",
+      "create": "Create taxi stop",
+      "save": "Save changes",
+      "messages": {
+        "createSuccess": "Taxi stop created successfully",
+        "createError": "Failed to create the taxi stop",
+        "updateSuccess": "Taxi stop updated successfully",
+        "updateError": "Failed to update the taxi stop"
+      }
+    }
+  },
+  "legal": {
+    "lastUpdated": "Last updated:",
+    "privacy": {
+      "title": "Privacy policy",
+      "lastUpdated": "October 13, 2026",
+      "intro": "Aydamoun Cheykhlar Municipality respects the privacy of the users of its website and app and is committed to protecting the personal data that citizens provide. This policy explains what data we collect, how we use and protect it, and your rights regarding it.",
+      "sections": {
+        "collect": {
+          "heading": "Data we collect",
+          "body": [
+            "Account data: full name, email and/or phone number, and password (stored encrypted; no one can view it).",
+            "Service request data: name, phone number, email, address, request description, and any additional information the service requires.",
+            "Limited technical data needed to run the website, such as login session cookies."
+          ]
+        },
+        "use": {
+          "heading": "How we use data",
+          "body": [
+            "To process the municipal service requests submitted through the website, follow them up and update their status.",
+            "To contact you about your request when more information is needed or to inform you of the outcome.",
+            "To manage your account and let you log in and reset your password.",
+            "We do not use your data for advertising and we do not sell it to anyone."
+          ]
+        },
+        "share": {
+          "heading": "Data sharing",
+          "body": [
+            "Your data is not shared with any third party except in the following cases: the municipal departments responsible for processing your request, or when required by law or a court order.",
+            "We use technical service providers to run the website (hosting, file storage and sending password reset emails); they process data on our behalf and only according to our instructions."
+          ]
+        },
+        "retention": {
+          "heading": "Data retention",
+          "body": [
+            "We keep account data for as long as the account remains active.",
+            "Service requests are kept for as long as needed to process them and for administrative archiving in line with the municipality's procedures.",
+            "When you delete your account, your personal data and the requests linked to it are permanently deleted from the system."
+          ]
+        },
+        "rights": {
+          "heading": "Your rights",
+          "body": [
+            "You can view and edit your data at any time from your profile page.",
+            "You can edit or delete the service requests you have submitted.",
+            "You can delete your entire account from your profile page, or write to us to request it.",
+            "For questions about your data or to file a complaint about how it is processed, please contact us using the information below."
+          ]
+        },
+        "security": {
+          "heading": "Data protection",
+          "body": [
+            "Passwords are stored encrypted using secure hashing algorithms and cannot be recovered in their original form.",
+            "Data exchanged between your device and the website travels over an encrypted connection, and access to administrative data is limited to authorized staff."
+          ]
+        },
+        "cookies": {
+          "heading": "Cookies",
+          "body": [
+            "We only use essential cookies to keep you logged in and to remember your display language. We do not use advertising tracking cookies."
+          ]
+        },
+        "children": {
+          "heading": "Children's privacy",
+          "body": [
+            "Our services are intended for adults. We do not knowingly collect data from children under eighteen without the consent of a parent or guardian."
+          ]
+        },
+        "changes": {
+          "heading": "Changes to this policy",
+          "body": [
+            "We may update this policy as our services evolve or legal requirements change; the date of the last update will appear at the top of the page."
+          ]
+        },
+        "contact": {
+          "heading": "Contact us",
+          "body": [
+            "For any question about privacy or your personal data, you can contact Aydamoun Cheykhlar Municipality:",
+            "Email: info@aydamoun-cheykhlar-municipality.org",
+            "Phone: +961 6 000 000",
+            "Address: Aydamoun Cheykhlar Municipality, Lebanon"
+          ]
+        }
+      }
+    },
+    "terms": {
+      "title": "Terms of use",
+      "lastUpdated": "October 13, 2026",
+      "intro": "These terms govern your use of the Aydamoun Cheykhlar Municipality website and app. By using the website or creating an account, you agree to be bound by these terms.",
+      "sections": {
+        "acceptance": {
+          "heading": "Acceptance of terms",
+          "body": [
+            "By using the website, you confirm that you have read, understood and accepted these terms. If you do not agree with them, please do not use the website."
+          ]
+        },
+        "accounts": {
+          "heading": "Account and password",
+          "body": [
+            "You can create an account with an email address or a phone number. You are responsible for the accuracy of the information you provide.",
+            "You are responsible for keeping your password confidential and for all activity on your account. Please notify us immediately if you suspect any unauthorized use.",
+            "The municipality may suspend or cancel any account used in breach of these terms."
+          ]
+        },
+        "acceptableUse": {
+          "heading": "Acceptable use",
+          "body": [
+            "You may not use the website for any unlawful purpose or to harm the website or other users.",
+            "You may not submit false or impersonated information, or attempt unauthorized access to the municipality's systems or to other users' data.",
+            "You may not send offensive, defamatory or unlawful content."
+          ]
+        },
+        "submissions": {
+          "heading": "Service requests",
+          "body": [
+            "Submitting a request through the website does not mean it is automatically approved; all requests are reviewed according to the municipality's established procedures and regulations.",
+            "You are responsible for the accuracy of the information and documents you submit. Incorrect information may lead to the request being rejected.",
+            "You can edit or delete your request from your profile page as long as its status allows it.",
+            "Some transactions may require visiting the municipality in person to complete the procedure or pay fees."
+          ]
+        },
+        "content": {
+          "heading": "Content and intellectual property",
+          "body": [
+            "All content published on the website, including news, documents and logos, belongs to Aydamoun Cheykhlar Municipality and may not be republished for commercial purposes without prior permission.",
+            "You may view and download official documents for personal or administrative use."
+          ]
+        },
+        "availability": {
+          "heading": "Service availability",
+          "body": [
+            "We strive to keep the website available at all times, but it may be temporarily unavailable for maintenance or for technical reasons beyond our control, without any resulting obligation."
+          ]
+        },
+        "liability": {
+          "heading": "Limitation of liability",
+          "body": [
+            "Information published on the website is provided for informational purposes. Although we strive for accuracy, the municipality is not liable for any damage resulting from reliance on outdated information.",
+            "In case of conflict between the website's content and the official regulations in force, the official regulations prevail."
+          ]
+        },
+        "termination": {
+          "heading": "Account termination",
+          "body": [
+            "You can delete your account at any time from your profile page. Deletion permanently removes your data and requests.",
+            "The municipality may terminate or suspend an account that breaches these terms."
+          ]
+        },
+        "law": {
+          "heading": "Governing law",
+          "body": [
+            "These terms are governed by the laws in force in Lebanon, and the competent Lebanese courts have jurisdiction over any dispute."
+          ]
+        },
+        "changes": {
+          "heading": "Changes to the terms",
+          "body": [
+            "These terms may be amended from time to time; changes take effect from the date they are published on this page. Continuing to use the website after a change means you accept it."
+          ]
+        },
+        "contact": {
+          "heading": "Contact us",
+          "body": [
+            "For any question about these terms, you can contact Aydamoun Cheykhlar Municipality:",
+            "Email: info@aydamoun-cheykhlar-municipality.org",
+            "Phone: +961 6 000 000",
+            "Address: Aydamoun Cheykhlar Municipality, Lebanon"
+          ]
+        }
+      }
+    }
+  },
+  "announcements": {
+    "title": "Municipal announcements",
+    "subtitle": "The latest announcements and alerts from Aydamoun Cheykhlar Municipality",
+    "empty": "No announcements at the moment",
+    "pinned": "Pinned",
+    "priority": {
+      "NORMAL": "Announcement",
+      "IMPORTANT": "Important",
+      "URGENT": "Urgent"
+    }
+  }
+}

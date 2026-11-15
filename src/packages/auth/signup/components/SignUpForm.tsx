@@ -11,13 +11,15 @@ import Button from '@/packages/common/components/Button';
 import Banner from '@/packages/common/components/Banner';
 import useSignUp from '@/packages/auth/hooks/useSignUp';
 import { signupSchema, SignupFormData } from '@/packages/auth/validation/auth.validation';
+import GoogleSignInButton from '@/packages/auth/components/GoogleSignInButton';
 
 // useSignUp's error codes → messages.
 const ERROR_KEYS: Record<string, string> = {
   USER_EXISTS: 'auth.signup.messages.userExists',
   WEAK_PASSWORD: 'auth.signup.messages.weakPassword',
   INVALID_PHONE: 'auth.signup.messages.invalidPhone',
-  EMAIL_OR_PHONE_REQUIRED: 'auth.signup.messages.emailOrPhoneRequired',
+  PHONE_REQUIRED: 'auth.signup.messages.phoneRequired',
+  EMAIL_OR_PHONE_REQUIRED: 'auth.signup.messages.phoneRequired',
 };
 
 type SignUpFormProps = {
@@ -40,7 +42,6 @@ export default function SignUpForm({ onSuccess }: SignUpFormProps) {
     resolver: yupResolver(signupSchema) as any,
     defaultValues: {
       name: '',
-      email: '',
       phone: '',
       password: '',
       confirmPassword: '',
@@ -56,7 +57,7 @@ export default function SignUpForm({ onSuccess }: SignUpFormProps) {
       onSuccess: async () => {
         setMessage({ type: 'success', text: t('auth.signup.messages.accountCreated') });
         const signInResult = await signIn('credentials', {
-          identifier: (data.email?.trim() ? data.email : data.phone) || '',
+          identifier: data.phone,
           password: data.password,
           redirect: false,
         });
@@ -96,23 +97,14 @@ export default function SignUpForm({ onSuccess }: SignUpFormProps) {
       />
 
       <ControlledInputText
-        id="email"
-        label={t('auth.signup.email')}
-        type="email"
-        placeholder={t('auth.signup.emailPlaceholder')}
-        control={control}
-        name="email"
-        error={errors.email}
-      />
-
-      <ControlledInputText
         id="phone"
         label={t('auth.signup.phone')}
-        type="text"
+        type="tel"
         placeholder={t('auth.signup.phonePlaceholder')}
         control={control}
         name="phone"
         error={errors.phone}
+        required
       />
 
       <ControlledInputText
@@ -140,6 +132,8 @@ export default function SignUpForm({ onSuccess }: SignUpFormProps) {
       <Button type="submit" variant="primary" size="lg" loading={isLoading} disabled={isLoading} className="w-full">
         {t('auth.signup.submit')}
       </Button>
+
+      <GoogleSignInButton />
 
       {/* Same consent line as the app's signup screen. */}
       <p className="-mt-2 text-center text-xs leading-relaxed text-gray-600">

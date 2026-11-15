@@ -12,7 +12,7 @@ export default function EditJobPage() {
         <div className="mb-6">
           <BackButton />
           <div className="mb-8 text-center">
-            <h1 className="mb-4 text-4xl font-bold text-gray-900 md:text-5xl">تعديل الوظيفة</h1>
+            <h1 className="mb-4 text-4xl font-bold text-gray-900 md:text-5xl">{t('jobs.form.editTitle')}</h1>
           </div>
         </div>
         <EditJobForm />

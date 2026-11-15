@@ -1,7 +1,7 @@
 import { Jobs } from '@prisma/client';
 import { useTranslation } from 'react-i18next';
-import { formatDate } from '@/packages/common/utils/date.utils';
-import { isDeadlinePassed } from '@/packages/jobs/utils/jobs.utils';
+import { isDeadlinePassed, useJobDate } from '@/packages/jobs/utils/jobs.utils';
+import { useLocalized } from '@/lib/localized';
 
 interface JobCardDetailsProps {
   job: Jobs;
@@ -11,14 +11,17 @@ interface JobCardDetailsProps {
 
 export default function JobCardDetails({ job, showDescription = true }: JobCardDetailsProps) {
   const { t } = useTranslation();
+  const loc = useLocalized();
+  const formatDate = useJobDate();
+  const description = job.description ? loc(job.description, job.descriptionEn) : null;
   const deadlinePassed = isDeadlinePassed(job.deadline);
 
   return (
     <div className="flex flex-col gap-4">
       {/* Description */}
-      {showDescription && job.description && (
+      {showDescription && description && (
         <div className="text-sm leading-relaxed text-gray-700">
-          <p>{job.description}</p>
+          <p>{description}</p>
         </div>
       )}
 
@@ -33,7 +36,7 @@ export default function JobCardDetails({ job, showDescription = true }: JobCardD
           />
         </svg>
         <span className="font-medium">{t('jobs.provider')}:</span>
-        <span>{job.provider}</span>
+        <span>{loc(job.provider, job.providerEn)}</span>
       </div>
 
       {/* Phone */}
@@ -66,7 +69,7 @@ export default function JobCardDetails({ job, showDescription = true }: JobCardD
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
         </svg>
         <span className="font-medium">{t('jobs.location')}:</span>
-        <span>{job.location}</span>
+        <span>{loc(job.location, job.locationEn)}</span>
       </div>
 
       {/* Salary */}

@@ -19,6 +19,7 @@ import { useRouter, useParams } from 'next/navigation';
 import { NewsCategory } from '@/packages/news/types/news.types';
 import Spinner from '@/packages/common/components/Spinner';
 import ErrorMessage from '@/packages/common/components/ErrorMessage';
+import { EnglishInput, EnglishSection } from '@/packages/admin/common/EnglishFields';
 
 export default function EditNewsForm() {
   const { t } = useTranslation();
@@ -39,6 +40,9 @@ export default function EditNewsForm() {
   } = useForm<UpdateNewsFormData>({
     defaultValues: {
       title: '',
+      titleEn: '',
+      excerptEn: '',
+      contentEn: '',
       content: '',
       excerpt: '',
       category: 'MUNICIPAL_NEWS' as NewsCategory,
@@ -54,6 +58,9 @@ export default function EditNewsForm() {
     if (newsData) {
       reset({
         title: newsData.title || '',
+        titleEn: newsData.titleEn ?? '',
+        excerptEn: newsData.excerptEn ?? '',
+        contentEn: newsData.contentEn ?? '',
         content: newsData.content || '',
         excerpt: newsData.excerpt || '',
         category: newsData.category || 'MUNICIPAL_NEWS',
@@ -195,6 +202,14 @@ export default function EditNewsForm() {
         />
 
         <ControlledCheckbox id="featured" label={t('news.form.featured')} control={control} name="featured" error={errors.featured} />
+      </div>
+
+      <div className="mt-6">
+        <EnglishSection>
+          <EnglishInput id="titleEn" name="titleEn" control={control} label={t('news.form.newsTitle')} error={errors.titleEn} />
+          <EnglishInput id="excerptEn" name="excerptEn" control={control} label={t('news.form.excerpt')} error={errors.excerptEn} rows={3} />
+          <EnglishInput id="contentEn" name="contentEn" control={control} label={t('news.form.content')} error={errors.contentEn} rows={8} />
+        </EnglishSection>
       </div>
 
       <div className="mt-8">

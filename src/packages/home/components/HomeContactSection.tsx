@@ -77,7 +77,7 @@ export default function HomeContactSection({ t }: HomeContactSectionProps) {
             <div className="relative">
               <div className="absolute -inset-4 rounded-2xl bg-gradient-to-r from-blue-400 to-green-400 opacity-10 blur-sm"></div>
               <div className="relative overflow-hidden rounded-2xl border border-white/20 bg-white/80 shadow-xl backdrop-blur-sm">
-                <div className="absolute -top-3 left-6 z-10 h-6 w-6 rounded-full bg-gradient-to-r from-blue-500 to-green-500"></div>
+                <div className="absolute -top-3 end-6 z-10 h-6 w-6 rounded-full bg-gradient-to-r from-blue-500 to-green-500"></div>
                 <MapCard />
               </div>
             </div>

@@ -14,12 +14,11 @@ export default function EditSubmissionPage() {
   const submissionId = params?.submissionId as string;
   const { isLoading: authLoading } = useAuth();
 
-  const { form, submission, isLoading, isSubmitting, message, onSubmit, closeMessage, errorSubmission, mappedCategory, mappedServiceId } =
-    useEditSubmission({
-      submissionId,
-      serviceId: '',
-      category: '',
-    });
+  const { form, submission, isLoading, isSubmitting, message, onSubmit, closeMessage, errorSubmission, fields } = useEditSubmission({
+    submissionId,
+    serviceId: '',
+    category: '',
+  });
 
   if (authLoading || isLoading) {
     return <Spinner className="min-h-screen" />;
@@ -53,8 +52,7 @@ export default function EditSubmissionPage() {
             message={message}
             onSubmit={onSubmit}
             closeMessage={closeMessage}
-            category={mappedCategory}
-            serviceId={mappedServiceId}
+            fields={fields}
           />
         )}
       </div>

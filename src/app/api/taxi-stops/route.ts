@@ -2,8 +2,9 @@ import { NextRequest, NextResponse, after } from 'next/server';
 import { requireAdmin } from '@/lib/mobile-auth';
 import { ApiErrorHandler } from '@/packages/common/errors';
 import { returnProperErrorMessage } from '@/packages/common/utils/error.utils';
-import { TaxiStopsService } from '@/packages/taxiStops/services/taxiStops.service';
+import { TaxiStopsService, readTaxiStopEnglish } from '@/packages/taxiStops/services/taxiStops.service';
 import { PushNotificationsService } from '@/packages/notifications/services/pushNotifications.service';
+import { taxiStopPush } from '@/packages/notifications/services/pushMessages';
 
 export const dynamic = 'force-dynamic';
 const taxiStopsService = TaxiStopsService.instance();
@@ -37,15 +38,10 @@ export async function POST(request: NextRequest) {
       toLocation,
       hour,
       phone,
+      ...readTaxiStopEnglish(formData),
     });
 
-    after(() =>
-      pushNotificationsService.broadcast({
-        title: 'محطة تاكسي جديدة',
-        body: `${taxiStop.name}: ${taxiStop.fromLocation} – ${taxiStop.toLocation} (${taxiStop.hour})`,
-        path: '/taxi-stops',
-      })
-    );
+    after(() => pushNotificationsService.broadcast('taxiStops', taxiStopPush(taxiStop)));
 
     return NextResponse.json(taxiStop, { status: 201 });
   } catch (error) {

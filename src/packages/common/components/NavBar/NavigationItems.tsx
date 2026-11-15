@@ -66,6 +66,18 @@ export default function NavigationItems({ t, setIsMobileMenuOpen, isMobile = fal
           <NavLink href="/admin/users" setIsMobileMenuOpen={setIsMobileMenuOpen} additionalClasses={linkClasses}>
             {t('navigation.main.adminUsers')}
           </NavLink>
+          <NavLink href="/admin/announcements" setIsMobileMenuOpen={setIsMobileMenuOpen} additionalClasses={linkClasses}>
+            {t('navigation.main.adminAnnouncements')}
+          </NavLink>
+          <NavLink href="/admin/services" setIsMobileMenuOpen={setIsMobileMenuOpen} additionalClasses={linkClasses}>
+            {t('navigation.main.adminServices')}
+          </NavLink>
+          <NavLink href="/admin/council" setIsMobileMenuOpen={setIsMobileMenuOpen} additionalClasses={linkClasses}>
+            {t('navigation.main.adminCouncil')}
+          </NavLink>
+          <NavLink href="/admin/history" setIsMobileMenuOpen={setIsMobileMenuOpen} additionalClasses={linkClasses}>
+            {t('navigation.main.adminHistory')}
+          </NavLink>
         </>
       )}
 
@@ -78,8 +90,8 @@ export default function NavigationItems({ t, setIsMobileMenuOpen, isMobile = fal
             onClick={handleLogout}
             className={
               isMobile
-                ? 'block w-full rounded-md px-4 py-3 text-right text-base font-medium text-gray-700 transition-colors duration-200 hover:bg-gray-50 hover:text-blue-800'
-                : "text-md relative inline-block cursor-pointer px-4 py-2 text-lg font-medium whitespace-nowrap text-gray-700 transition-colors duration-150 after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-full after:origin-bottom-right after:scale-x-0 after:bg-blue-800 after:transition-transform after:duration-300 after:content-[''] hover:text-blue-800 hover:after:origin-bottom-left hover:after:scale-x-100"
+                ? 'block w-full rounded-md px-4 py-3 text-start text-base font-medium text-gray-700 transition-colors duration-200 hover:bg-gray-50 hover:text-blue-800'
+                : "text-md relative inline-block cursor-pointer px-4 py-2 text-lg font-medium whitespace-nowrap text-gray-700 transition-colors duration-150 after:absolute after:bottom-0 after:start-0 after:h-0.5 after:w-full after:origin-bottom-right after:scale-x-0 after:bg-blue-800 after:transition-transform after:duration-300 after:content-[''] hover:text-blue-800 hover:after:origin-bottom-left hover:after:scale-x-100"
             }
           >
             {t('navigation.main.logout')}

@@ -35,10 +35,10 @@ function SubmissionSuccess() {
           </div>
 
           {/* Titre */}
-          <h1 className="mb-4 text-3xl font-bold text-gray-800">تم إرسال طلبك بنجاح!</h1>
+          <h1 className="mb-4 text-3xl font-bold text-gray-800">{t('services.submissionSuccess.title')}</h1>
 
           {/* Message */}
-          <p className="mb-6 text-lg text-gray-600">شكراً لك على تقديم طلبك. لقد تم استلامه وسيتم مراجعته من قبل فريق البلدية.</p>
+          <p className="mb-6 text-lg text-gray-600">{t('services.submissionSuccess.message')}</p>
 
           {id && (
             <div className="mb-6 rounded-lg border border-gray-200 p-4">
@@ -52,9 +52,9 @@ function SubmissionSuccess() {
 
           {/* Instructions */}
           <div className="mb-8 rounded-lg bg-yellow-50 p-6">
-            <h3 className="mb-2 text-lg font-semibold text-yellow-800">الخطوات التالية</h3>
-            <ul className="space-y-1 text-right text-sm text-yellow-700">
-              <li>• سيتم مراجعة طلبك خلال 3-5 أيام عمل</li>
+            <h3 className="mb-2 text-lg font-semibold text-yellow-800">{t('services.submissionSuccess.nextSteps')}</h3>
+            <ul className="space-y-1 text-start text-sm text-yellow-700">
+              <li>• {t('services.submissionSuccess.reviewTime')}</li>
               <li>• {t('services.submissionSuccess.track')}</li>
             </ul>
           </div>
@@ -72,17 +72,17 @@ function SubmissionSuccess() {
               href="/services"
               className="rounded-lg bg-gradient-to-r from-blue-500 to-blue-600 px-6 py-3 font-semibold text-white transition-opacity hover:opacity-90"
             >
-              العودة إلى الخدمات
+              {t('services.submissionSuccess.backToServices')}
             </Link>
 
             <Link href="/" className="rounded-lg bg-gray-100 px-6 py-3 font-semibold text-gray-700 transition-colors hover:bg-gray-200">
-              الصفحة الرئيسية
+              {t('services.submissionSuccess.home')}
             </Link>
           </div>
 
           {/* Note importante */}
           <div className="mt-8 border-t border-gray-200 pt-6">
-            <p className="text-sm text-gray-500">إذا كان لديك أي استفسار، يمكنك التواصل معنا عبر الهاتف أو البريد الإلكتروني</p>
+            <p className="text-sm text-gray-500">{t('services.submissionSuccess.contact')}</p>
           </div>
         </div>
       </div>

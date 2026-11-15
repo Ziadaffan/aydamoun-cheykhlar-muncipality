@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useAuth } from '@/packages/common/hooks/useAuth';
 import HomeHeaderSection from './HomeHeaderSection';
 import HomeLatestRequest from './HomeLatestRequest';
+import HomeAnnouncements from './HomeAnnouncements';
 import HomeLatestNews from './HomeLatestNews';
 import HomeServicesSection from './HomeServicesSection';
 import HomeQuickLinks from './HomeQuickLinks';
@@ -17,6 +18,8 @@ export default function HomePage() {
   return (
     <div className="min-h-screen bg-gradient-to-r from-blue-50 to-green-50">
       <HomeHeaderSection t={t} />
+
+      <HomeAnnouncements t={t} />
 
       {isAuthenticated && <HomeLatestRequest t={t} />}
 

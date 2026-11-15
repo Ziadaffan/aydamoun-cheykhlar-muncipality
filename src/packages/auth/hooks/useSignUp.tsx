@@ -3,14 +3,13 @@ import { isApiError, readApiError } from '@/packages/common/utils/api-error.util
 
 export interface SignUpData {
   name: string;
-  email?: string;
-  phone?: string;
+  phone: string;
   password: string;
   confirmPassword: string;
 }
 
 // Server rejections the form explains with their own message; anything else is SIGNUP_FAILED.
-const KNOWN_CODES = ['WEAK_PASSWORD', 'INVALID_PHONE', 'EMAIL_OR_PHONE_REQUIRED'];
+const KNOWN_CODES = ['WEAK_PASSWORD', 'INVALID_PHONE', 'PHONE_REQUIRED', 'EMAIL_OR_PHONE_REQUIRED'];
 
 export default function useSignUp() {
   return useMutation({
@@ -24,7 +23,7 @@ const signUp = async (data: SignUpData) => {
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify(data),
+    body: JSON.stringify({ name: data.name, phone: data.phone, password: data.password }),
   });
 
   if (!response.ok) {

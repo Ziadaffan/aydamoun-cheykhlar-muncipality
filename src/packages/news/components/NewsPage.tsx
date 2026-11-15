@@ -14,10 +14,11 @@ import NoNews from '@/packages/news/components/NoNews';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '@/packages/common/hooks/useAuth';
 import { useRouter } from 'next/navigation';
-import { categoryLabels } from '../utils/news.utils';
+import { useNewsCategoryLabel } from '../utils/news.utils';
 
 export default function NewsPage() {
   const { t } = useTranslation();
+  const categoryLabel = useNewsCategoryLabel();
   const [selectedCategory, setSelectedCategory] = useState<NewsCategory | 'ALL'>('ALL');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const { role } = useAuth();
@@ -56,7 +57,7 @@ export default function NewsPage() {
         {/* View Mode Toggle */}
         <div className="mb-6 flex items-center justify-between">
           <h2 className="text-2xl font-bold text-gray-800">
-            {selectedCategory === 'ALL' ? t('news.page.allNews') : categoryLabels[selectedCategory]}
+            {selectedCategory === 'ALL' ? t('news.page.allNews') : categoryLabel(selectedCategory)}
           </h2>
 
           <div className="flex items-center space-x-2">
@@ -100,7 +101,7 @@ export default function NewsPage() {
           <p className="text-gray-600">
             {selectedCategory === 'ALL'
               ? t('news.page.newsCount', { count: filteredNews.length })
-              : t('news.page.newsCountInCategory', { count: filteredNews.length, category: selectedCategory })}
+              : t('news.page.newsCountInCategory', { count: filteredNews.length, category: categoryLabel(selectedCategory) })}
           </p>
         </div>
 

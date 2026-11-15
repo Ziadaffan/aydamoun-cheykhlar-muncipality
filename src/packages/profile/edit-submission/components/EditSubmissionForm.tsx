@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { getAdditionalFields } from '@/packages/services/utils/form.utils';
+import type { ServiceField } from '@/packages/services/utils/serviceFields';
 import PersonalInfoSection from '@/packages/services/forms/PersonalInfoSection';
 import AdditionalFieldsSection from '@/packages/services/forms/AdditionalFieldsSection';
 import RequestDetailsSection from '@/packages/services/forms/RequestDetailsSection';
@@ -29,8 +29,8 @@ type EditSubmissionFormProps = {
   message: { type: 'success' | 'error'; text: string } | null;
   onSubmit: (data: FormData) => void;
   closeMessage: () => void;
-  category: string;
-  serviceId: string;
+  /** The service's form fields (resolveServiceFields). */
+  fields: ServiceField[];
   showStatusField?: boolean;
 };
 
@@ -40,8 +40,7 @@ export default function EditSubmissionForm({
   message,
   onSubmit,
   closeMessage,
-  category,
-  serviceId,
+  fields,
   showStatusField = false,
 }: EditSubmissionFormProps) {
   const { t } = useTranslation();
@@ -51,7 +50,6 @@ export default function EditSubmissionForm({
     formState: { errors, isDirty, isValid },
   } = form;
 
-  const additionalFields = getAdditionalFields(category, serviceId);
   const statusOptions = [
     { value: 'PENDING', label: t('profile.submissions.status.pending') },
     { value: 'IN_PROGRESS', label: t('profile.submissions.status.inProgress') },
@@ -80,7 +78,7 @@ export default function EditSubmissionForm({
         </div>
       )}
 
-      <AdditionalFieldsSection additionalFields={additionalFields} control={control} errors={errors} />
+      <AdditionalFieldsSection additionalFields={fields} control={control} errors={errors} />
 
       <RequestDetailsSection control={control} errors={errors} />
 

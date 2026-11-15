@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
+import { useLocalized } from '@/lib/localized';
 import Spinner from '@/packages/common/components/Spinner';
 import ErrorMessage from '@/packages/common/components/ErrorMessage';
 import { useAuth } from '@/packages/common/hooks/useAuth';
@@ -28,6 +29,7 @@ function BackToJobs() {
 
 export default function JobPage() {
   const { t } = useTranslation();
+  const loc = useLocalized();
   const params = useParams();
   const id = params?.id as string;
   const { role } = useAuth();
@@ -61,7 +63,7 @@ export default function JobPage() {
             {job.description && (
               <div className="px-4 py-5 sm:px-6">
                 <h2 className="mb-3 text-base font-semibold text-gray-900">{t('jobs.aboutRole')}</h2>
-                <p className="leading-8 break-words whitespace-pre-line text-gray-700 [overflow-wrap:anywhere]">{job.description}</p>
+                <p className="leading-8 break-words whitespace-pre-line text-gray-700 [overflow-wrap:anywhere]">{loc(job.description, job.descriptionEn)}</p>
               </div>
             )}
 

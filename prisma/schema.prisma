@@ -34,6 +34,12 @@ enum ServiceStatus {
   REJECTED
 }
 
+enum AnnouncementPriority {
+  NORMAL
+  IMPORTANT
+  URGENT
+}
+
 enum NewsCategory {
   MUNICIPAL_NEWS
   DEVELOPMENT_PROJECTS
@@ -58,6 +64,7 @@ model User {
   accounts      Account[]
   sessions      Session[]
   submissions   ServiceSubmission[]
+  pushTokens    PushToken[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -105,7 +112,16 @@ model Council {
   phone    String?
   email    String?
   image    String?
+  /// Duty in the municipality, e.g. "رئيس لجنة الأشغال".
+  role     String?
+  /// Field of study / profession, e.g. "مهندس مدني".
+  major    String?
+  order    Int      @default(0)
 
+  /// English versions (optional; Arabic is shown when empty).
+  nameEn    String?
+  roleEn    String?
+  majorEn   String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -115,10 +131,17 @@ model Service {
   name        String
   description String
   type        ServiceType
+  /// ServiceField[] (see src/packages/services/utils/serviceFields.ts); null = the category defaults.
+  fields      Json?
+  active      Boolean             @default(true)
+  order       Int                 @default(0)
   submissions ServiceSubmission[]
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  /// English versions (optional; Arabic is shown when empty).
+  nameEn        String?
+  descriptionEn String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 }
 
 model ServiceSubmission {
@@ -153,6 +176,10 @@ model News {
   tags      String[]
   createdBy String
 
+  /// English versions (optional; Arabic is shown when empty).
+  titleEn   String?
+  contentEn String?  @db.Text
+  excerptEn String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -168,8 +195,11 @@ model Document {
   type        String
   fileUrl     String
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  /// English versions (optional; Arabic is shown when empty).
+  titleEn       String?
+  descriptionEn String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 }
 
 model Jobs {
@@ -183,18 +213,26 @@ model Jobs {
   deadline    DateTime?
   active      Boolean   @default(true)
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  /// English versions (optional; Arabic is shown when empty).
+  titleEn       String?
+  descriptionEn String?
+  providerEn    String?
+  locationEn    String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 }
 
 model Association {
-  id          String  @id @default(uuid())
+  id          String @id @default(uuid())
   name        String
   description String
   picaURL     String
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  /// English versions (optional; Arabic is shown when empty).
+  nameEn        String?
+  descriptionEn String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 }
 
 model TaxiStop {
@@ -205,17 +243,71 @@ model TaxiStop {
   hour         String
   phone        String
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  /// English versions (optional; Arabic is shown when empty).
+  nameEn         String?
+  fromLocationEn String?
+  toLocationEn   String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 }
 
 // Expo push tokens of app installs, signed in or not: every install hears
 // about new news, jobs and taxi stops.
 model PushToken {
-  id       String @id @default(uuid())
-  token    String @unique
+  id       String   @id @default(uuid())
+  token    String   @unique
   platform String
+  /// "ar" | "en": the language the install's notifications are written in.
+  locale   String   @default("ar")
+  /// Subscribed topics: announcements, news, jobs, taxiStops, requests.
+  topics   String[] @default(["announcements", "news", "jobs", "taxiStops", "requests"])
+  /// Last signed-in user of the install, for personal notifications (request status).
+  userId   String?
+  user     User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@index([userId])
+}
+
+model Announcement {
+  id        String               @id @default(uuid())
+  title     String
+  body      String               @db.Text
+  /// Cloudinary public id or https URL.
+  imageUrl  String?
+  priority  AnnouncementPriority @default(NORMAL)
+  pinned    Boolean              @default(false)
+  /// Hidden from public lists after this.
+  expiresAt DateTime?
+  /// Admin user id.
+  createdBy String
+
+  /// English versions (optional; Arabic is shown when empty).
+  titleEn   String?
+  bodyEn    String?  @db.Text
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([createdAt])
+}
+
+// Village history timeline, managed by admins.
+model HistoryEntry {
+  id          String  @id @default(uuid())
+  /// Free text: "1920", "القرن التاسع عشر", "1975 – 1990".
+  period      String
+  title       String
+  description String  @db.Text
+  imageUrl    String?
+  /// Ascending = chronological.
+  order       Int     @default(0)
+
+  /// English versions (optional; Arabic is shown when empty).
+  periodEn      String?
+  titleEn       String?
+  descriptionEn String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 }

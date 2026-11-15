@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { requireAdmin } from '@/lib/mobile-auth';
 import { returnProperErrorMessage } from '@/packages/common/utils/error.utils';
-import { JobsService } from '@/packages/jobs/services/jobs.service';
+import { JobsService, readJobEnglish } from '@/packages/jobs/services/jobs.service';
 
 const jobsService = JobsService.instance();
 
@@ -66,6 +66,7 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
       salary: salary || null,
       deadline,
       active,
+      ...readJobEnglish(formData),
     };
 
     const result = await jobsService.updateJob(id, jobData);

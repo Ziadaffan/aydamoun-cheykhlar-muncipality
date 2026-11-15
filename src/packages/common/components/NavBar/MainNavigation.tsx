@@ -4,6 +4,7 @@ import Link from 'next/link';
 import MobileMenuButton from './MobileMenuButton';
 import MobileMenu from './MobileMenu';
 import NavigationItems from './NavigationItems';
+import LanguageSwitcher from './LanguageSwitcher';
 import { CldImage } from 'next-cloudinary';
 
 type MainNavigationProps = {
@@ -30,8 +31,9 @@ export default function MainNavigation({ t }: MainNavigationProps) {
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden min-[1601px]:flex items-center">
+          <div className="hidden min-[1601px]:flex items-center gap-4">
             <NavigationItems t={t} />
+            <LanguageSwitcher />
           </div>
 
           {/* Mobile Button */}

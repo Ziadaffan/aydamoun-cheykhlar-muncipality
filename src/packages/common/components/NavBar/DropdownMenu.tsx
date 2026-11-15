@@ -35,7 +35,7 @@ export default function DropdownMenu({ isOpen, label, items, onToggle, isMobile 
             />
           </svg>
         </button>
-        <div className={`${isOpen ? 'block' : 'hidden'} space-y-1 pl-4 transition-all duration-200`}>
+        <div className={`${isOpen ? 'block' : 'hidden'} space-y-1 ps-4 transition-all duration-200`}>
           {items.map(item => (
             <NavLink key={item.href} href={item.href}>
               {item.label}
@@ -51,7 +51,7 @@ export default function DropdownMenu({ isOpen, label, items, onToggle, isMobile 
       <button className="inline-flex items-center px-3 py-2 font-medium text-gray-700 transition-colors duration-200 hover:text-blue-800">
         {label}
         <svg
-          className="ml-1 h-5 w-5 transition-transform duration-200 group-hover:rotate-180"
+          className="ms-1 h-5 w-5 transition-transform duration-200 group-hover:rotate-180"
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 20 20"
           fill="currentColor"
@@ -63,7 +63,7 @@ export default function DropdownMenu({ isOpen, label, items, onToggle, isMobile 
           />
         </svg>
       </button>
-      <div className="ring-opacity-5 invisible absolute left-0 mt-2 w-56 -translate-y-2 transform rounded-md bg-white opacity-0 shadow-lg ring-1 ring-black transition-all duration-200 ease-out group-hover:visible group-hover:translate-y-0 group-hover:opacity-100">
+      <div className="ring-opacity-5 invisible absolute start-0 mt-2 w-56 -translate-y-2 transform rounded-md bg-white opacity-0 shadow-lg ring-1 ring-black transition-all duration-200 ease-out group-hover:visible group-hover:translate-y-0 group-hover:opacity-100">
         <div className="pt-1">
           {items.map(item => (
             <NavLink key={item.href} href={item.href}>

@@ -11,7 +11,7 @@ const invalidCredentials = () => NextResponse.json({ error: 'Invalid credentials
 /**
  * Token-based login for non-browser clients (React Native app).
  * Body: { identifier: string (email or phone), password: string }
- * Returns: { token, user } — send the token as `Authorization: Bearer <token>`.
+ * Returns: { token, user } (user.hasPassword is always true here) — send the token as `Authorization: Bearer <token>`.
  */
 export async function POST(request: NextRequest) {
   try {
@@ -61,6 +61,7 @@ export async function POST(request: NextRequest) {
         role: user.role,
         createdAt: user.createdAt,
         updatedAt: user.updatedAt,
+        hasPassword: true,
       },
     });
   } catch (error) {

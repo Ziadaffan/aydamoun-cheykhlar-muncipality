@@ -36,6 +36,11 @@ const updateJob = async (data: UpdateJobFormData & { id: string }) => {
     formData.append('deadline', deadlineDate.toISOString());
   }
   formData.append('active', data.active?.toString() || 'true');
+  // English version: always sent, so clearing a field clears it on the server.
+  formData.append('titleEn', data.titleEn ?? '');
+  formData.append('descriptionEn', data.descriptionEn ?? '');
+  formData.append('providerEn', data.providerEn ?? '');
+  formData.append('locationEn', data.locationEn ?? '');
 
   const response = await fetch(`/api/jobs/${data.id}`, {
     method: 'PUT',

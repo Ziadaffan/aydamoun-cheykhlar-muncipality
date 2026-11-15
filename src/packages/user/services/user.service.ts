@@ -17,6 +17,20 @@ export const PUBLIC_USER_SELECT = {
   updatedAt: true,
 } as const;
 
+// Read along with the profile only to tell whether a password is set; never sent.
+const PROFILE_SELECT = { ...PUBLIC_USER_SELECT, password: true } as const;
+
+type ProfileRow = { password: string | null } & Record<string, unknown>;
+
+/**
+ * The user as API clients get it: no password hash, plus `hasPassword` (false for
+ * accounts made with Google, which have no password to change).
+ */
+export function toPublicUser<T extends ProfileRow>(user: T): Omit<T, 'password'> & { hasPassword: boolean } {
+  const { password, ...rest } = user;
+  return { ...rest, hasPassword: !!password };
+}
+
 // The session still points at an account that is gone (e.g. deleted from another device):
 // 401 so clients drop the session instead of showing a form error.
 const accountNotFound = () => new UnauthorizedError('User not found', 'USER_NOT_FOUND');
@@ -39,7 +53,8 @@ export class UserService extends BasePrismaService<'user'> {
 
   /** Public profile of the signed-in user, or null when the account no longer exists. */
   public async getProfile(id: string) {
-    return this.repository.findUnique({ where: { id }, select: PUBLIC_USER_SELECT });
+    const user = await this.repository.findUnique({ where: { id }, select: PROFILE_SELECT });
+    return user ? toPublicUser(user) : null;
   }
 
   /**
@@ -96,11 +111,13 @@ export class UserService extends BasePrismaService<'user'> {
     }
 
     try {
-      return await this.repository.update({
-        where: { id },
-        data: updateData,
-        select: PUBLIC_USER_SELECT,
-      });
+      return toPublicUser(
+        await this.repository.update({
+          where: { id },
+          data: updateData,
+          select: PROFILE_SELECT,
+        })
+      );
     } catch (error) {
       // Another account took the email/phone between the check above and this write.
       if ((error as { code?: string })?.code === 'P2002') {
@@ -133,11 +150,13 @@ export class UserService extends BasePrismaService<'user'> {
 
     const hashedNewPassword = await bcrypt.hash(String(newPassword), 12);
 
-    return this.repository.update({
-      where: { id },
-      data: { password: hashedNewPassword },
-      select: PUBLIC_USER_SELECT,
-    });
+    return toPublicUser(
+      await this.repository.update({
+        where: { id },
+        data: { password: hashedNewPassword },
+        select: PROFILE_SELECT,
+      })
+    );
   }
 
   /**

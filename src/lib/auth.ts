@@ -1,8 +1,13 @@
 import { NextAuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
+import GoogleProvider, { GoogleProfile } from 'next-auth/providers/google';
 import prisma from '@/packages/lib/db';
 import bcrypt from 'bcryptjs';
 import { normalizePhone, phoneLookupValues } from '@/packages/common/utils/phone.utils';
+import { findOrCreateGoogleUser } from '@/packages/auth/service/google.service';
+
+// "Continue with Google" appears only when both are set (see README).
+export const isGoogleSignInConfigured = !!(process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET);
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -49,6 +54,25 @@ export const authOptions: NextAuthOptions = {
         };
       },
     }),
+    ...(isGoogleSignInConfigured
+      ? [
+          GoogleProvider({
+            clientId: process.env.GOOGLE_CLIENT_ID!,
+            clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+            // Placeholder values: the jwt callback swaps in the database user.
+            profile(profile: GoogleProfile) {
+              return {
+                id: profile.sub,
+                name: profile.name,
+                email: profile.email,
+                image: profile.picture,
+                role: 'USER',
+                createdAt: new Date(),
+              };
+            },
+          }),
+        ]
+      : []),
   ],
   session: {
     strategy: 'jwt',
@@ -59,8 +83,30 @@ export const authOptions: NextAuthOptions = {
     maxAge: 24 * 60 * 60, // 24 heures
   },
   callbacks: {
-    async jwt({ token, user, trigger }) {
-      if (user) {
+    async signIn({ account, profile }) {
+      // Only addresses Google has verified may sign in (and be matched to an existing account).
+      if (account?.provider === 'google') {
+        return (profile as GoogleProfile | undefined)?.email_verified === true && !!profile?.email;
+      }
+      return true;
+    },
+    async jwt({ token, user, account, profile, trigger }) {
+      if (account?.provider === 'google' && profile?.email) {
+        // Same account as the app's Google sign-in: linked user, else user with that email, else a new one.
+        const { user: dbUser } = await findOrCreateGoogleUser({
+          sub: account.providerAccountId,
+          email: profile.email.trim().toLowerCase(),
+          name: profile.name ?? null,
+          picture: (profile as GoogleProfile).picture ?? null,
+        });
+        token.sub = dbUser.id;
+        token.name = dbUser.name;
+        token.email = dbUser.email;
+        token.role = dbUser.role;
+        token.phone = dbUser.phone;
+        token.createdAt = dbUser.createdAt;
+        token.lastUpdated = Date.now();
+      } else if (user) {
         token.role = user.role;
         token.phone = user.phone;
         token.createdAt = user.createdAt;

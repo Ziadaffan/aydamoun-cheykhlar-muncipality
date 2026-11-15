@@ -4,7 +4,12 @@ import { ServiceSubmissionService } from '@/packages/serviceSubmissions/services
 import { NextRequest, NextResponse } from 'next/server';
 import { requireAuth } from '@/lib/mobile-auth';
 import { ServiceService } from '@/packages/services/services/services.service';
-import { parseSubmissionInput, readJsonObject } from '@/packages/serviceSubmissions/validation/submission.validation';
+import {
+  assertAdditionalInfoMatchesFields,
+  parseSubmissionInput,
+  readJsonObject,
+} from '@/packages/serviceSubmissions/validation/submission.validation';
+import { ConflictError } from '@/packages/common/errors';
 
 const serviceSubmissionService = ServiceSubmissionService.instance();
 const serviceService = ServiceService.instance();
@@ -36,7 +41,11 @@ export const POST = ApiErrorHandler(async (req: NextRequest, context) => {
 
     const data = parseSubmissionInput(await readJsonObject(req));
     // 404 for a removed service instead of a foreign-key error (500).
-    await serviceService.getServiceById(serviceId);
+    const service = await serviceService.getServiceById(serviceId);
+    if (!service.active) {
+      throw new ConflictError('Service is not available', 'SERVICE_INACTIVE');
+    }
+    assertAdditionalInfoMatchesFields(data.additionalInfo, service.fields);
 
     const submission = await serviceSubmissionService.createServiceSubmissions(serviceId, session.user.id, data);
 

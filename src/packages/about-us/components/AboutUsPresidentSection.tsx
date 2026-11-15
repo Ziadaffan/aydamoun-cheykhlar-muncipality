@@ -1,8 +1,10 @@
+'use client';
+
 import { TFunction } from 'i18next';
 import React from 'react';
 import Image from 'next/image';
 import { Council } from '@prisma/client';
-import { getPositionLabel } from '@/packages/common/utils/position.utils';
+import { useLocalized } from '@/lib/localized';
 import { CldImage } from 'next-cloudinary';
 
 type AboutUsPresidentSectionProps = {
@@ -11,6 +13,8 @@ type AboutUsPresidentSectionProps = {
 };
 
 export default function AboutUsPresidentSection({ t, president }: AboutUsPresidentSectionProps) {
+  const loc = useLocalized();
+
   return (
     <section className="relative overflow-hidden border-b border-gray-300 py-20">
       <div className="relative container mx-auto px-4">
@@ -28,7 +32,7 @@ export default function AboutUsPresidentSection({ t, president }: AboutUsPreside
                   {president.image && (
                     <CldImage
                       src={president.image}
-                      alt={president.id}
+                      alt={loc(president.name, president.nameEn)}
                       fill
                       className="object-cover transition-transform duration-300 group-hover:scale-105"
                     />
@@ -39,21 +43,27 @@ export default function AboutUsPresidentSection({ t, president }: AboutUsPreside
               <div className="mt-8 w-full max-w-sm">
                 <div className="relative rounded-2xl border border-white/20 bg-white/80 p-6 shadow-lg backdrop-blur-sm">
                   <p className="text-center leading-relaxed font-medium text-gray-700">
-                    أهلي في عيدمون ، نعدكم بالعمل المتواصل من أجل تطوير الخدمات وتحقيق العدالة الإدارية، وأبواب البلدية مفتوحه للجميع
+                    {t('aboutUs.president.message')}
                   </p>
                 </div>
               </div>
             </div>
 
-            <div className="flex-1 text-center lg:text-right">
+            <div className="flex-1 text-center lg:text-start">
               <div className="space-y-6">
                 <div>
                   <h3 className="mb-3 bg-gradient-to-r from-gray-800 to-gray-600 bg-clip-text text-5xl font-bold text-transparent">
-                    {president.name}
+                    {loc(president.name, president.nameEn)}
                   </h3>
                   <div className="inline-block rounded-full bg-gradient-to-r from-blue-600 to-green-600 px-6 py-2 text-xl font-semibold text-white shadow-lg">
-                    {getPositionLabel(president.position)}
+                    {t(`aboutUs.positions.${president.position}`)}
                   </div>
+                  {(president.role || president.major) && (
+                    <div className="mt-4 space-y-1">
+                      {president.role && <p className="text-xl font-semibold text-gray-800">{loc(president.role, president.roleEn)}</p>}
+                      {president.major && <p className="text-lg text-gray-600">{loc(president.major, president.majorEn)}</p>}
+                    </div>
+                  )}
                 </div>
 
                 <div className="rounded-2xl border border-white/20 bg-white/60 p-8 shadow-lg backdrop-blur-sm">

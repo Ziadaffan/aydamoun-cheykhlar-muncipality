@@ -1,7 +1,9 @@
+'use client';
+
 import { TFunction } from 'i18next';
 import React from 'react';
 import { Council } from '@prisma/client';
-import { getPositionLabel } from '@/packages/common/utils/position.utils';
+import { useLocalized } from '@/lib/localized';
 import { CldImage } from 'next-cloudinary';
 
 type AboutUsConcilMembersSectionProps = {
@@ -10,6 +12,8 @@ type AboutUsConcilMembersSectionProps = {
 };
 
 export default function AboutUsConcilMembersSection({ t, councilMembers }: AboutUsConcilMembersSectionProps) {
+  const loc = useLocalized();
+
   return (
     <section className="relative overflow-hidden py-20">
       <div className="relative container mx-auto px-6">
@@ -29,7 +33,7 @@ export default function AboutUsConcilMembersSection({ t, councilMembers }: About
                       {member.image && (
                         <CldImage
                           src={member.image}
-                          alt={member.id}
+                          alt={loc(member.name, member.nameEn)}
                           fill
                           className="object-cover transition-transform duration-300 group-hover:scale-105"
                         />
@@ -39,16 +43,23 @@ export default function AboutUsConcilMembersSection({ t, councilMembers }: About
                   </div>
 
                   <div className="text-center">
-                    <h3 className="mb-3 text-xl font-bold text-gray-800">{member.name}</h3>
+                    <h3 className="mb-3 text-xl font-bold text-gray-800">{loc(member.name, member.nameEn)}</h3>
                     <div className="mb-4 inline-block rounded-full bg-gradient-to-r from-blue-600 to-green-600 px-4 py-1 text-sm font-semibold text-white shadow-lg">
-                      {getPositionLabel(member.position)}
+                      {t(`aboutUs.positions.${member.position}`)}
                     </div>
+
+                    {(member.role || member.major) && (
+                      <div className="mb-4 space-y-1">
+                        {member.role && <p className="font-semibold text-gray-800">{loc(member.role, member.roleEn)}</p>}
+                        {member.major && <p className="text-sm text-gray-600">{loc(member.major, member.majorEn)}</p>}
+                      </div>
+                    )}
 
                     <div className="rounded-xl border border-white/20 bg-white/60 p-4 shadow-lg backdrop-blur-sm">
                       <p className="text-sm text-gray-600">
-                        <span className="font-semibold">رقم الهاتف:</span>{' '}
+                        <span className="font-semibold">{t('aboutUs.council.phone')}</span>{' '}
                         <span dir="ltr" className="inline-block">
-                          {member.phone || 'غير متوفر'}
+                          {member.phone || t('aboutUs.council.phoneUnavailable')}
                         </span>
                       </p>
                     </div>

@@ -25,8 +25,7 @@ export default function AdminEditSubmissionPage() {
     onSubmit,
     closeMessage,
     errorSubmission,
-    mappedCategory,
-    mappedServiceId,
+    fields,
   } = useAdminEditSubmission(submissionId);
 
   if (authLoading || isLoading) {
@@ -63,8 +62,7 @@ export default function AdminEditSubmissionPage() {
             message={message}
             onSubmit={onSubmit}
             closeMessage={closeMessage}
-            category={mappedCategory}
-            serviceId={mappedServiceId}
+            fields={fields}
             showStatusField
           />
         )}

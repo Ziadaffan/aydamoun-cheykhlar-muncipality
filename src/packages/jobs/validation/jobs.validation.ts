@@ -30,7 +30,7 @@ export const createJobSchema = yup.object({
     .mixed()
     .nullable()
     .default(null)
-    .test('is-date', 'يجب أن يكون تاريخ صحيح', value => {
+    .test('is-date', validationMessages.invalidDate, value => {
       if (!value) return true;
       if (value instanceof Date) return !isNaN(value.getTime());
       if (typeof value === 'string') {
@@ -47,6 +47,12 @@ export const createJobSchema = yup.object({
     }),
 
   active: yup.boolean().default(true),
+
+  // English version (optional; the Arabic text is shown when it is empty).
+  titleEn: yup.string().trim().max(200, validationMessages.maxLength('العنوان بالإنجليزية', 200)).default(''),
+  descriptionEn: yup.string().trim().max(5000, validationMessages.maxLength('الوصف بالإنجليزية', 5000)).default(''),
+  providerEn: yup.string().trim().max(100, validationMessages.maxLength('اسم المزود بالإنجليزية', 100)).default(''),
+  locationEn: yup.string().trim().max(100, validationMessages.maxLength('الموقع بالإنجليزية', 100)).default(''),
 });
 
 export type CreateJobFormData = yup.InferType<typeof createJobSchema>;
@@ -80,7 +86,7 @@ export const updateJobSchema = yup.object({
     .mixed()
     .nullable()
     .default(null)
-    .test('is-date', 'يجب أن يكون تاريخ صحيح', value => {
+    .test('is-date', validationMessages.invalidDate, value => {
       if (!value) return true;
       if (value instanceof Date) return !isNaN(value.getTime());
       if (typeof value === 'string') {
@@ -97,6 +103,12 @@ export const updateJobSchema = yup.object({
     }),
 
   active: yup.boolean().default(true),
+
+  // English version (optional; the Arabic text is shown when it is empty).
+  titleEn: yup.string().trim().max(200, validationMessages.maxLength('العنوان بالإنجليزية', 200)).default(''),
+  descriptionEn: yup.string().trim().max(5000, validationMessages.maxLength('الوصف بالإنجليزية', 5000)).default(''),
+  providerEn: yup.string().trim().max(100, validationMessages.maxLength('اسم المزود بالإنجليزية', 100)).default(''),
+  locationEn: yup.string().trim().max(100, validationMessages.maxLength('الموقع بالإنجليزية', 100)).default(''),
 });
 
 type YupUpdateJobFormData = yup.InferType<typeof updateJobSchema>;
@@ -110,5 +122,9 @@ export type UpdateJobFormData = {
   salary: YupUpdateJobFormData['salary'];
   deadline: YupUpdateJobFormData['deadline'];
   active: boolean;
+  titleEn?: string;
+  descriptionEn?: string;
+  providerEn?: string;
+  locationEn?: string;
 };
 

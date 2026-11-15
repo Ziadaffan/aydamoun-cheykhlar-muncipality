@@ -1,6 +1,7 @@
 import { NextRequest } from 'next/server';
 import { BadRequestError } from '@/packages/common/errors';
 import { isValidPhone, normalizePhone } from '@/packages/common/utils/phone.utils';
+import { findAdditionalInfoProblem, ServiceField } from '@/packages/services/utils/serviceFields';
 
 /**
  * Server-side checks for service requests sent by the website and the mobile app.
@@ -97,6 +98,20 @@ function additionalInfoOf(value: unknown): Record<string, AdditionalInfoValue> {
     }
   }
   return out;
+}
+
+/**
+ * Checks additionalInfo against the service's resolved fields (required present, select
+ * value among the options, number numeric, date 'YYYY-MM-DD'). Staff edits pass
+ * `requireAll: false`, so a request made before a field was added can still be updated.
+ */
+export function assertAdditionalInfoMatchesFields(
+  additionalInfo: Record<string, AdditionalInfoValue>,
+  fields: ServiceField[],
+  options?: { requireAll?: boolean }
+) {
+  const problem = findAdditionalInfoProblem(additionalInfo, fields, options);
+  if (problem) throw invalid(problem);
 }
 
 /** A new request: name, phone and address are required; extra body fields are ignored. */

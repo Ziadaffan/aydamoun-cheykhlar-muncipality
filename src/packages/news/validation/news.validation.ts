@@ -1,6 +1,14 @@
 import * as yup from 'yup';
-import { validationMessages } from '../../common/validation/common.validation';
+import { localizedMessage, validationMessages } from '../../common/validation/common.validation';
 import { NewsCategory } from '../types/news.types';
+
+const messages = {
+  invalidCategory: localizedMessage('يرجى اختيار فئة صحيحة', 'Please choose a valid category'),
+  tagMinLength: localizedMessage('يجب أن يكون كل علامة على الأقل حرفين', 'Each tag must be at least 2 characters'),
+  tooManyTags: localizedMessage('يمكن إضافة 10 علامات كحد أقصى', 'You can add up to 10 tags'),
+  imagesRequired: localizedMessage('يرجى إضافة صورة واحدة على الأقل', 'Please add at least one image'),
+  tooManyImages: localizedMessage('يمكن إضافة 5 صور كحد أقصى', 'You can add up to 5 images'),
+};
 
 export const createNewsSchema = yup.object({
   title: yup
@@ -21,6 +29,11 @@ export const createNewsSchema = yup.object({
     .max(500, validationMessages.maxLength('ملخص الخبر', 500))
     .required(validationMessages.required('ملخص الخبر')),
 
+  // English version (optional; the Arabic text is shown when it is empty).
+  titleEn: yup.string().trim().max(200, validationMessages.maxLength('العنوان بالإنجليزية', 200)).default(''),
+  excerptEn: yup.string().trim().max(500, validationMessages.maxLength('الملخص بالإنجليزية', 500)).default(''),
+  contentEn: yup.string().trim().max(5000, validationMessages.maxLength('المحتوى بالإنجليزية', 5000)).default(''),
+
   category: yup
     .string()
     .oneOf(
@@ -35,7 +48,7 @@ export const createNewsSchema = yup.object({
         'HEALTH_AND_SOCIAL_SERVICES',
         'OTHER',
       ],
-      'يرجى اختيار فئة صحيحة'
+      messages.invalidCategory
     )
     .required(validationMessages.required('فئة الخبر')),
 
@@ -47,8 +60,8 @@ export const createNewsSchema = yup.object({
 
   tags: yup
     .array()
-    .of(yup.string().min(2, 'يجب أن يكون كل علامة على الأقل حرفين'))
-    .max(10, 'يمكن إضافة 10 علامات كحد أقصى')
+    .of(yup.string().min(2, messages.tagMinLength))
+    .max(10, messages.tooManyTags)
     .required(validationMessages.required('العلامات')),
 
   featured: yup.boolean().default(false),
@@ -58,20 +71,20 @@ export const createNewsSchema = yup.object({
     .of(
       yup
         .mixed()
-        .test('file-required', 'يرجى اختيار صورة', value => value && value instanceof File)
-        .test('file-type', 'نوع الملف غير مدعوم', value => {
+        .test('file-required', validationMessages.chooseImage, value => value && value instanceof File)
+        .test('file-type', validationMessages.unsupportedFileType, value => {
           if (!value || !(value instanceof File)) return false;
           const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
           return allowedTypes.includes(value.type);
         })
-        .test('file-size', 'حجم الصورة يجب أن يكون أقل من 5 ميجابايت', value => {
+        .test('file-size', validationMessages.imageTooLarge, value => {
           if (!value || !(value instanceof File)) return false;
           const maxSize = 5 * 1024 * 1024; // 5MB
           return value.size <= maxSize;
         })
     )
-    .min(1, 'يرجى إضافة صورة واحدة على الأقل')
-    .max(5, 'يمكن إضافة 5 صور كحد أقصى')
+    .min(1, messages.imagesRequired)
+    .max(5, messages.tooManyImages)
     .required(validationMessages.required('الصور')),
 });
 
@@ -96,6 +109,11 @@ export const updateNewsSchema = yup.object({
     .max(500, validationMessages.maxLength('ملخص الخبر', 500))
     .required(validationMessages.required('ملخص الخبر')),
 
+  // English version (optional; the Arabic text is shown when it is empty).
+  titleEn: yup.string().trim().max(200, validationMessages.maxLength('العنوان بالإنجليزية', 200)).default(''),
+  excerptEn: yup.string().trim().max(500, validationMessages.maxLength('الملخص بالإنجليزية', 500)).default(''),
+  contentEn: yup.string().trim().max(5000, validationMessages.maxLength('المحتوى بالإنجليزية', 5000)).default(''),
+
   category: yup
     .string()
     .oneOf(
@@ -110,7 +128,7 @@ export const updateNewsSchema = yup.object({
         'HEALTH_AND_SOCIAL_SERVICES',
         'OTHER',
       ],
-      'يرجى اختيار فئة صحيحة'
+      messages.invalidCategory
     )
     .required(validationMessages.required('فئة الخبر')),
 
@@ -122,8 +140,8 @@ export const updateNewsSchema = yup.object({
 
   tags: yup
     .array()
-    .of(yup.string().min(2, 'يجب أن يكون كل علامة على الأقل حرفين'))
-    .max(10, 'يمكن إضافة 10 علامات كحد أقصى')
+    .of(yup.string().min(2, messages.tagMinLength))
+    .max(10, messages.tooManyTags)
     .required(validationMessages.required('العلامات')),
 
   featured: yup.boolean().default(false),
@@ -133,20 +151,20 @@ export const updateNewsSchema = yup.object({
     .of(
       yup
         .mixed()
-        .test('file-required', 'يرجى اختيار صورة', value => value && value instanceof File)
-        .test('file-type', 'نوع الملف غير مدعوم', value => {
+        .test('file-required', validationMessages.chooseImage, value => value && value instanceof File)
+        .test('file-type', validationMessages.unsupportedFileType, value => {
           if (!value || !(value instanceof File)) return false;
           const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
           return allowedTypes.includes(value.type);
         })
-        .test('file-size', 'حجم الصورة يجب أن يكون أقل من 5 ميجابايت', value => {
+        .test('file-size', validationMessages.imageTooLarge, value => {
           if (!value || !(value instanceof File)) return false;
           const maxSize = 5 * 1024 * 1024; // 5MB
           return value.size <= maxSize;
         })
     )
-    .min(1, 'يرجى إضافة صورة واحدة على الأقل')
-    .max(5, 'يمكن إضافة 5 صور كحد أقصى')
+    .min(1, messages.imagesRequired)
+    .max(5, messages.tooManyImages)
     .required(validationMessages.required('الصور')),
 });
 

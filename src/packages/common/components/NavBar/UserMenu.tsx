@@ -4,9 +4,11 @@ import { useSession, signOut } from 'next-auth/react';
 import { useState, useRef, useEffect } from 'react';
 import Image from 'next/image';
 import NavLink from './NavLink';
+import { useTranslation } from 'react-i18next';
 
 export default function UserMenu() {
   const { data: session } = useSession();
+  const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
@@ -29,9 +31,9 @@ export default function UserMenu() {
 
   if (!session) {
     return (
-      <div className="flex items-center space-x-4 space-x-reverse">
-        <NavLink href="/auth/login">تسجيل الدخول</NavLink>
-        <NavLink href="/auth/signup">إنشاء حساب</NavLink>
+      <div className="flex items-center gap-4">
+        <NavLink href="/auth/login">{t('navigation.main.login')}</NavLink>
+        <NavLink href="/auth/signup">{t('navigation.main.signup')}</NavLink>
       </div>
     );
   }
@@ -40,7 +42,7 @@ export default function UserMenu() {
     <div className="relative" ref={menuRef}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center space-x-2 space-x-reverse rounded-full text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
+        className="flex items-center gap-2 rounded-full text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
       >
         <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-600 font-medium text-white">
           {session.user?.name?.[0]?.toUpperCase() || session.user?.email?.[0]?.toUpperCase() || 'U'}
@@ -49,18 +51,18 @@ export default function UserMenu() {
       </button>
 
       {isOpen && (
-        <div className="absolute left-0 z-50 mt-2 w-48 rounded-md border bg-white py-1 shadow-lg">
+        <div className="absolute end-0 z-50 mt-2 w-48 rounded-md border bg-white py-1 shadow-lg">
           <div className="border-b px-4 py-2 text-sm text-gray-700">
             <div className="font-medium">{session.user?.name}</div>
             <div className="text-gray-500">{session.user?.email}</div>
           </div>
 
           <NavLink href="/profile" setIsMobileMenuOpen={() => setIsOpen(false)}>
-            الملف الشخصي
+            {t('navigation.main.profile')}
           </NavLink>
 
-          <button onClick={handleLogout} className="block w-full px-4 py-2 text-right text-sm text-gray-700 transition-colors hover:bg-gray-100">
-            تسجيل الخروج
+          <button onClick={handleLogout} className="block w-full px-4 py-2 text-start text-sm text-gray-700 transition-colors hover:bg-gray-100">
+            {t('navigation.main.logout')}
           </button>
         </div>
       )}

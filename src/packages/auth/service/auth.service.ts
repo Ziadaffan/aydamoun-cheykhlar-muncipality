@@ -21,17 +21,19 @@ export class AuthService extends BasePrismaService<'user'> {
     return AuthService.singleton;
   }
 
+  /**
+   * New accounts are made with a phone number and a password. An email in the body is
+   * ignored (older app versions still send one): email accounts are the existing ones,
+   * and Google sign-in.
+   */
   public async signup(data: any): Promise<User> {
-    const rawEmail = data.email ? String(data.email).trim() : '';
-
-    const email = rawEmail ? rawEmail.toLowerCase() : null;
     const phone = data.phone ? normalizePhone(data.phone) || null : null;
 
-    if (!email && !phone) {
-      throw new BadRequestError('Email or phone is required', 'EMAIL_OR_PHONE_REQUIRED');
+    if (!phone) {
+      throw new BadRequestError('Phone is required', 'PHONE_REQUIRED');
     }
 
-    if (phone && !isValidPhone(phone)) {
+    if (!isValidPhone(phone)) {
       throw new BadRequestError('Invalid phone number', 'INVALID_PHONE');
     }
 
@@ -44,7 +46,7 @@ export class AuthService extends BasePrismaService<'user'> {
     const existingUser = await this.repository.findFirst({
       where: {
         // The raw phone too: numbers stored before normalization keep their spaces/dashes.
-        OR: [...(email ? [{ email }] : []), ...(phone ? [{ phone: { in: phoneLookupValues(String(data.phone)) } }] : [])],
+        phone: { in: phoneLookupValues(String(data.phone)) },
       },
     });
 
@@ -58,7 +60,6 @@ export class AuthService extends BasePrismaService<'user'> {
       return await this.repository.create({
         data: {
           name: data.name,
-          email,
           phone,
           password: hashedPassword,
         },

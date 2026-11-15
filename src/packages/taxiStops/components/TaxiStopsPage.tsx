@@ -1,5 +1,6 @@
 'use client';
 
+import { useTranslation } from 'react-i18next';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/packages/common/hooks/useAuth';
@@ -18,9 +19,13 @@ type TaxiStopItem = {
   toLocation: string;
   hour: string;
   phone: string;
+  nameEn?: string | null;
+  fromLocationEn?: string | null;
+  toLocationEn?: string | null;
 };
 
 export default function TaxiStopsPage() {
+  const { t } = useTranslation();
   const [taxiStops, setTaxiStops] = useState<TaxiStopItem[]>([]);
   const router = useRouter();
   const { role } = useAuth();
@@ -50,7 +55,7 @@ export default function TaxiStopsPage() {
           {role === 'ADMIN' && (
             <div className="mb-8 flex justify-center">
               <Button variant="primary" size="lg" onClick={() => router.push('/taxi-stops/create')}>
-                إضافة موقف تاكسي جديد
+                {t('taxiStops.add')}
               </Button>
             </div>
           )}

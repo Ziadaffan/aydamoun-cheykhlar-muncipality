@@ -1,12 +1,5 @@
+import { Prisma } from '@prisma/client';
 import prisma from '@/packages/lib/db';
-
-type TaxiStopData = {
-  name: string;
-  fromLocation: string;
-  toLocation: string;
-  hour: string;
-  phone: string;
-};
 
 export class TaxiStopsRepository {
   constructor(private readonly prismaClient: typeof prisma = prisma) {}
@@ -19,11 +12,11 @@ export class TaxiStopsRepository {
     return this.prismaClient.taxiStop.findUnique({ where: { id } });
   }
 
-  public create(data: TaxiStopData) {
+  public create(data: Prisma.TaxiStopCreateInput) {
     return this.prismaClient.taxiStop.create({ data });
   }
 
-  public update(id: string, data: TaxiStopData) {
+  public update(id: string, data: Prisma.TaxiStopUpdateInput) {
     return this.prismaClient.taxiStop.update({ where: { id }, data });
   }
 

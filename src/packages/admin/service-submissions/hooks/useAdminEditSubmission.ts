@@ -5,7 +5,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useTranslation } from 'react-i18next';
 import { Service, ServiceStatus, ServiceSubmission } from '@prisma/client';
 import { createServiceSubmissionSchema } from '@/packages/services/validation/services.validation';
-import { mapServiceTypeToCategory } from '@/packages/services/utils/category.utils';
+import { resolveServiceFields, ServiceField } from '@/packages/services/utils/serviceFields';
 import { useAdminServiceSubmission } from './useAdminSubmission';
 import { useAdminUpdateServiceSubmission } from './useAdminUpdateServiceSubmission';
 
@@ -24,14 +24,14 @@ export function useAdminEditSubmission(submissionId: string) {
   const { t } = useTranslation();
   const router = useRouter();
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
-  const [mappedCategory, setMappedCategory] = useState<string>('');
-  const [mappedServiceId, setMappedServiceId] = useState<string>('');
+  // The service's form fields, known once the request has loaded.
+  const [fields, setFields] = useState<ServiceField[]>([]);
 
   const { data: submissionData, isLoading: isLoadingSubmission, error: errorSubmission } = useAdminServiceSubmission(submissionId);
   const { mutate: updateServiceSubmission, isPending: isLoadingUpdate } = useAdminUpdateServiceSubmission();
 
   const form = useForm<FormData>({
-    resolver: yupResolver(createServiceSubmissionSchema(mappedCategory, mappedServiceId)) as any,
+    resolver: yupResolver(createServiceSubmissionSchema(fields)) as any,
     defaultValues: {
       fullName: '',
       phone: '',
@@ -46,11 +46,7 @@ export function useAdminEditSubmission(submissionId: string) {
 
   useEffect(() => {
     if (submissionData) {
-      const category = mapServiceTypeToCategory(submissionData.service?.type || '');
-      const serviceId = submissionData.serviceId;
-
-      setMappedCategory(category);
-      setMappedServiceId(serviceId);
+      setFields(resolveServiceFields(submissionData.service));
 
       form.reset({
         fullName: submissionData.fullName || '',
@@ -101,7 +97,6 @@ export function useAdminEditSubmission(submissionId: string) {
     message,
     onSubmit,
     closeMessage,
-    mappedCategory,
-    mappedServiceId,
+    fields,
   };
 }

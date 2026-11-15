@@ -2,6 +2,9 @@ import { Document } from '@prisma/client';
 import { TFunction } from 'i18next';
 import Button from '@/packages/common/components/Button';
 import { useDeleteDocument } from '@/packages/document/hooks/useDeleteDocument';
+import { useTranslation } from 'react-i18next';
+import { useLocalized } from '@/lib/localized';
+import { dateLocale } from '@/packages/common/utils/date.utils';
 import { documentExtension, documentMimeType, isRemoteFileUrl } from '@/packages/document/utils/document.utils';
 
 type DocumentCardProps = {
@@ -16,8 +19,8 @@ const getFileUrl = (doc: Document) => {
   return `data:${documentMimeType(doc.type)};base64,${doc.fileUrl}`;
 };
 
-const formatDate = (date: Date) => {
-  return new Date(date).toLocaleDateString('ar-SA', {
+const formatDate = (date: Date, language: string | undefined) => {
+  return new Date(date).toLocaleDateString(dateLocale(language), {
     year: 'numeric',
     month: 'short',
     day: 'numeric',
@@ -27,6 +30,10 @@ const formatDate = (date: Date) => {
 export default function DocumentCard({ document, role, t }: DocumentCardProps) {
   const { mutate: deleteDocument, isPending } = useDeleteDocument();
   const fileSrc = getFileUrl(document);
+  const { i18n } = useTranslation();
+  const loc = useLocalized();
+  const title = loc(document.title, document.titleEn);
+  const description = document.description ? loc(document.description, document.descriptionEn) : null;
 
   const onDelete = () => {
     deleteDocument(document.id);
@@ -36,17 +43,17 @@ export default function DocumentCard({ document, role, t }: DocumentCardProps) {
     <div key={document.id} className="relative h-60 w-96">
       <div className="relative flex h-full flex-col rounded-2xl border border-white/20 bg-white/80 p-6 shadow-xl backdrop-blur-sm">
         {/* Document Title */}
-        <h3 className="mb-3 line-clamp-1 text-xl font-bold text-gray-800">{document.title}</h3>
+        <h3 className="mb-3 line-clamp-1 text-xl font-bold text-gray-800">{title}</h3>
 
         {/* Document Description */}
-        {document.description && (
-          <p className="mb-4 line-clamp-2 leading-relaxed break-words whitespace-normal text-gray-600">{document.description}</p>
+        {description && (
+          <p className="mb-4 line-clamp-2 leading-relaxed break-words whitespace-normal text-gray-600">{description}</p>
         )}
 
         {/* Document Meta */}
         <div className="mb-4 text-xs text-gray-500">
           <span>
-            {t('documents.added')} {formatDate(document.createdAt)}
+            {t('documents.added')} {formatDate(document.createdAt, i18n.language)}
           </span>
         </div>
 
@@ -54,7 +61,7 @@ export default function DocumentCard({ document, role, t }: DocumentCardProps) {
         <div className="mt-auto flex items-center gap-3">
           <a
             href={fileSrc}
-            download={`${document.title}.${documentExtension(document.type)}`}
+            download={`${title}.${documentExtension(document.type)}`}
             target="_blank"
             rel="noopener noreferrer"
             className={`inline-flex flex-1 cursor-pointer items-center justify-center rounded-lg bg-blue-500 px-4 py-2 font-semibold text-white transition-opacity duration-200 hover:opacity-80`}

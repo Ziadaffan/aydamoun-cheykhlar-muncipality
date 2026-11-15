@@ -11,6 +11,7 @@ import Banner from '@/packages/common/components/Banner';
 import useLogin from '@/packages/auth/hooks/useLogin';
 import { loginSchema, LoginFormData } from '@/packages/auth/validation/auth.validation';
 import { CldImage } from 'next-cloudinary';
+import GoogleSignInButton from '@/packages/auth/components/GoogleSignInButton';
 
 export default function LogInPage() {
   const { t } = useTranslation();
@@ -46,6 +47,13 @@ export default function LogInPage() {
     };
     checkSession();
   }, [router]);
+
+  // NextAuth comes back here with ?error=... when a Google sign-in fails.
+  useEffect(() => {
+    if (new URLSearchParams(window.location.search).get('error')) {
+      setMessage({ type: 'error', text: t('auth.google.error') });
+    }
+  }, [t]);
 
   const onSubmit = async (data: LoginFormData) => {
     setIsLoading(true);
@@ -104,7 +112,7 @@ export default function LogInPage() {
         />
 
         {/* Lien mot de passe oublié */}
-        <div className="mb-6 text-left">
+        <div className="mb-6 text-end">
           <a href="/auth/forgot-password" className="text-xs text-blue-600 hover:underline md:text-sm">
             {t('auth.login.forgotPassword')}
           </a>
@@ -113,6 +121,10 @@ export default function LogInPage() {
         <Button type="submit" variant="primary" size="lg" loading={isLoading} disabled={isLoading} className="w-full">
           {t('auth.login.submit')}
         </Button>
+
+        <div className="mt-4">
+          <GoogleSignInButton />
+        </div>
 
         <div className="mt-4 text-center">
           <span className="text-sm text-gray-600">{t('auth.login.noAccount')} </span>

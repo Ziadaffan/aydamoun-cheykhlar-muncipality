@@ -1,4 +1,5 @@
 import { TaxiStopsRepository } from '../repository/taxiStops.repository';
+import { fieldReaders } from '@/packages/common/utils/request-body.utils';
 
 type TaxiStopData = {
   name: string;
@@ -6,7 +7,24 @@ type TaxiStopData = {
   toLocation: string;
   hour: string;
   phone: string;
+  /** English versions: null clears, undefined leaves the stored value alone. */
+  nameEn?: string | null;
+  fromLocationEn?: string | null;
+  toLocationEn?: string | null;
 };
+
+/**
+ * The optional English fields of a taxi stop form: trimmed, '' → null (clears it),
+ * absent → undefined (an update leaves the stored value alone). Same limits as the Arabic fields.
+ */
+export function readTaxiStopEnglish(formData: FormData) {
+  const fields = fieldReaders(Object.fromEntries(formData), 'INVALID_TAXI_STOP');
+  return {
+    nameEn: fields.optionalText('nameEn', 150),
+    fromLocationEn: fields.optionalText('fromLocationEn', 150),
+    toLocationEn: fields.optionalText('toLocationEn', 150),
+  };
+}
 
 export class TaxiStopsService {
   private static singleton: TaxiStopsService;

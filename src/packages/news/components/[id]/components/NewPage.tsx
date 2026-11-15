@@ -5,16 +5,17 @@ import { NewsRequestError, useGetNewsById } from '@/packages/news/hooks/useGetNe
 import { BackButton } from '@/packages/common/components/BackButton';
 import Spinner from '@/packages/common/components/Spinner';
 import ErrorMessage from '@/packages/common/components/ErrorMessage';
-import { formatDate } from '@/packages/common/utils/date.utils';
 import { News } from '@/packages/news/types/news.types';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { NewHeader } from './NewHeader';
 import { useTranslation } from 'react-i18next';
-import { categoryColors, categoryLabels } from '@/packages/news/utils/news.utils';
+import { categoryColors, useNewsCategoryLabel } from '@/packages/news/utils/news.utils';
+import { useLocalized } from '@/lib/localized';
 import { newsImageLoader, newsImageSrc } from '@/packages/news/utils/newsImage.utils';
 import { NewsFleshesImage } from '@/packages/common/components/NewsFleshImage';
 import { ImageIndicators } from '@/packages/common/components/ImageIndicators';
+import { formatDate } from '@/packages/common/utils/date.utils';
 
 export default function NewsPage() {
   const params = useParams();
@@ -22,7 +23,10 @@ export default function NewsPage() {
   const [news, setNews] = useState<News | null>(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const { data: newsData, isLoading, error } = useGetNewsById(id);
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const loc = useLocalized();
+  const categoryLabel = useNewsCategoryLabel();
+  const formatNewsDate = (date: Date | string) => formatDate(date, i18n.language);
 
   useEffect(() => {
     if (newsData) {
@@ -44,6 +48,9 @@ export default function NewsPage() {
     return <Spinner className="min-h-screen" />;
   }
 
+  const title = loc(news.title, news.titleEn);
+  const excerpt = loc(news.excerpt, news.excerptEn);
+  const content = loc(news.content, news.contentEn);
   const hasMultipleImages = news.imageUrl && news.imageUrl.length > 1;
   const currentImage = newsImageSrc(news.imageUrl?.[currentImageIndex]);
 
@@ -76,7 +83,7 @@ export default function NewsPage() {
               <Image
                 src={currentImage}
                 loader={newsImageLoader(currentImage)}
-                alt={news.title}
+                alt={title}
                 className="h-full w-full object-cover"
                 width={1200}
                 height={500}
@@ -96,7 +103,7 @@ export default function NewsPage() {
           <div className="border-b border-gray-200 p-6">
             <div className="mb-4">
               <div className={`inline-flex items-center rounded-full border px-3 py-1 text-xs font-medium ${categoryColors[news.category]}`}>
-                {categoryLabels[news.category]}
+                {categoryLabel(news.category)}
               </div>
             </div>
             {news.tags && news.tags.length > 0 && (
@@ -109,7 +116,7 @@ export default function NewsPage() {
               </div>
             )}
 
-            <h1 className="mb-4 text-3xl leading-tight font-bold text-gray-900">{news.title}</h1>
+            <h1 className="mb-4 text-3xl leading-tight font-bold text-gray-900">{title}</h1>
 
             <div className="flex items-center gap-6 text-sm text-gray-600">
               <div className="flex items-center gap-2">
@@ -132,7 +139,7 @@ export default function NewsPage() {
                     d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
                   />
                 </svg>
-                <span>{formatDate(news.createdAt)}</span>
+                <span>{formatNewsDate(news.createdAt)}</span>
               </div>
             </div>
           </div>
@@ -140,15 +147,15 @@ export default function NewsPage() {
           {/* News Content */}
           <div className="p-6">
             {/* Excerpt */}
-            {news.excerpt && (
+            {excerpt && (
               <div className="mb-6">
-                <p className="border-r-4 border-blue-500 pr-4 text-lg leading-relaxed text-gray-700">{news.excerpt}</p>
+                <p className="border-s-4 border-blue-500 ps-4 text-lg leading-relaxed text-gray-700">{excerpt}</p>
               </div>
             )}
 
             {/* Main Content */}
             <div className="prose prose-lg max-w-none">
-              <div className="leading-relaxed whitespace-pre-line text-gray-800" dangerouslySetInnerHTML={{ __html: news.content }} />
+              <div className="leading-relaxed whitespace-pre-line text-gray-800" dangerouslySetInnerHTML={{ __html: content }} />
             </div>
           </div>
 
@@ -156,7 +163,7 @@ export default function NewsPage() {
           <div className="border-t border-gray-200 bg-gray-50 p-6">
             <div className="flex items-center justify-between text-sm text-gray-600">
               <div className="flex items-center gap-4">
-                <span>آخر تحديث: {formatDate(news.updatedAt)}</span>
+                <span>{t('news.page.lastUpdated', { date: formatNewsDate(news.updatedAt) })}</span>
               </div>
             </div>
           </div>

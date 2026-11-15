@@ -1,6 +1,21 @@
 import { BasePrismaService } from '@/packages/common/services/prisma.service';
 import { JobsRepository } from '../repository/jobs.repository';
-import { Jobs } from '@prisma/client';
+import { Jobs, Prisma } from '@prisma/client';
+import { fieldReaders } from '@/packages/common/utils/request-body.utils';
+
+/**
+ * The optional English fields of a job form: trimmed, '' → null (clears it),
+ * absent → undefined (an update leaves the stored value alone). Same limits as the Arabic fields.
+ */
+export function readJobEnglish(formData: FormData) {
+  const fields = fieldReaders(Object.fromEntries(formData), 'INVALID_JOB');
+  return {
+    titleEn: fields.optionalText('titleEn', 200),
+    descriptionEn: fields.optionalText('descriptionEn', 5000),
+    providerEn: fields.optionalText('providerEn', 100),
+    locationEn: fields.optionalText('locationEn', 100),
+  };
+}
 
 export class JobsService extends BasePrismaService<'jobs'> {
   private static singleton: JobsService;
@@ -24,7 +39,7 @@ export class JobsService extends BasePrismaService<'jobs'> {
     return this.repository.findUnique({ where: { id } });
   }
 
-  public async create(jobData: Omit<Jobs, 'id' | 'createdAt' | 'updatedAt'>): Promise<Jobs> {
+  public async create(jobData: Prisma.JobsCreateInput): Promise<Jobs> {
     try {
       const job = await this.repository.create({
         data: jobData,
@@ -36,7 +51,7 @@ export class JobsService extends BasePrismaService<'jobs'> {
     }
   }
 
-  public async updateJob(id: string, jobData: Omit<Jobs, 'id' | 'createdAt' | 'updatedAt'>): Promise<Jobs> {
+  public async updateJob(id: string, jobData: Prisma.JobsUpdateInput): Promise<Jobs> {
     try {
       const job = await this.repository.update({
         where: { id },

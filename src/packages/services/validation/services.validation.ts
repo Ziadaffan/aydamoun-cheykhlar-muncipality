@@ -1,7 +1,8 @@
 import * as yup from 'yup';
 import { ServiceStatus } from '@prisma/client';
-import { getAdditionalFields, toDateOnly } from '@/packages/services/utils/form.utils';
-import { commonValidations, validationMessages } from '../../common/validation/common.validation';
+import { toDateOnly } from '@/packages/services/utils/form.utils';
+import type { ServiceField } from '@/packages/services/utils/serviceFields';
+import { commonValidations, localizedMessage, validationMessages } from '../../common/validation/common.validation';
 import { isValidPhone, normalizePhone } from '@/packages/common/utils/phone.utils';
 
 // Same rules as the mobile app's request form and the server (6–15 digits once
@@ -22,76 +23,63 @@ const requestEmail = () =>
     .transform((value: unknown) => (value === '' ? null : value))
     .nullable();
 
-// Helper function to create dynamic validation schema for additional fields
-const createAdditionalInfoSchema = (category: string, serviceId?: string) => {
-  const additionalFields = getAdditionalFields(category, serviceId);
+// Validation of the service's extra fields (service.fields, resolved by the API).
+const createAdditionalInfoSchema = (fields: ServiceField[]) => {
   const schemaObject: Record<string, any> = {};
 
-  additionalFields.forEach(field => {
+  fields.forEach(field => {
     let fieldSchema: any;
+    // The field's own Arabic and English labels (admin-defined, so not in validationMessages' name list).
+    const ar = field.label;
+    const en = field.labelEn?.trim() || field.label;
+    const required = (schema: any) => (field.required ? schema.required(localizedMessage(`${ar} مطلوب`, `${en} is required`)) : schema);
 
-    switch (field.type) {
-      case 'text':
-        fieldSchema = yup.string().trim();
-        if (field.required) {
-          fieldSchema = fieldSchema.required(validationMessages.required(field.label));
-        }
-        break;
-
+    switch (field.kind) {
       case 'number':
-        fieldSchema = yup.number().typeError(`${field.label} يجب أن يكون رقماً`);
-        if (field.required) {
-          fieldSchema = fieldSchema.required(validationMessages.required(field.label));
-        }
+        // An empty optional input is '' : no value rather than "not a number".
+        fieldSchema = required(
+          yup
+            .number()
+            .transform((value: unknown, original: unknown) => (original === '' || original === null ? undefined : value))
+            .typeError(localizedMessage(`${ar} يجب أن يكون رقماً`, `${en} must be a number`))
+        );
         break;
 
       case 'select':
-        fieldSchema = yup.string();
+        fieldSchema = yup.string().transform((value: unknown) => (value === '' ? undefined : value));
         if (field.options && field.options.length > 0) {
-          fieldSchema = fieldSchema.oneOf(field.options, `يرجى اختيار ${field.label} صحيح`);
+          fieldSchema = fieldSchema.oneOf(field.options, localizedMessage(`يرجى اختيار ${ar} صحيح`, `Please choose a valid ${en}`));
         }
-        if (field.required) {
-          fieldSchema = fieldSchema.required(validationMessages.required(field.label));
-        }
-        break;
-
-      case 'radio':
-        fieldSchema = yup.string();
-        if (field.options && field.options.length > 0) {
-          fieldSchema = fieldSchema.oneOf(field.options, `يرجى اختيار ${field.label} صحيح`);
-        }
-        if (field.required) {
-          fieldSchema = fieldSchema.required(validationMessages.required(field.label));
-        }
+        fieldSchema = required(fieldSchema);
         break;
 
       case 'date':
         // Kept as the input's 'YYYY-MM-DD' (yup.date() would store the browser's local
         // midnight as a UTC timestamp, a day off in other readers).
-        fieldSchema = yup
-          .string()
-          .transform((value: unknown) => (typeof value === 'string' && value ? toDateOnly(value) : undefined))
-          .matches(/^\d{4}-\d{2}-\d{2}$/, `${field.label} يجب أن يكون تاريخاً صحيحاً`);
-        if (field.required) {
-          fieldSchema = fieldSchema.required(validationMessages.required(field.label));
-        }
+        fieldSchema = required(
+          yup
+            .string()
+            .transform((value: unknown) => (typeof value === 'string' && value ? toDateOnly(value) : undefined))
+            .matches(/^\d{4}-\d{2}-\d{2}$/, localizedMessage(`${ar} يجب أن يكون تاريخاً صحيحاً`, `${en} must be a valid date`))
+        );
+        break;
+
+      case 'textarea':
+        fieldSchema = required(yup.string().trim().max(1000, localizedMessage(`${ar} يجب أن يكون أقل من 1000 حرف`, `${en} must be less than 1000 characters`)));
         break;
 
       default:
-        fieldSchema = yup.string();
-        if (field.required) {
-          fieldSchema = fieldSchema.required(validationMessages.required(field.label));
-        }
+        fieldSchema = required(yup.string().trim());
     }
 
-    schemaObject[field.name] = fieldSchema;
+    schemaObject[field.key] = fieldSchema;
   });
 
   return yup.object(schemaObject);
 };
 
 // Service submission validation schema factory
-export const createServiceSubmissionSchema = (category: string, serviceId?: string) => {
+export const createServiceSubmissionSchema = (fields: ServiceField[]) => {
   return yup.object({
     // Personal Information
     fullName: commonValidations.name('الاسم الكامل').max(100, validationMessages.maxLength('الاسم الكامل', 100)),
@@ -103,13 +91,13 @@ export const createServiceSubmissionSchema = (category: string, serviceId?: stri
     serviceType: yup.string().required(validationMessages.required('نوع الخدمة')),
     description: commonValidations.description(),
 
-    // Additional Information (dynamic fields based on category and serviceId)
-    additionalInfo: createAdditionalInfoSchema(category, serviceId),
+    // Additional Information (the service's own fields)
+    additionalInfo: createAdditionalInfoSchema(fields),
 
     // Status (used by admin)
     status: yup
       .mixed<ServiceStatus>()
-      .oneOf(Object.values(ServiceStatus) as ServiceStatus[], 'حالة الطلب غير صالحة')
+      .oneOf(Object.values(ServiceStatus) as ServiceStatus[], localizedMessage('حالة الطلب غير صالحة', 'Invalid request status'))
       .optional(),
   });
 };
@@ -127,7 +115,7 @@ export const serviceSubmissionSchema = yup.object({
   description: commonValidations.description(),
 
   // Additional Information (dynamic fields)
-  additionalInfo: yup.object().test('additional-info-validation', 'يرجى ملء جميع الحقول المطلوبة', function (value) {
+  additionalInfo: yup.object().test('additional-info-validation', localizedMessage('يرجى ملء جميع الحقول المطلوبة', 'Please fill in all required fields'), function (value) {
     // This will be handled dynamically based on the service category
     return true;
   }),
