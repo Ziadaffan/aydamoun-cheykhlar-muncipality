@@ -2,6 +2,8 @@
 
 import { useTranslation } from 'react-i18next';
 import { Eye, Landmark, Target, type LucideIcon } from 'lucide-react';
+import { CldImage } from 'next-cloudinary';
+import { VILLAGE_STORY_IMAGE } from '@/packages/home/slides';
 import HistoryTimeline from './HistoryTimeline';
 
 function ValueCard({ icon: Icon, title, body, tone }: { icon: LucideIcon; title: string; body: string; tone: string }) {
@@ -26,9 +28,9 @@ export default function HistoryPage() {
     <div className="min-h-screen bg-gradient-to-r from-mist to-sand py-8 md:py-12">
       <div className="mx-auto max-w-4xl space-y-10 px-4">
         <header
-          className="relative flex min-h-64 items-end overflow-hidden rounded-3xl bg-cover bg-center shadow-xl md:min-h-80"
-          style={{ backgroundImage: 'url("/assets/images/bg.jpg")' }}
+          className="relative flex min-h-64 items-end overflow-hidden rounded-3xl shadow-xl md:min-h-80"
         >
+          <CldImage src={VILLAGE_STORY_IMAGE} alt="" fill priority sizes="(max-width: 896px) 100vw, 896px" className="object-cover" />
           <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/30 to-transparent" aria-hidden="true" />
           <div className="relative p-6 text-on-image md:p-10">
             <Landmark className="mb-3 h-8 w-8" aria-hidden />
