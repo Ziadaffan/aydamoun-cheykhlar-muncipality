@@ -45,14 +45,14 @@ export default function HomeContactSection({ t }: HomeContactSectionProps) {
         <div className="mx-auto max-w-6xl">
           <div className="mb-16 text-center">
             <h2 className="mb-6 text-4xl font-bold text-gray-800 md:text-5xl lg:text-6xl">{t('home.contact.title')}</h2>
-            <div className="mx-auto h-1.5 w-32 rounded-full bg-gradient-to-r from-blue-500 to-green-500"></div>
+            <div className="mx-auto h-1.5 w-32 rounded-full bg-gradient-to-r from-blue-500 to-sky-500"></div>
           </div>
 
           <div className="grid grid-cols-1 items-start gap-8 lg:grid-cols-2">
             <div className="space-y-6">
               {contactInfo.map(info => (
                 <div key={info.id} className="relative">
-                  <div className="absolute -inset-4 rounded-2xl bg-gradient-to-r from-blue-400 to-green-400 opacity-10 blur-sm"></div>
+                  <div className="absolute -inset-4 rounded-2xl bg-gradient-to-r from-blue-400 to-sky-400 opacity-10 blur-sm"></div>
                   <div className="relative rounded-2xl border border-white/20 bg-white/80 p-6 shadow-xl backdrop-blur-sm">
                     <div className="flex items-start gap-4">
                       <div className="text-3xl">{info.icon}</div>
@@ -75,9 +75,9 @@ export default function HomeContactSection({ t }: HomeContactSectionProps) {
             </div>
 
             <div className="relative">
-              <div className="absolute -inset-4 rounded-2xl bg-gradient-to-r from-blue-400 to-green-400 opacity-10 blur-sm"></div>
+              <div className="absolute -inset-4 rounded-2xl bg-gradient-to-r from-blue-400 to-sky-400 opacity-10 blur-sm"></div>
               <div className="relative overflow-hidden rounded-2xl border border-white/20 bg-white/80 shadow-xl backdrop-blur-sm">
-                <div className="absolute -top-3 end-6 z-10 h-6 w-6 rounded-full bg-gradient-to-r from-blue-500 to-green-500"></div>
+                <div className="absolute -top-3 end-6 z-10 h-6 w-6 rounded-full bg-gradient-to-r from-blue-500 to-sky-500"></div>
                 <MapCard />
               </div>
             </div>

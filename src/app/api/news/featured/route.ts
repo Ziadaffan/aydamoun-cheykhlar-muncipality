@@ -4,6 +4,7 @@ import { NewsService, isSummaryRequest } from '@/packages/news/service/news.serv
 
 const newsService = NewsService.instance();
 
+/** GET /api/news/featured — the newest featured article; `summary=1` as in GET /api/news. */
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);

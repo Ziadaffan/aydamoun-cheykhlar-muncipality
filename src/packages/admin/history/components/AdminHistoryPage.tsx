@@ -7,6 +7,8 @@ import Banner from '@/packages/common/components/Banner';
 import { DeleteButton } from '@/packages/common/components/DeleteButton';
 import AdminPage from '../../common/AdminPage';
 import { historyResource } from '../historyResource';
+import EmptyState from '@/packages/common/components/EmptyState';
+import { Inbox } from 'lucide-react';
 
 export default function AdminHistoryPage() {
   const { t } = useTranslation();
@@ -33,14 +35,13 @@ export default function AdminHistoryPage() {
       {message && <Banner type={message.type} message={message.text} onClose={() => setMessage(null)} />}
 
       {entries?.length === 0 ? (
-        <p className="rounded-2xl bg-white p-8 text-center text-gray-600 shadow">{t('admin.history.empty')}</p>
+        <EmptyState icon={Inbox} title={t('admin.history.empty')} />
       ) : (
         <ol className="space-y-4">
           {entries?.map(entry => (
             <li key={entry.id} className="flex flex-col gap-3 rounded-2xl bg-white p-6 shadow sm:flex-row sm:items-start sm:justify-between">
               <div className="min-w-0 flex-1">
                 <div className="mb-1 flex flex-wrap items-center gap-2 text-sm">
-                  <span className="rounded-full bg-blue-100 px-3 py-0.5 font-semibold text-blue-800">{entry.period}</span>
                   <span className="text-gray-500">
                     {t('admin.common.order')}: {entry.order}
                   </span>

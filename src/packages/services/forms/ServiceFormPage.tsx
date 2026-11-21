@@ -22,11 +22,11 @@ export default function ServiceFormPage() {
   if (error || !service || service.active === false) return <ServiceNotFound />;
 
   return (
-    <div className="min-h-screen bg-gradient-to-r from-blue-50 to-green-50">
+    <div className="min-h-screen bg-gradient-to-r from-mist to-sand">
       <div className="container mx-auto px-6 py-8">
         <div className="mx-auto max-w-4xl">
           <div className="mb-6">
-            <BackButton />
+            <BackButton fallbackHref="/services" />
           </div>
 
           <div className="mb-8 text-center">

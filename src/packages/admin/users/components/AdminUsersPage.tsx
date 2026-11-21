@@ -12,6 +12,8 @@ import { formatDate } from '@/packages/common/utils/date.utils';
 import { useAdminUsers } from '../hooks/useAdminUsers';
 import { useAdminUpdateUser } from '../hooks/useAdminUpdateUser';
 import { AdminUser } from '../types';
+import EmptyState from '@/packages/common/components/EmptyState';
+import { UsersRound } from 'lucide-react';
 
 export default function AdminUsersPage() {
   const { t } = useTranslation();
@@ -101,9 +103,7 @@ export default function AdminUsersPage() {
         )}
 
         {!users || users.length === 0 ? (
-          <div className="rounded-lg bg-white p-8 text-center shadow">
-            <p className="text-gray-600">{t('admin.users.empty')}</p>
-          </div>
+          <EmptyState icon={UsersRound} title={t('admin.users.empty')} />
         ) : (
           <div className="overflow-hidden rounded-lg bg-white shadow">
             <div className="overflow-x-auto">

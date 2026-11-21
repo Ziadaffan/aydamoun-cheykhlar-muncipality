@@ -50,7 +50,6 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
 
     const title = formData.get('title') as string;
     const content = formData.get('content') as string;
-    const excerpt = formData.get('excerpt') as string;
     const category = formData.get('category') as NewsCategory;
     const author = formData.get('author') as string;
     const featured = formData.get('featured') === 'true';
@@ -60,7 +59,6 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
     const newsData = {
       title,
       content,
-      excerpt,
       category,
       author,
       tags,

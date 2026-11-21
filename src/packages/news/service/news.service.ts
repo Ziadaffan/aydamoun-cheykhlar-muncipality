@@ -6,17 +6,21 @@ import { News, NewsCategory } from '../types/news.types';
 import { destroyNewsImages, uploadNewsImages } from './newsImage.service';
 import { v2 as cloudinary } from 'cloudinary';
 import { fieldReaders } from '@/packages/common/utils/request-body.utils';
+import { textPreview } from '@/packages/common/utils/text.utils';
 
 type NewsInput = Omit<News, 'id' | 'createdAt' | 'updatedAt' | 'imageUrl'>;
 type NewsQueryOptions = { summary?: boolean };
 
-// Card fields: everything except the article body (Arabic and English).
+/** Plain-text length of `content`/`contentEn` in a summary. */
+export const NEWS_SUMMARY_CONTENT_LENGTH = 300;
+
+// Card fields. `content` is read in full and cut down by `toSummary`.
 const NEWS_SUMMARY_SELECT = {
   id: true,
   title: true,
-  excerpt: true,
+  content: true,
   titleEn: true,
-  excerptEn: true,
+  contentEn: true,
   imageUrl: true,
   category: true,
   author: true,
@@ -39,7 +43,10 @@ export function parseNewsCategory(value: string | null): NewsCategory | 'ALL' {
   return value as NewsCategory;
 }
 
-/** `?summary=1` asks for card data: no `content` and only the cover image. */
+/**
+ * `?summary=1` asks for card data: only the cover image, and `content`/`contentEn` as plain
+ * text (HTML/markdown removed) cut to ~300 characters.
+ */
 export const isSummaryRequest = (searchParams: URLSearchParams): boolean => ['1', 'true'].includes(searchParams.get('summary') ?? '');
 
 /**
@@ -51,11 +58,15 @@ export function readNewsEnglish(formData: FormData) {
   return {
     titleEn: fields.optionalText('titleEn', 200),
     contentEn: fields.optionalText('contentEn', 5000),
-    excerptEn: fields.optionalText('excerptEn', 500),
   };
 }
 
-const toSummary = <T extends { imageUrl: string[] }>(news: T): T => ({ ...news, imageUrl: news.imageUrl.slice(0, 1) });
+const toSummary = <T extends { imageUrl: string[]; content: string; contentEn: string | null }>(news: T): T => ({
+  ...news,
+  imageUrl: news.imageUrl.slice(0, 1),
+  content: textPreview(news.content, NEWS_SUMMARY_CONTENT_LENGTH),
+  contentEn: news.contentEn ? textPreview(news.contentEn, NEWS_SUMMARY_CONTENT_LENGTH) : news.contentEn,
+});
 
 export class NewsService extends BasePrismaService<'news'> {
   private static singlenton: NewsService;
@@ -170,11 +181,9 @@ export class NewsService extends BasePrismaService<'news'> {
         data: {
           title: newsData.title,
           content: newsData.content,
-          excerpt: newsData.excerpt,
           // undefined (not sent) leaves the stored English text as is.
           titleEn: newsData.titleEn,
           contentEn: newsData.contentEn,
-          excerptEn: newsData.excerptEn,
           category: newsData.category,
           author: newsData.author,
           tags: newsData.tags,

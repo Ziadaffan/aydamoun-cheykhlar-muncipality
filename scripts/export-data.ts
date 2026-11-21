@@ -34,7 +34,6 @@ async function exportData() {
         id: true,
         title: true,
         content: true,
-        excerpt: true,
         imageUrl: true,
         category: true,
         author: true,

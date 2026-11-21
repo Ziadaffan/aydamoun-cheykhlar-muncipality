@@ -1,7 +1,7 @@
-'use client';
+import { redirect } from 'next/navigation';
 
-import AssociationPage from '@/packages/associations/components/[id]/AssociationPage';
-
-export default function page() {
-  return <AssociationPage />;
+// Associations have no page of their own: old /associations/<id> links open its modal on the list.
+export default async function AssociationRedirect({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  redirect(`/associations#${encodeURIComponent(id)}`);
 }

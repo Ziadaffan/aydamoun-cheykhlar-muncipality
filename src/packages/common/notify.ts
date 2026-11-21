@@ -1,4 +1,5 @@
 import { toast } from 'react-toastify';
+import { isDarkTheme } from './utils/theme.utils';
 
 export const notify = (message: string, type: 'success' | 'error' | 'warning' | 'info') => {
   toast[type](message, {
@@ -9,7 +10,7 @@ export const notify = (message: string, type: 'success' | 'error' | 'warning' | 
     pauseOnHover: true,
     draggable: true,
     rtl: true,
-    theme: 'light',
+    theme: isDarkTheme() ? 'dark' : 'light',
     style: {
       fontSize: '14px',
       maxWidth: '90vw',

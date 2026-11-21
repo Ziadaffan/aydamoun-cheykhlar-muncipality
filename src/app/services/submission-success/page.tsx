@@ -22,7 +22,7 @@ function SubmissionSuccess() {
   const id = useSearchParams()?.get('id');
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gradient-to-r from-blue-50 to-green-50">
+    <div className="flex min-h-screen items-center justify-center bg-gradient-to-r from-mist to-sand">
       <div className="mx-auto max-w-2xl p-8 text-center">
         <div className="rounded-2xl bg-white p-8 shadow-xl">
           {/* Icône de succès */}
@@ -62,7 +62,7 @@ function SubmissionSuccess() {
           {/* Boutons d'action */}
           <div className="flex flex-col justify-center gap-4 sm:flex-row">
             <Link
-              href="/profile"
+              href="/submissions"
               className="rounded-lg bg-gradient-to-r from-green-500 to-green-600 px-6 py-3 font-semibold text-white transition-opacity hover:opacity-90"
             >
               {t('services.submissionSuccess.trackButton')}

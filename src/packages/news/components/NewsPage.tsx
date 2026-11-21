@@ -15,6 +15,7 @@ import { useTranslation } from 'react-i18next';
 import { useAuth } from '@/packages/common/hooks/useAuth';
 import { useRouter } from 'next/navigation';
 import { useNewsCategoryLabel } from '../utils/news.utils';
+import PageHeader from '@/packages/common/components/PageHeader';
 
 export default function NewsPage() {
   const { t } = useTranslation();
@@ -40,8 +41,11 @@ export default function NewsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-r from-blue-50 to-green-50 py-20">
-      {/* Hero Section */}
+    <div className="min-h-screen bg-gradient-to-r from-mist to-sand py-12">
+      <div className="container mx-auto px-4">
+        <PageHeader title={t('news.page.latestNews')} subtitle={t('news.page.latestNewsDescription')} />
+      </div>
+
       {role === 'ADMIN' && (
         <div className="mb-8 flex justify-center">
           <Button variant="primary" size="lg" onClick={() => router.push('/news/create')}>
@@ -60,10 +64,10 @@ export default function NewsPage() {
             {selectedCategory === 'ALL' ? t('news.page.allNews') : categoryLabel(selectedCategory)}
           </h2>
 
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center gap-2">
             <Button
               className={`rounded-lg p-2 transition-colors ${
-                viewMode === 'grid' ? 'bg-blue-600 text-white' : 'bg-gray-400 text-gray-600 hover:bg-gray-300'
+                viewMode === 'grid' ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
               }`}
               variant="primary"
               size="sm"
@@ -76,7 +80,7 @@ export default function NewsPage() {
 
             <Button
               className={`rounded-lg p-2 transition-colors ${
-                viewMode === 'list' ? 'bg-blue-600 text-white' : 'bg-gray-400 text-gray-600 hover:bg-gray-300'
+                viewMode === 'list' ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
               }`}
               variant="primary"
               size="sm"

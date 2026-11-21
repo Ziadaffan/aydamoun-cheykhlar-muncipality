@@ -19,10 +19,8 @@ import { adminErrorKey, optionalImageSchema } from '../../common/imageValidation
 import { historyResource } from '../historyResource';
 
 const schema = yup.object({
-  period: yup.string().trim().max(100, validationMessages.maxLength('الفترة', 100)).required(validationMessages.required('الفترة')),
   title: yup.string().trim().max(200, validationMessages.maxLength('العنوان', 200)).required(validationMessages.required('العنوان')),
   description: yup.string().trim().max(10000, validationMessages.maxLength('الوصف', 10000)).required(validationMessages.required('الوصف')),
-  periodEn: yup.string().trim().max(100, validationMessages.maxLength('الفترة بالإنجليزية', 100)).default(''),
   titleEn: yup.string().trim().max(200, validationMessages.maxLength('العنوان بالإنجليزية', 200)).default(''),
   descriptionEn: yup.string().trim().max(10000, validationMessages.maxLength('الوصف بالإنجليزية', 10000)).default(''),
   order: yup
@@ -52,10 +50,8 @@ export default function HistoryEntryForm({ entry, nextOrder = 0 }: { entry?: His
   } = useForm<FormValues>({
     resolver: yupResolver(schema) as any,
     defaultValues: {
-      period: entry?.period ?? '',
       title: entry?.title ?? '',
       description: entry?.description ?? '',
-      periodEn: entry?.periodEn ?? '',
       titleEn: entry?.titleEn ?? '',
       descriptionEn: entry?.descriptionEn ?? '',
       order: entry?.order ?? nextOrder,
@@ -69,10 +65,8 @@ export default function HistoryEntryForm({ entry, nextOrder = 0 }: { entry?: His
     const init = imageFormBody(
       entry ? 'PUT' : 'POST',
       {
-        period: values.period,
         title: values.title,
         description: values.description,
-        periodEn: values.periodEn,
         titleEn: values.titleEn,
         descriptionEn: values.descriptionEn,
         order: values.order,
@@ -93,18 +87,7 @@ export default function HistoryEntryForm({ entry, nextOrder = 0 }: { entry?: His
     <form onSubmit={handleSubmit(onSubmit)} className="rounded-2xl bg-white p-6 shadow-xl md:p-8" noValidate>
       <InfoMessage message={message} onClose={() => setMessage(null)} />
 
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-        <ControlledInputText
-          id="period"
-          name="period"
-          control={control}
-          label={t('admin.history.fields.period')}
-          placeholder={t('admin.history.fields.periodPlaceholder')}
-          error={errors.period}
-          required
-        />
-        <ControlledInputText id="order" name="order" type="number" control={control} label={t('admin.common.order')} error={errors.order} />
-      </div>
+      <ControlledInputText id="order" name="order" type="number" control={control} label={t('admin.common.order')} error={errors.order} />
       <p className="-mt-3 mb-5 text-sm text-gray-500">{t('admin.history.fields.orderHint')}</p>
 
       <ControlledInputText id="title" name="title" control={control} label={t('admin.history.fields.title')} error={errors.title} required />
@@ -119,7 +102,6 @@ export default function HistoryEntryForm({ entry, nextOrder = 0 }: { entry?: His
       />
 
       <EnglishSection>
-        <EnglishInput id="periodEn" name="periodEn" control={control} label={t('admin.history.fields.period')} error={errors.periodEn} />
         <EnglishInput id="titleEn" name="titleEn" control={control} label={t('admin.history.fields.title')} error={errors.titleEn} />
         <EnglishInput
           id="descriptionEn"

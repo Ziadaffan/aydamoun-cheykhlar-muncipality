@@ -17,6 +17,8 @@ import { useAdminUpdateServiceSubmission } from '../hooks/useAdminUpdateServiceS
 import { AdminServiceSubmission } from '../types';
 import { matchesSubmissionReference, submissionReference } from '@/packages/serviceSubmissions/utils/reference';
 import { normalizePhone } from '@/packages/common/utils/phone.utils';
+import EmptyState from '@/packages/common/components/EmptyState';
+import { Inbox, SearchX } from 'lucide-react';
 
 /** Staff look a request up by the number the resident quotes, or by name or phone. */
 function matchesSearch(submission: AdminServiceSubmission, query: string): boolean {
@@ -130,13 +132,9 @@ export default function AdminServiceSubmissionsPage() {
         )}
 
         {!submissions || submissions.length === 0 ? (
-          <div className="rounded-lg bg-white p-8 text-center shadow">
-            <p className="text-gray-600">{t('admin.serviceSubmissions.empty')}</p>
-          </div>
+          <EmptyState icon={Inbox} title={t('admin.serviceSubmissions.empty')} />
         ) : visibleSubmissions.length === 0 ? (
-          <div className="rounded-lg bg-white p-8 text-center shadow">
-            <p className="text-gray-600">{t('admin.serviceSubmissions.noResults')}</p>
-          </div>
+          <EmptyState icon={SearchX} title={t('admin.serviceSubmissions.noResults')} />
         ) : (
           <div className="overflow-hidden rounded-lg bg-white shadow">
             <div className="overflow-x-auto">

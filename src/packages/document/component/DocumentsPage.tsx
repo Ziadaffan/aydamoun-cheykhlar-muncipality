@@ -34,7 +34,7 @@ export default function DocumentsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-r from-blue-50 to-green-50 py-20">
+    <div className="min-h-screen bg-gradient-to-r from-mist to-sand py-12">
       <div className="container mx-auto px-6">
         <div className="mx-auto max-w-6xl">
           {/* Header */}

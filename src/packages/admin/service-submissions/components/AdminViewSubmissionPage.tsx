@@ -83,7 +83,7 @@ export default function AdminViewSubmissionPage() {
     <div className="min-h-screen bg-gray-50 py-12">
       <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
         <div className="mb-6">
-          <BackButton />
+          <BackButton fallbackHref="/admin/service-submissions" />
         </div>
 
         <div className="mb-6 rounded-2xl bg-white p-8 shadow">

@@ -32,10 +32,8 @@ export default function CreateNewsForm() {
     defaultValues: {
       title: '',
       titleEn: '',
-      excerptEn: '',
       contentEn: '',
       content: '',
-      excerpt: '',
       category: 'MUNICIPAL_NEWS' as NewsCategory,
       author: '',
       tags: [],
@@ -99,17 +97,6 @@ export default function CreateNewsForm() {
         />
 
         <ControlledTextArea
-          id="excerpt"
-          label={t('news.form.excerpt')}
-          control={control}
-          name="excerpt"
-          error={errors.excerpt}
-          placeholder={t('news.form.excerptPlaceholder')}
-          rows={3}
-          required
-        />
-
-        <ControlledTextArea
           id="content"
           label={t('news.form.content')}
           control={control}
@@ -168,7 +155,6 @@ export default function CreateNewsForm() {
       <div className="mt-6">
         <EnglishSection>
           <EnglishInput id="titleEn" name="titleEn" control={control} label={t('news.form.newsTitle')} error={errors.titleEn} />
-          <EnglishInput id="excerptEn" name="excerptEn" control={control} label={t('news.form.excerpt')} error={errors.excerptEn} rows={3} />
           <EnglishInput id="contentEn" name="contentEn" control={control} label={t('news.form.content')} error={errors.contentEn} rows={8} />
         </EnglishSection>
       </div>

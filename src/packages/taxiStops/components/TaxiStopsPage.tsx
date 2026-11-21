@@ -47,7 +47,7 @@ export default function TaxiStopsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-r from-blue-50 to-green-50 py-10 md:py-16">
+    <div className="min-h-screen bg-gradient-to-r from-mist to-sand py-12">
       <div className="container mx-auto px-4 sm:px-6">
         <div className="mx-auto max-w-6xl">
           <TaxiStopsHeader />
@@ -60,7 +60,7 @@ export default function TaxiStopsPage() {
             </div>
           )}
 
-          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {taxiStops.map(taxiStop => (
               <TaxiStopCard key={taxiStop.id} taxiStop={taxiStop} />
             ))}

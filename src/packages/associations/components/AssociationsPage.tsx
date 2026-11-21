@@ -1,9 +1,9 @@
 'use client';
 
 import { useTranslation } from 'react-i18next';
-import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/packages/common/hooks/useAuth';
+import { useHashModal } from '@/packages/common/hooks/useHashModal';
 import Button from '@/packages/common/components/Button';
 import Spinner from '@/packages/common/components/Spinner';
 import ErrorMessage from '@/packages/common/components/ErrorMessage';
@@ -14,26 +14,13 @@ import AssociationsEmptyState from './AssociationsEmptyState';
 
 export default function AssociationsPage() {
   const { t } = useTranslation();
-  const [associations, setAssociations] = useState<
-    {
-      id: string;
-      name: string;
-      description: string;
-      picaURL: string;
-      nameEn?: string | null;
-      descriptionEn?: string | null;
-    }[]
-  >([]);
   const router = useRouter();
   const { role } = useAuth();
 
   const { data, isLoading, error } = useGetAssociations();
-
-  useEffect(() => {
-    if (data) {
-      setAssociations(data);
-    }
-  }, [data]);
+  const associations = data ?? [];
+  // /associations#<id> (shared links, old /associations/<id> links) opens that association.
+  const { openId, open, close } = useHashModal(data);
 
   if (isLoading) {
     return <Spinner className="min-h-screen" />;
@@ -44,7 +31,7 @@ export default function AssociationsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-r from-blue-50 to-green-50 py-10 md:py-16">
+    <div className="min-h-screen bg-gradient-to-r from-mist to-sand py-12">
       <div className="container mx-auto px-4 sm:px-6">
         <div className="mx-auto max-w-6xl">
           <AssociationsHeader />
@@ -57,9 +44,15 @@ export default function AssociationsPage() {
             </div>
           )}
 
-          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {associations.map(association => (
-              <AssociationCard key={association.id} association={association} />
+              <AssociationCard
+                key={association.id}
+                association={association}
+                open={openId === association.id}
+                onOpen={() => open(association.id)}
+                onClose={close}
+              />
             ))}
           </div>
 

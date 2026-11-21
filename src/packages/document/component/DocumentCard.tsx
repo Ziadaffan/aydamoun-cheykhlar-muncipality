@@ -1,4 +1,5 @@
 import { Document } from '@prisma/client';
+import { FileText } from 'lucide-react';
 import { TFunction } from 'i18next';
 import Button from '@/packages/common/components/Button';
 import { useDeleteDocument } from '@/packages/document/hooks/useDeleteDocument';
@@ -40,31 +41,31 @@ export default function DocumentCard({ document, role, t }: DocumentCardProps) {
   };
 
   return (
-    <div key={document.id} className="relative h-60 w-96">
-      <div className="relative flex h-full flex-col rounded-2xl border border-white/20 bg-white/80 p-6 shadow-xl backdrop-blur-sm">
-        {/* Document Title */}
-        <h3 className="mb-3 line-clamp-1 text-xl font-bold text-gray-800">{title}</h3>
+    <article className="group flex h-full flex-col overflow-hidden rounded-xl bg-white shadow-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
+      {/* Fixed band with the file type, the same height on every document card. */}
+      <div className="relative flex h-28 flex-shrink-0 items-center justify-center gap-3 bg-blue-100 text-blue-700" aria-hidden="true">
+        <FileText className="h-12 w-12 opacity-80" />
+        <span className="rounded-md bg-white/70 px-2 py-0.5 text-sm font-bold uppercase">{documentExtension(document.type)}</span>
+      </div>
 
-        {/* Document Description */}
-        {description && (
-          <p className="mb-4 line-clamp-2 leading-relaxed break-words whitespace-normal text-gray-600">{description}</p>
-        )}
+      <div className="flex flex-1 flex-col p-6">
+        <h3 className="mb-3 line-clamp-2 text-xl font-bold break-words text-gray-800 [overflow-wrap:anywhere]">{title}</h3>
 
-        {/* Document Meta */}
+        {description && <p className="mb-4 line-clamp-3 leading-relaxed break-words text-gray-600 [overflow-wrap:anywhere]">{description}</p>}
+
         <div className="mb-4 text-xs text-gray-500">
           <span>
             {t('documents.added')} {formatDate(document.createdAt, i18n.language)}
           </span>
         </div>
 
-        {/* Download Button */}
         <div className="mt-auto flex items-center gap-3">
           <a
             href={fileSrc}
             download={`${title}.${documentExtension(document.type)}`}
             target="_blank"
             rel="noopener noreferrer"
-            className={`inline-flex flex-1 cursor-pointer items-center justify-center rounded-lg bg-blue-500 px-4 py-2 font-semibold text-white transition-opacity duration-200 hover:opacity-80`}
+            className="inline-flex flex-1 cursor-pointer items-center justify-center rounded-lg bg-blue-600 px-4 py-2 font-bold text-white shadow transition hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:outline-none"
           >
             {t('documents.download')}
           </a>
@@ -75,6 +76,6 @@ export default function DocumentCard({ document, role, t }: DocumentCardProps) {
           )}
         </div>
       </div>
-    </div>
+    </article>
   );
 }

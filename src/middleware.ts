@@ -29,6 +29,7 @@ export const config = {
   matcher: [
     '/services/forms/:path*',
     '/profile/:path*',
+    '/submissions/:path*',
     '/admin/:path*',
     '/news/create',
     '/news/:id/edit',

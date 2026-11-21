@@ -7,7 +7,7 @@ import { useProfilePage } from '../hooks/useProfilePage';
 import ProfileHeader from './ProfileHeader';
 import ProfileFormSection from './ProfileFormSection';
 import ProfileActions from './ProfileActions';
-import SubmissionsSection from './SubmissionsSection';
+import MySubmissionsLinkCard from './MySubmissionsLinkCard';
 import DeleteAccountSection from './DeleteAccountSection';
 
 export default function ProfilePage() {
@@ -16,16 +16,10 @@ export default function ProfilePage() {
     user,
     isAuthenticated,
     isLoading,
-    submissions,
-    submissionsLoading,
-    submissionsError,
-    deletingId,
     isProfileUpdating,
     updateMessage,
     handleChangePassword,
     handleEditProfile,
-    handleEditSubmission,
-    handleDeleteSubmission,
     closeMessage,
   } = useProfilePage();
 
@@ -60,14 +54,7 @@ export default function ProfilePage() {
           />
         </div>
 
-        <SubmissionsSection
-          submissions={submissions}
-          isLoading={submissionsLoading}
-          error={submissionsError}
-          deletingId={deletingId}
-          onEditSubmission={handleEditSubmission}
-          onDeleteSubmission={handleDeleteSubmission}
-        />
+        <MySubmissionsLinkCard />
 
         <DeleteAccountSection />
       </div>

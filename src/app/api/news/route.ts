@@ -10,6 +10,14 @@ import { newsPush } from '@/packages/notifications/services/pushMessages';
 const newsService = NewsService.instance();
 const pushNotificationsService = PushNotificationsService.instance();
 
+/**
+ * GET /api/news?category=<NewsCategory|ALL>&summary=1
+ *
+ * Newest first. With `summary=1` (card data) each item has only its cover image and
+ * `content`/`contentEn` as plain text (HTML/markdown stripped, whitespace collapsed) cut to
+ * ~300 characters with an ellipsis; fetch /api/news/<id> for the full article.
+ * News has no separate summary/excerpt field.
+ */
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
@@ -31,7 +39,6 @@ export async function POST(request: NextRequest) {
 
     const title = formData.get('title') as string;
     const content = formData.get('content') as string;
-    const excerpt = formData.get('excerpt') as string;
     const category = formData.get('category') as NewsCategory;
     const author = formData.get('author') as string;
     const featured = formData.get('featured') === 'true';
@@ -41,7 +48,6 @@ export async function POST(request: NextRequest) {
     const newsData = {
       title,
       content,
-      excerpt,
       category,
       author,
       tags,

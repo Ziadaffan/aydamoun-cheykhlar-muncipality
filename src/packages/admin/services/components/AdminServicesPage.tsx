@@ -9,6 +9,8 @@ import { jsonBody } from '../../common/adminApi';
 import AdminPage from '../../common/AdminPage';
 import { servicesResource, ServiceDto } from '../servicesResource';
 import { serviceTypeKey } from '../serviceTypes';
+import EmptyState from '@/packages/common/components/EmptyState';
+import { Inbox } from 'lucide-react';
 
 export default function AdminServicesPage() {
   const { t } = useTranslation();
@@ -43,7 +45,7 @@ export default function AdminServicesPage() {
       {message && <Banner type={message.type} message={message.text} onClose={() => setMessage(null)} />}
 
       {services?.length === 0 ? (
-        <p className="rounded-2xl bg-white p-8 text-center text-gray-600 shadow">{t('admin.services.empty')}</p>
+        <EmptyState icon={Inbox} title={t('admin.services.empty')} />
       ) : (
         <div className="overflow-x-auto rounded-2xl bg-white shadow">
           <table className="min-w-full divide-y divide-gray-200 text-start">

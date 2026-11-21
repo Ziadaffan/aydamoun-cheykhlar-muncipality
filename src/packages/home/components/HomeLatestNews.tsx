@@ -11,7 +11,7 @@ type HomeLatestNewsProps = {
 };
 
 // The three newest articles, like the app's home screen. `summary=1` leaves
-// out every photo but the cover.
+// out every photo but the cover and sends a short plain-text `content`.
 const getLatestNews = async (): Promise<News[]> => {
   const response = await fetch('/api/news?category=ALL&summary=1');
   if (!response.ok) throw new Error('Failed to fetch news');
@@ -34,11 +34,11 @@ export default function HomeLatestNews({ t }: HomeLatestNewsProps) {
         />
         <div className="grid grid-cols-1 gap-4 lg:grid-cols-3" aria-busy={isPending}>
           {items
-            ? items.map(news => <CompactCard key={news.id} news={news} />)
+            ? items.map(news => <CompactCard key={news.id} news={news} orientation="vertical" />)
             : [0, 1, 2].map(i => (
-                <div key={i} className="flex animate-pulse items-center gap-4 rounded-lg bg-white p-4 shadow-md">
-                  <div className="h-20 w-20 flex-shrink-0 rounded-lg bg-gray-200" />
-                  <div className="flex-1 space-y-2">
+                <div key={i} className="flex animate-pulse flex-col overflow-hidden rounded-xl bg-white shadow-md">
+                  <div className="aspect-[16/10] w-full bg-gray-200" />
+                  <div className="space-y-2 p-5">
                     <div className="h-3 w-1/3 rounded bg-gray-200" />
                     <div className="h-4 w-5/6 rounded bg-gray-200" />
                     <div className="h-3 w-2/3 rounded bg-gray-200" />

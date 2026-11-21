@@ -1,8 +1,246 @@
 @import 'tailwindcss';
 
+/* `dark:` follows the `dark` class on <html> (set before paint by the inline script in app/layout.tsx). */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/*
+ * Palette from the municipality logo, the same as the mobile app (constants/theme.ts there): cedar green
+ * (primary), terracotta roof (accent), sky, sun and warm stone neutrals.
+ *
+ * Tailwind v4 colour utilities read these variables (bg-gray-700 → var(--color-gray-700)), so the scales the
+ * site already uses are re-pointed here instead of editing every component:
+ *   blue          → cedar green (brand)          green / emerald → leaf green (success)
+ *   sky           → logo sky                     orange          → terracotta (accent)
+ *   amber, yellow → sun (warning)                red             → warm red (danger)
+ *   gray, white   → warm stone neutrals / surface
+ * In dark mode (.dark below) every scale is inverted (50 ↔ 950) so pairs such as `bg-blue-100 text-blue-800`
+ * or `bg-blue-600 text-white` keep their contrast; `white` becomes the dark card surface.
+ * Anything that must stay white whatever the theme (text on photos, the footer) uses `on-image`.
+ */
+@theme {
+  --color-gray-50: #fbfaf6;
+  --color-gray-100: #f3f1eb;
+  --color-gray-200: #e4e2da;
+  --color-gray-300: #cfccc2;
+  --color-gray-400: #8f958f;
+  --color-gray-500: #636d66;
+  --color-gray-600: #4a544d;
+  --color-gray-700: #39423c;
+  --color-gray-800: #262f2a;
+  --color-gray-900: #1c2420;
+  --color-gray-950: #111714;
+
+  --color-white: #ffffff;
+  --color-black: #000000;
+
+  --color-blue-50: #eef6ef;
+  --color-blue-100: #e6f2e8;
+  --color-blue-200: #c0e0c8;
+  --color-blue-300: #9dcca8;
+  --color-blue-400: #6fae7b;
+  --color-blue-500: #377f48;
+  --color-blue-600: #2e6b3c;
+  --color-blue-700: #255c33;
+  --color-blue-800: #1f5130;
+  --color-blue-900: #163d24;
+  --color-blue-950: #0d2615;
+
+  --color-green-50: #eef7f0;
+  --color-green-100: #dcefe0;
+  --color-green-200: #bfe0c7;
+  --color-green-300: #93c9a0;
+  --color-green-400: #5fae73;
+  --color-green-500: #34834a;
+  --color-green-600: #2f7a43;
+  --color-green-700: #256338;
+  --color-green-800: #1f5130;
+  --color-green-900: #183f26;
+  --color-green-950: #0e2617;
+
+  --color-emerald-100: var(--color-green-100);
+  --color-emerald-200: var(--color-green-200);
+  --color-emerald-800: var(--color-green-800);
+
+  --color-sky-50: #eef8fb;
+  --color-sky-100: #dff1f8;
+  --color-sky-200: #bfe3ef;
+  --color-sky-300: #8fd0e6;
+  --color-sky-400: #4fb6d8;
+  --color-sky-500: #2a9fc4;
+  --color-sky-600: #127a9c;
+  --color-sky-700: #0d6b8a;
+  --color-sky-800: #0b5872;
+  --color-sky-900: #0a465b;
+  --color-sky-950: #062d3b;
+
+  --color-orange-50: #fdf3ef;
+  --color-orange-100: #fbe3dc;
+  --color-orange-200: #f6c6b8;
+  --color-orange-300: #eea08a;
+  --color-orange-400: #e8714f;
+  --color-orange-500: #d9573b;
+  --color-orange-600: #b23a22;
+  --color-orange-700: #94301c;
+  --color-orange-800: #7a2817;
+  --color-orange-900: #5e1f12;
+  --color-orange-950: #3a130b;
+
+  --color-amber-50: #fdf9ec;
+  --color-amber-100: #fdf0c8;
+  --color-amber-200: #fae3a0;
+  --color-amber-300: #f2c94c;
+  --color-amber-400: #e8b630;
+  --color-amber-500: #e0a100;
+  --color-amber-600: #9a6400;
+  --color-amber-700: #855200;
+  --color-amber-800: #7a4a00;
+  --color-amber-900: #5e3800;
+  --color-amber-950: #3a2300;
+
+  --color-yellow-50: var(--color-amber-50);
+  --color-yellow-100: var(--color-amber-100);
+  --color-yellow-200: var(--color-amber-200);
+  --color-yellow-300: var(--color-amber-300);
+  --color-yellow-400: var(--color-amber-400);
+  --color-yellow-500: var(--color-amber-500);
+  --color-yellow-600: var(--color-amber-600);
+  --color-yellow-700: var(--color-amber-700);
+  --color-yellow-800: var(--color-amber-800);
+  --color-yellow-900: var(--color-amber-900);
+
+  --color-red-50: #fdf2f0;
+  --color-red-100: #fde4e1;
+  --color-red-200: #f9c9c2;
+  --color-red-300: #f2a397;
+  --color-red-400: #e66a5a;
+  --color-red-500: #c9372c;
+  --color-red-600: #b42318;
+  --color-red-700: #962015;
+  --color-red-800: #7a1d14;
+  --color-red-900: #5f1a12;
+  --color-red-950: #3b0f0a;
+
+  /* Named tokens */
+  --color-mist: #eef6ef; /* page-header gradient start (cedar mist) */
+  --color-sand: #fdf7ee; /* page-header gradient end (warm sand) */
+  --color-nav-start: #cfe8d4; /* navbar gradient: logo green → sky */
+  --color-nav-end: #bfe3ef;
+  --color-footer: #1f2a24;
+  --color-on-image: #ffffff; /* stays white in both themes: text/icons on photos, dark overlays, the footer */
+}
+
+/* Before .dark: same specificity, so .dark must come later to win. */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  color-scheme: light;
+  --background: #fbfaf6;
+  --foreground: #1c2420;
+}
+
+.dark {
+  color-scheme: dark; /* native inputs, date pickers and scrollbars */
+
+  --color-gray-50: #0f1512;
+  --color-gray-100: #1f2a24;
+  --color-gray-200: #2a352f;
+  --color-gray-300: #3a4740;
+  --color-gray-400: #76827b;
+  --color-gray-500: #909b94;
+  --color-gray-600: #b4bdb7;
+  --color-gray-700: #c9d0cb;
+  --color-gray-800: #dbe0dc;
+  --color-gray-900: #e8ece9;
+  --color-gray-950: #f4f6f4;
+
+  --color-white: #17201b; /* card surface */
+
+  --color-blue-50: #121d17;
+  --color-blue-100: #1d3324;
+  --color-blue-200: #24402d;
+  --color-blue-300: #2f5a3b;
+  --color-blue-400: #3d7a4d;
+  --color-blue-500: #4ea566;
+  --color-blue-600: #6cc283;
+  --color-blue-700: #85cf99;
+  --color-blue-800: #9fdbaf;
+  --color-blue-900: #bde7c8;
+  --color-blue-950: #dcf3e2;
+
+  --color-green-50: #13201a;
+  --color-green-100: #1d3324;
+  --color-green-200: #234030;
+  --color-green-300: #2d5a3c;
+  --color-green-400: #3d7a4d;
+  --color-green-500: #5bb373;
+  --color-green-600: #6cc283;
+  --color-green-700: #8fd6a2;
+  --color-green-800: #a9e0b8;
+  --color-green-900: #c8ecd2;
+  --color-green-950: #e3f6e8;
+
+  --color-sky-50: #101c21;
+  --color-sky-100: #16303a;
+  --color-sky-200: #1b3d4a;
+  --color-sky-300: #22566a;
+  --color-sky-400: #2f7d99;
+  --color-sky-500: #4fb6d8;
+  --color-sky-600: #6cc7e6;
+  --color-sky-700: #7fd0ec;
+  --color-sky-800: #a0ddf2;
+  --color-sky-900: #c4eaf7;
+  --color-sky-950: #e2f5fb;
+
+  --color-orange-50: #241612;
+  --color-orange-100: #3a221b;
+  --color-orange-200: #4f2c22;
+  --color-orange-300: #6e3a2b;
+  --color-orange-400: #b8553a;
+  --color-orange-500: #e8714f;
+  --color-orange-600: #f08a6a;
+  --color-orange-700: #f5a085;
+  --color-orange-800: #f7b29c;
+  --color-orange-900: #fad0c2;
+  --color-orange-950: #fde8e0;
+
+  --color-amber-50: #1f1b10;
+  --color-amber-100: #3a3218;
+  --color-amber-200: #4d4220;
+  --color-amber-300: #6b5a26;
+  --color-amber-400: #b8902e;
+  --color-amber-500: #e0b040;
+  --color-amber-600: #f2c94c;
+  --color-amber-700: #f5cf6b;
+  --color-amber-800: #f7da8a;
+  --color-amber-900: #fae6b0;
+  --color-amber-950: #fdf3d8;
+
+  --color-red-50: #241312;
+  --color-red-100: #3b1c1c;
+  --color-red-200: #552622;
+  --color-red-300: #7a3129;
+  --color-red-400: #c4544a;
+  --color-red-500: #f87171;
+  --color-red-600: #f98b80;
+  --color-red-700: #faa094;
+  --color-red-800: #fbb8ae;
+  --color-red-900: #fdd5cf;
+  --color-red-950: #feecea;
+
+  /* News category chips */
+  --color-purple-100: #2d2140;
+  --color-purple-200: #3f2d5a;
+  --color-purple-800: #d8c4f5;
+  --color-pink-100: #3a1c2b;
+  --color-pink-200: #52263b;
+  --color-pink-800: #f5b8d3;
+
+  --color-mist: #111a15;
+  --color-sand: #16150f;
+  --color-nav-start: #1b3323;
+  --color-nav-end: #16303a;
+  --color-footer: #0b100d;
+
+  --background: #0f1512;
+  --foreground: #e8ece9;
 }
 
 @theme inline {
@@ -14,19 +252,23 @@
   --font-baloo-bhaijaan-2: var(--font-baloo-bhaijaan-2);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
 html {
   scroll-behavior: smooth;
 }
 
+/* Focus-ring offsets default to white; in dark mode use the surface instead. */
+@layer base {
+  .dark *,
+  .dark ::before,
+  .dark ::after {
+    --tw-ring-offset-color: #17201b;
+  }
+}
+
 body {
   font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--background);
+  color: var(--foreground);
 }
 
 h1,

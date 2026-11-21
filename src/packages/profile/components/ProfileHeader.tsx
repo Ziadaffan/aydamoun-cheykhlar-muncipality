@@ -22,6 +22,7 @@ export default function ProfileHeader({ user }: ProfileHeaderProps) {
         {/* User info */}
         <div className="text-center sm:text-start">
           <h1 className="mb-2 text-3xl font-extrabold tracking-tight text-gray-900">{user?.name}</h1>
+          <p className="mb-3 text-lg leading-relaxed text-gray-600">{t('profile.header.subtitle')}</p>
           <div className="space-y-1">
             <p className="font-medium text-gray-700" dir="ltr">
               {user?.email || user?.phone}

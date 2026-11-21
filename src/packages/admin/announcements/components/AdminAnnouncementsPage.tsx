@@ -8,6 +8,8 @@ import { DeleteButton } from '@/packages/common/components/DeleteButton';
 import { formatDate } from '@/packages/common/utils/date.utils';
 import AdminPage from '../../common/AdminPage';
 import { announcementsResource } from '../announcementsResource';
+import EmptyState from '@/packages/common/components/EmptyState';
+import { Inbox } from 'lucide-react';
 
 const PRIORITY_STYLES = {
   NORMAL: 'bg-gray-100 text-gray-700',
@@ -42,7 +44,7 @@ export default function AdminAnnouncementsPage() {
       {message && <Banner type={message.type} message={message.text} onClose={() => setMessage(null)} />}
 
       {announcements?.length === 0 ? (
-        <p className="rounded-2xl bg-white p-8 text-center text-gray-600 shadow">{t('admin.announcements.empty')}</p>
+        <EmptyState icon={Inbox} title={t('admin.announcements.empty')} />
       ) : (
         <div className="space-y-4">
           {announcements?.map(announcement => {

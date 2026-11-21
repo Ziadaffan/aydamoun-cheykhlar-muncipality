@@ -11,6 +11,7 @@ type AssociationCardFooterProps = {
   };
 };
 
+/** Admin actions on an association card. */
 export default function AssociationCardFooter({ association }: AssociationCardFooterProps) {
   const { t } = useTranslation();
   const router = useRouter();
@@ -23,15 +24,13 @@ export default function AssociationCardFooter({ association }: AssociationCardFo
   };
 
   return (
-    <div className="mt-auto px-5 pb-5">
-      <div className="flex items-center gap-2">
-        <Button variant="warning" size="md" className="flex-1" onClick={() => router.push(`/associations/${association.id}/edit`)}>
-          {t('associations.actions.edit')}
-        </Button>
-        <Button variant="danger" size="md" className="flex-1" onClick={handleDelete} loading={isPending}>
-          {t('associations.actions.delete')}
-        </Button>
-      </div>
+    <div className="flex items-center gap-2">
+      <Button variant="warning" size="md" className="flex-1" onClick={() => router.push(`/associations/${association.id}/edit`)}>
+        {t('associations.actions.edit')}
+      </Button>
+      <Button variant="danger" size="md" className="flex-1" onClick={handleDelete} loading={isPending}>
+        {t('associations.actions.delete')}
+      </Button>
     </div>
   );
 }

@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { ReactNode } from 'react';
+import { usePathname } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import Spinner from '@/packages/common/components/Spinner';
 import ErrorMessage from '@/packages/common/components/ErrorMessage';
@@ -25,6 +26,8 @@ type AdminPageProps = {
 export default function AdminPage({ title, description, action, showBack = false, width = 'wide', isLoading, error, children }: AdminPageProps) {
   const { t } = useTranslation();
   const { role, isLoading: authLoading } = useAuth();
+  // Opened directly, "back" leads to the section's list: /admin/<section>/<id>/edit → /admin/<section>.
+  const sectionHref = (usePathname() ?? '/admin').split('/').slice(0, 3).join('/');
 
   if (authLoading || isLoading) return <Spinner className="min-h-screen" />;
   if (role !== 'ADMIN') return <ErrorMessage message={t('admin.serviceSubmissions.unauthorized')} />;
@@ -34,7 +37,7 @@ export default function AdminPage({ title, description, action, showBack = false
       <div className={`mx-auto px-4 sm:px-6 ${width === 'wide' ? 'max-w-7xl' : 'max-w-4xl'}`}>
         {showBack && (
           <div className="mb-6">
-            <BackButton />
+            <BackButton fallbackHref={sectionHref} />
           </div>
         )}
         <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">

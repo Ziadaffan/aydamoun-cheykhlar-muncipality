@@ -9,6 +9,8 @@ import StoredImage from '@/packages/common/components/StoredImage';
 import { getPositionLabel } from '@/packages/common/utils/position.utils';
 import AdminPage from '../../common/AdminPage';
 import { councilResource } from '../councilResource';
+import EmptyState from '@/packages/common/components/EmptyState';
+import { Inbox } from 'lucide-react';
 
 export default function AdminCouncilPage() {
   const { t } = useTranslation();
@@ -35,7 +37,7 @@ export default function AdminCouncilPage() {
       {message && <Banner type={message.type} message={message.text} onClose={() => setMessage(null)} />}
 
       {members?.length === 0 ? (
-        <p className="rounded-2xl bg-white p-8 text-center text-gray-600 shadow">{t('admin.council.empty')}</p>
+        <EmptyState icon={Inbox} title={t('admin.council.empty')} />
       ) : (
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
           {members?.map(member => (

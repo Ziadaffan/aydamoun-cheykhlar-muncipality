@@ -13,7 +13,7 @@ The sections below describe the original port; where they differ, this list wins
 
 - One request for every article (`?category=ALL&summary=1`; older backends ignore `summary`). The featured card is the newest article flagged `featured`, shown only under «الكل» or its own category and never repeated in the list. Categories are derived from the data in enum order.
 - Category labels are the website's (`news.categories` in its ar.json): أخبار البلدية، مشاريع تنموية، إعلانات، فعاليات مجتمعية، بنية تحتية، بيئية، خدمات اجتماعية، صحة وخدمات اجتماعية، أخرى. The website's `news.utils.ts categoryLabels` uses the same wording.
-- Search: the shared `components/ui/SearchField` with `lib/search` Arabic folding (hamza forms, ة/ه, ى/ي, diacritics, tatweel, Arabic-Indic digits) over title, excerpt, tags and category; combined with the selected category.
+- Search: the shared `components/ui/SearchField` with `lib/search` Arabic folding (hamza forms, ة/ه, ى/ي, diacritics, tatweel, Arabic-Indic digits) over title, content preview, tags and category; combined with the selected category.
 - The selected category lives in the route (`/news?category=ENVIRONMENTAL`), so the article's category chip and links open a filtered list.
 - `https://aydamoun-cheykhlar-municipality.org/news` opens this screen when the app is installed (universal links / App Links).
 
@@ -111,7 +111,7 @@ Selected pill: `bg-primary text-white`. Idle: `bg-surfaceMuted text-text`.
 | Image | `imageUrl[0]` via `<CldImage>` — fallback placeholder |
 | Category badge | `<Badge>` colored by category |
 | Title | `title`, 2 lines max with ellipsis |
-| Excerpt | `excerpt`, 3 lines max |
+| Preview | `content` (plain-text preview from `summary=1`), 3 lines max |
 | Meta | `date-fns format(createdAt)` · `author` · 👁 `views` |
 
 Tap → `router.push(\`/news/${id}\`)`.
