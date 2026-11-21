@@ -89,7 +89,7 @@ export default function JobCardDetails({ job, showDescription = true }: JobCardD
       )}
 
       {/* Created Date */}
-      <div className="flex items-center gap-2 font-medium text-gray-600">
+      <div className="flex items-center gap-2 text-sm text-gray-600">
         <svg className="h-4 w-4 flex-shrink-0 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path
             strokeLinecap="round"

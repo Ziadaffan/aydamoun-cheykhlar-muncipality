@@ -18,7 +18,7 @@ export const GET = ApiErrorHandler(async (): Promise<NextResponse> => {
   }
 });
 
-/** Admin: { period, title, description, periodEn?, titleEn?, descriptionEn?, order?, image? } as JSON or form data. */
+/** Admin: { title, description, titleEn?, descriptionEn?, order?, image? } as JSON or form data. */
 export const POST = ApiErrorHandler(async (request: NextRequest): Promise<NextResponse> => {
   try {
     await requireAdmin(request);

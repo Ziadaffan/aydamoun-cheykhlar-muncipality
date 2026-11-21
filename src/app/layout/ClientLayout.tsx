@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react';
 import i18n from '@/i18n';
 import Spinner from '@/packages/common/components/Spinner';
 import Footer from '@/packages/common/components/Footer';
+import { useTrackInAppHistory } from '@/packages/common/hooks/useInAppHistory';
 
 type ClientLayoutProps = {
   children: React.ReactNode;
@@ -15,6 +16,8 @@ type ClientLayoutProps = {
 export default function ClientLayout({ children }: ClientLayoutProps) {
   const [mounted, setMounted] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  // Lets BackButton tell "came from another page here" from "opened directly".
+  useTrackInAppHistory();
 
   useEffect(() => {
     const loadTranslations = async () => {

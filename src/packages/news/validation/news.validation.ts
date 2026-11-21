@@ -23,15 +23,8 @@ export const createNewsSchema = yup.object({
     .max(5000, validationMessages.maxLength('محتوى الخبر', 5000))
     .required(validationMessages.required('محتوى الخبر')),
 
-  excerpt: yup
-    .string()
-    .min(10, validationMessages.minLength('ملخص الخبر', 10))
-    .max(500, validationMessages.maxLength('ملخص الخبر', 500))
-    .required(validationMessages.required('ملخص الخبر')),
-
   // English version (optional; the Arabic text is shown when it is empty).
   titleEn: yup.string().trim().max(200, validationMessages.maxLength('العنوان بالإنجليزية', 200)).default(''),
-  excerptEn: yup.string().trim().max(500, validationMessages.maxLength('الملخص بالإنجليزية', 500)).default(''),
   contentEn: yup.string().trim().max(5000, validationMessages.maxLength('المحتوى بالإنجليزية', 5000)).default(''),
 
   category: yup
@@ -103,15 +96,8 @@ export const updateNewsSchema = yup.object({
     .max(5000, validationMessages.maxLength('محتوى الخبر', 5000))
     .required(validationMessages.required('محتوى الخبر')),
 
-  excerpt: yup
-    .string()
-    .min(10, validationMessages.minLength('ملخص الخبر', 10))
-    .max(500, validationMessages.maxLength('ملخص الخبر', 500))
-    .required(validationMessages.required('ملخص الخبر')),
-
   // English version (optional; the Arabic text is shown when it is empty).
   titleEn: yup.string().trim().max(200, validationMessages.maxLength('العنوان بالإنجليزية', 200)).default(''),
-  excerptEn: yup.string().trim().max(500, validationMessages.maxLength('الملخص بالإنجليزية', 500)).default(''),
   contentEn: yup.string().trim().max(5000, validationMessages.maxLength('المحتوى بالإنجليزية', 5000)).default(''),
 
   category: yup

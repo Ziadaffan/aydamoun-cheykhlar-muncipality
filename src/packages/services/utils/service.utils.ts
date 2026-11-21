@@ -3,19 +3,19 @@ import { ServiceType } from '@prisma/client';
 export function getServiceCategoryMeta(type: ServiceType) {
   switch (type) {
     case 'LICENSEES_AND_CONSTRUCTION_SERVICES':
-      return { icon: '🏗️', bgColor: 'from-blue-400 to-blue-600', categoryKey: 'buildingLicenses' };
+      return { icon: '🏗️', bgColor: 'from-blue-500 to-blue-700', categoryKey: 'buildingLicenses' };
     case 'ENVIRONMENTAL_SERVICES':
-      return { icon: '🌱', bgColor: 'from-green-400 to-green-600', categoryKey: 'environmentalServices' };
+      return { icon: '🌱', bgColor: 'from-green-500 to-green-700', categoryKey: 'environmentalServices' };
     case 'ADMINISTRATIVE_SERVICES':
-      return { icon: '📋', bgColor: 'from-purple-400 to-purple-600', categoryKey: 'administrativeTransactions' };
+      return { icon: '📋', bgColor: 'from-sky-600 to-sky-700', categoryKey: 'administrativeTransactions' };
     case 'DOWNLOAD_OFFICIAL_FORMS_SERVICES':
-      return { icon: '📄', bgColor: 'from-blue-400 to-blue-600', categoryKey: 'officialForms' };
+      return { icon: '📄', bgColor: 'from-blue-500 to-blue-700', categoryKey: 'officialForms' };
     case 'COMPLAINTS_AND_SUGGESTIONS_SERVICES':
-      return { icon: '📢', bgColor: 'from-orange-400 to-orange-600', categoryKey: 'complaintsAndSuggestions' };
+      return { icon: '📢', bgColor: 'from-orange-600 to-orange-700', categoryKey: 'complaintsAndSuggestions' };
     case 'OTHER':
-      return { icon: '⭐', bgColor: 'from-indigo-400 to-indigo-600', categoryKey: 'additionalServices' };
+      return { icon: '⭐', bgColor: 'from-amber-600 to-amber-700', categoryKey: 'additionalServices' };
     default:
-      return { icon: '❓', bgColor: 'from-gray-400 to-gray-600', categoryKey: 'other' };
+      return { icon: '❓', bgColor: 'from-gray-500 to-gray-700', categoryKey: 'other' };
   }
 }
 

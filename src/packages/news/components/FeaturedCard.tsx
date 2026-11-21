@@ -11,6 +11,7 @@ import { NewsFleshesImage } from '@/packages/common/components/NewsFleshImage';
 import { ImageIndicators } from '@/packages/common/components/ImageIndicators';
 import { useAuth } from '@/packages/common/hooks/useAuth';
 import { useDeleteNews } from '@/packages/news/hooks/useDeteleNews';
+import { textPreview } from '@/packages/common/utils/text.utils';
 
 type FeaturedCardProps = {
   news: News;
@@ -46,8 +47,8 @@ export const FeaturedCard = ({ news, t }: FeaturedCardProps) => {
     <div className="group relative overflow-hidden rounded-2xl bg-white shadow-xl transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl">
       <div className="grid grid-cols-1 gap-0 lg:grid-cols-2">
         {/* Image Section */}
-        <div className="relative h-64 overflow-hidden lg:h-full">
-          <Image src={currentImage} loader={newsImageLoader(currentImage)} alt={title} fill sizes="(max-width: 1280px) 100vw, 1280px" className="object-cover transition-transform duration-300 group-hover:scale-105" />
+        <div className="relative h-64 overflow-hidden bg-gray-100 sm:h-80 lg:h-auto lg:min-h-[26rem]">
+          <Image src={currentImage} loader={newsImageLoader(currentImage)} alt={title} fill sizes="(max-width: 1024px) 100vw, 50vw" className="object-cover transition-transform duration-300 group-hover:scale-105" />
           <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
 
           {hasMultipleImages && <NewsFleshesImage nextImage={nextImage} prevImage={prevImage} />}
@@ -77,7 +78,7 @@ export const FeaturedCard = ({ news, t }: FeaturedCardProps) => {
             {title}
           </h3>
 
-          <p className="mb-6 line-clamp-4 text-lg leading-relaxed text-gray-600">{loc(news.content, news.contentEn)}</p>
+          <p className="mb-6 line-clamp-4 text-lg leading-relaxed text-gray-600">{textPreview(loc(news.content, news.contentEn))}</p>
 
           {/* Tags */}
           {news.tags.length > 0 && (
@@ -93,7 +94,7 @@ export const FeaturedCard = ({ news, t }: FeaturedCardProps) => {
             </div>
           )}
 
-          <div className="flex justify-center gap-5">
+          <div className="flex flex-wrap justify-center gap-3">
             <div>
               <Button variant="primary" size="lg" onClick={() => router.push(`/news/${news.id}`)}>
                 {t('news.page.readMore')}

@@ -1,17 +1,13 @@
+import { CarTaxiFront } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import EmptyState from '@/packages/common/components/EmptyState';
+
 type TaxiStopsEmptyStateProps = {
   taxiStops: Array<unknown>;
 };
 
 export default function TaxiStopsEmptyState({ taxiStops }: TaxiStopsEmptyStateProps) {
   const { t } = useTranslation();
-  if (taxiStops.length > 0) {
-    return null;
-  }
-
-  return (
-    <div className="mt-8 rounded-xl border border-dashed border-gray-300 bg-white p-6 text-center text-gray-600">
-      {t('taxiStops.empty')}
-    </div>
-  );
+  if (taxiStops.length > 0) return null;
+  return <EmptyState icon={CarTaxiFront} title={t('taxiStops.empty')} description={t('taxiStops.emptyDescription')} />;
 }

@@ -18,7 +18,7 @@ export const GET = ApiErrorHandler(async (request: NextRequest, context): Promis
   }
 });
 
-/** Admin: any of { period, title, description, periodEn, titleEn, descriptionEn, order, image }; `removeImage=true` / `image: null` clears the image. */
+/** Admin: any of { title, description, titleEn, descriptionEn, order, image }; `removeImage=true` / `image: null` clears the image. */
 export const PUT = ApiErrorHandler(async (request: NextRequest, context): Promise<NextResponse> => {
   try {
     await requireAdmin(request);

@@ -49,7 +49,6 @@ export default function NewsPage() {
   }
 
   const title = loc(news.title, news.titleEn);
-  const excerpt = loc(news.excerpt, news.excerptEn);
   const content = loc(news.content, news.contentEn);
   const hasMultipleImages = news.imageUrl && news.imageUrl.length > 1;
   const currentImage = newsImageSrc(news.imageUrl?.[currentImageIndex]);
@@ -67,11 +66,11 @@ export default function NewsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-r from-blue-50 to-green-50 py-8">
+    <div className="min-h-screen bg-gradient-to-r from-mist to-sand py-8">
       <div className="container mx-auto px-4">
         {/* Back Button */}
         <div className="mb-6">
-          <BackButton />
+          <BackButton fallbackHref="/news" />
         </div>
         <NewHeader t={t} />
 
@@ -146,13 +145,6 @@ export default function NewsPage() {
 
           {/* News Content */}
           <div className="p-6">
-            {/* Excerpt */}
-            {excerpt && (
-              <div className="mb-6">
-                <p className="border-s-4 border-blue-500 ps-4 text-lg leading-relaxed text-gray-700">{excerpt}</p>
-              </div>
-            )}
-
             {/* Main Content */}
             <div className="prose prose-lg max-w-none">
               <div className="leading-relaxed whitespace-pre-line text-gray-800" dangerouslySetInnerHTML={{ __html: content }} />

@@ -12,6 +12,7 @@ import ErrorMessage from '@/packages/common/components/ErrorMessage';
 import Button from '@/packages/common/components/Button';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/packages/common/hooks/useAuth';
+import { useHashModal } from '@/packages/common/hooks/useHashModal';
 
 export default function JobsPage() {
   const { t } = useTranslation();
@@ -20,6 +21,8 @@ export default function JobsPage() {
   const { role } = useAuth();
 
   const { data: jobsData, isLoading, error } = useGetJobs();
+  // /jobs#<id> (home, shared links, old /jobs/<id> links) opens that job.
+  const { openId, open, close } = useHashModal(jobsData);
 
   useEffect(() => {
     if (jobsData) {
@@ -36,7 +39,7 @@ export default function JobsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-r from-blue-50 to-green-50 py-20">
+    <div className="min-h-screen bg-gradient-to-r from-mist to-sand py-12">
       <div className="container mx-auto px-6">
         <div className="mx-auto max-w-6xl">
           {/* Header */}
@@ -54,7 +57,7 @@ export default function JobsPage() {
           {/* Jobs Grid */}
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
             {jobs.map(job => (
-              <JobCard key={job.id} job={job} />
+              <JobCard key={job.id} job={job} open={openId === job.id} onOpen={() => open(job.id)} onClose={close} />
             ))}
           </div>
 

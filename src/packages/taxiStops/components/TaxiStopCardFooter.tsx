@@ -23,7 +23,7 @@ export default function TaxiStopCardFooter({ taxiStop }: TaxiStopCardFooterProps
   };
 
   return (
-    <div className="mt-auto px-5 pb-5">
+    <div>
       <div className="flex items-center gap-2">
         <Button variant="warning" size="md" className="flex-1" onClick={() => router.push(`/taxi-stops/${taxiStop.id}/edit`)}>
           {t('taxiStops.actions.edit')}

@@ -1,31 +1,26 @@
 'use client';
 
 import { useTranslation } from 'react-i18next';
-import { useAuth } from '@/packages/common/hooks/useAuth';
 import HomeHeaderSection from './HomeHeaderSection';
-import HomeLatestRequest from './HomeLatestRequest';
 import HomeAnnouncements from './HomeAnnouncements';
+import HomeHistoryTeaser from './HomeHistoryTeaser';
 import HomeLatestNews from './HomeLatestNews';
-import HomeServicesSection from './HomeServicesSection';
 import HomeQuickLinks from './HomeQuickLinks';
 import HomeContactSection from './HomeContactSection';
 
 // Same sections, in the same order, as the app's home screen.
 export default function HomePage() {
   const { t } = useTranslation();
-  const { isAuthenticated } = useAuth();
 
   return (
-    <div className="min-h-screen bg-gradient-to-r from-blue-50 to-green-50">
+    <div className="min-h-screen bg-gradient-to-r from-mist to-sand">
       <HomeHeaderSection t={t} />
 
       <HomeAnnouncements t={t} />
 
-      {isAuthenticated && <HomeLatestRequest t={t} />}
+      <HomeHistoryTeaser t={t} />
 
       <HomeLatestNews t={t} />
-
-      <HomeServicesSection t={t} />
 
       <HomeQuickLinks t={t} />
 

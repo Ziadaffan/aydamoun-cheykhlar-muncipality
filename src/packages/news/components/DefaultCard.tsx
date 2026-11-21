@@ -11,6 +11,7 @@ import { NewsFleshesImage } from '@/packages/common/components/NewsFleshImage';
 import { ImageIndicators } from '@/packages/common/components/ImageIndicators';
 import { useAuth } from '@/packages/common/hooks/useAuth';
 import { useDeleteNews } from '@/packages/news/hooks/useDeteleNews';
+import { textPreview } from '@/packages/common/utils/text.utils';
 type DefaultCardProps = {
   news: News;
   t: TFunction;
@@ -43,8 +44,8 @@ export const DefaultCard = ({ news, t }: DefaultCardProps) => {
   return (
     <div className="group relative flex h-full flex-col overflow-hidden rounded-xl bg-white shadow-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
       {/* Image */}
-      <div className="relative h-48 overflow-hidden">
-        <Image src={currentImage} loader={newsImageLoader(currentImage)} alt={title} fill sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw" className="object-cover transition-transform duration-300 group-hover:scale-105" />
+      <div className="relative h-48 flex-shrink-0 overflow-hidden bg-gray-100">
+        <Image src={currentImage} loader={newsImageLoader(currentImage)} alt={title} fill sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw" className="object-cover transition-transform duration-300 group-hover:scale-105" />
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
 
         {hasMultipleImages && <NewsFleshesImage nextImage={nextImage} prevImage={prevImage} />}
@@ -73,11 +74,11 @@ export const DefaultCard = ({ news, t }: DefaultCardProps) => {
 
         <h3 className="mb-3 line-clamp-2 text-xl font-bold text-gray-900 transition-colors group-hover:text-blue-600">{title}</h3>
 
-        <p className="mb-4 line-clamp-3 leading-relaxed text-gray-600">{loc(news.content, news.contentEn)}</p>
+        <p className="mb-4 line-clamp-3 leading-relaxed text-gray-600">{textPreview(loc(news.content, news.contentEn))}</p>
 
         {/* Tags */}
         {news.tags.length > 0 && (
-          <div className="mb-4 flex flex-wrap gap-2">
+          <div className="mb-4 flex max-h-7 flex-wrap gap-2 overflow-hidden">
             {news.tags.slice(0, 3).map((tag, index) => (
               <span key={index} className="inline-flex items-center rounded-md bg-gray-100 px-2 py-1 text-xs font-medium text-gray-700">
                 #{tag}
@@ -90,7 +91,7 @@ export const DefaultCard = ({ news, t }: DefaultCardProps) => {
         <div className="flex-1"></div>
 
         {/* Read More Button */}
-        <div className="flex justify-center gap-3">
+        <div className="flex flex-wrap justify-center gap-3">
           <div>
             <Button variant="primary" size="md" onClick={() => router.push(`/news/${news.id}`)}>
               {t('news.page.readMore')}

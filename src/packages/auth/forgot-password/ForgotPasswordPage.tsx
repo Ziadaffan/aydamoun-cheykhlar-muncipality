@@ -1,5 +1,6 @@
 'use client';
 
+import { BackButton } from '@/packages/common/components/BackButton';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -40,6 +41,9 @@ export default function ForgotPasswordPage() {
 
   return (
     <SignUpCard>
+      <div className="mb-4">
+        <BackButton fallbackHref="/auth/login" />
+      </div>
       <div className="mb-6 flex justify-center">
         <CldImage src="logo_smzpb2" alt="Municipality Logo" width={80} height={80} className="object-contain" priority />
       </div>

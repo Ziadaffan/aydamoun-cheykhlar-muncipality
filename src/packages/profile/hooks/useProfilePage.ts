@@ -5,9 +5,6 @@ import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useTranslation } from 'react-i18next';
-import { ServiceSubmission } from '@prisma/client';
-import { useGetUserSubmissions } from '@/packages/serviceSubmissions/hooks/useGetUserSubmissions';
-import { useDeleteServiceSubmission } from '@/packages/serviceSubmissions/hooks/useDeleteServiceSubmission';
 import { useUpdateProfile } from '@/packages/profile/hooks/useUpdateProfile';
 import { useAuth } from '@/packages/common/hooks/useAuth';
 import { profileUpdateSchema } from '@/packages/profile/validation/profile.validation';
@@ -30,12 +27,8 @@ export function useProfilePage() {
   const router = useRouter();
   const { t } = useTranslation();
 
-  const [deletingId, setDeletingId] = useState<string | null>(null);
-  const [submissions, setSubmissions] = useState<ServiceSubmission[]>([]);
   const [updateMessage, setUpdateMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
-  const { mutate: deleteSubmission, isPending: isDeleting } = useDeleteServiceSubmission();
-  const { data: submissionsData, isLoading: submissionsLoading, error: submissionsError } = useGetUserSubmissions();
   const { mutate: updateProfile, isPending: isProfileUpdating } = useUpdateProfile();
   const { user, isAuthenticated, isLoading } = useAuth();
 
@@ -47,12 +40,6 @@ export function useProfilePage() {
       phone: '',
     },
   });
-
-  useEffect(() => {
-    if (submissionsData) {
-      setSubmissions(submissionsData);
-    }
-  }, [submissionsData]);
 
   useEffect(() => {
     if (user) {
@@ -84,24 +71,6 @@ export function useProfilePage() {
     });
   };
 
-  const handleEditSubmission = (submissionId: string) => {
-    router.push(`/profile/edit-submission/${submissionId}`);
-  };
-
-  const handleDeleteSubmission = (submissionId: string) => {
-    if (confirm(t('profile.submissions.deleteConfirmation'))) {
-      setDeletingId(submissionId);
-      deleteSubmission(submissionId, {
-        onSuccess: () => {
-          setDeletingId(null);
-        },
-        onError: () => {
-          setDeletingId(null);
-        },
-      });
-    }
-  };
-
   const closeMessage = () => {
     setUpdateMessage(null);
   };
@@ -115,12 +84,6 @@ export function useProfilePage() {
     isAuthenticated,
     isLoading,
 
-    // Submissions
-    submissions,
-    submissionsLoading,
-    submissionsError,
-    deletingId,
-
     // Profile update
     isProfileUpdating,
     updateMessage,
@@ -128,8 +91,6 @@ export function useProfilePage() {
     // Handlers
     handleChangePassword,
     handleEditProfile,
-    handleEditSubmission,
-    handleDeleteSubmission,
     closeMessage,
   };
 }

@@ -88,7 +88,7 @@ export function useEditSubmission({ submissionId, serviceId, category }: UseEdit
       },
       onSettled: () => {
         setTimeout(() => {
-          router.push('/profile');
+          router.push('/submissions');
         }, 1000);
       },
     });

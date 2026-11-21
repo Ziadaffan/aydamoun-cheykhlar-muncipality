@@ -3,6 +3,7 @@ import { Geist, Geist_Mono, Baloo_Bhaijaan_2 } from 'next/font/google';
 import { Amiri } from 'next/font/google';
 import './globals.css';
 import ClientLayout from './layout/ClientLayout';
+import { themeBootstrapScript } from '@/packages/common/utils/theme.utils';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -45,6 +46,8 @@ export default function RootLayout({
     <html lang="ar" dir="rtl" suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: languageBootstrapScript }} />
+        {/* Light/dark: sets the `dark` class on <html> before paint (no flash) and follows OS changes on "system". */}
+        <script dangerouslySetInnerHTML={{ __html: themeBootstrapScript }} />
         <meta
           name="keywords"
           content="بلدية عيدمون شيخلار, عيدمون شيخلار, بلدية عيدمون, شيخلار, خدمات بلدية عيدمون, بلدية شيخلار الرسمية, خدمات المواطنين في عيدمون, بلدية عيدمون شيخلار الرسمية, خدمات بلدية عيدمون شيخلار, municipality services, Aydamoun Cheikh Lahr,  Aydamoun municipality, Cheikh Lahr municipality"

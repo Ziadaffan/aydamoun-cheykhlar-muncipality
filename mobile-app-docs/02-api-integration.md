@@ -113,7 +113,7 @@ Reset password (website only, body `{ token, password }`): `200 { message }`; `4
 | `GET`  | `/api/news/categories`                | —    | `NewsCategory[]` that have at least one article                                 |
 | `GET`  | `/api/news/[id]`                      | —    | `News`, the full article. `404` if unknown                                      |
 
-`summary=1` (or `summary=true`) works with or without `category`. It drops `content` and keeps only the first image (`imageUrl` has at most one entry). Use it for every list and card, and fetch `/api/news/[id]` for the full article and gallery.
+`summary=1` (or `summary=true`) works with or without `category`. It sends `content` (and `contentEn`) as plain text cut to about 300 characters (HTML/markdown stripped, ellipsis when cut) and keeps only the first image (`imageUrl` has at most one entry). Use it for every list and card, and fetch `/api/news/[id]` for the full article and gallery.
 
 `imageUrl` entries are Cloudinary `https://` URLs. Articles saved before the image migration (`yarn migrate:news-images`) still hold raw base64 without a `data:` prefix until that script has been run, so clients should accept both.
 
@@ -237,7 +237,6 @@ interface News {
   id: string;
   title: string;
   content: string; // HTML
-  excerpt: string;
   imageUrl: string[]; // Cloudinary https URLs; raw base64 (no data: prefix) on rows not yet migrated
   category: NewsCategory;
   author: string;
@@ -248,8 +247,9 @@ interface News {
   updatedAt: string;
 }
 
-// ?summary=1: no `content`, and imageUrl holds at most the first image.
-type NewsSummary = Omit<News, 'content'>;
+// ?summary=1: `content`/`contentEn` are plain text (HTML/markdown stripped) cut to ~300 chars,
+// and imageUrl holds at most the first image. News has no excerpt/summary field.
+type NewsSummary = News;
 
 interface Service {
   id: string;

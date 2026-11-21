@@ -16,7 +16,7 @@ export const ImageIndicators = ({ news, setCurrentImageIndex, currentImageIndex 
             e.stopPropagation();
             setCurrentImageIndex(index);
           }}
-          className={`h-3 w-3 rounded-full transition-colors ${index === currentImageIndex ? 'bg-white' : 'bg-white/50'}`}
+          className={`h-3 w-3 rounded-full transition-colors ${index === currentImageIndex ? 'bg-on-image' : 'bg-on-image/50'}`}
         />
       ))}
     </div>

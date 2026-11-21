@@ -2,6 +2,7 @@ import { useRouter } from 'next/navigation';
 import { useAuth } from '@/packages/common/hooks/useAuth';
 import Spinner from '@/packages/common/components/Spinner';
 import { BackButton } from '@/packages/common/components/BackButton';
+import { hasInAppHistory } from '@/packages/common/hooks/useInAppHistory';
 import ChangePasswordForm from './ChangePasswordForm';
 import ChangePasswordHeader from './ChangePasswordHeader';
 import ChangePasswordCard from './ChangePasswordCard';
@@ -15,7 +16,8 @@ export default function ChangePasswordPage() {
   };
 
   const handleSuccess = () => {
-    router.back();
+    if (hasInAppHistory()) router.back();
+    else router.push('/profile');
   };
 
   if (isLoading) {
@@ -26,7 +28,7 @@ export default function ChangePasswordPage() {
     <div className="min-h-screen bg-gray-50 py-12">
       <div className="mx-auto max-w-md px-4 sm:px-6 lg:px-8">
         <div className="mb-6">
-          <BackButton />
+          <BackButton fallbackHref="/profile" />
         </div>
 
         <ChangePasswordCard>

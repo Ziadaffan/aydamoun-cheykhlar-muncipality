@@ -43,7 +43,6 @@ const FIELD_NAMES_EN: Record<string, string> = {
   إلى: 'To',
   الساعة: 'Time',
   'عنوان الخبر': 'News title',
-  'ملخص الخبر': 'News summary',
   'محتوى الخبر': 'News content',
   'فئة الخبر': 'News category',
   'اسم الكاتب': 'Author name',

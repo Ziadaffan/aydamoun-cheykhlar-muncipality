@@ -166,7 +166,6 @@ model News {
   id       String       @id @default(uuid())
   title    String
   content  String       @db.Text
-  excerpt  String
   imageUrl String[]
   category NewsCategory
   author   String
@@ -179,7 +178,6 @@ model News {
   /// English versions (optional; Arabic is shown when empty).
   titleEn   String?
   contentEn String?  @db.Text
-  excerptEn String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -296,8 +294,6 @@ model Announcement {
 // Village history timeline, managed by admins.
 model HistoryEntry {
   id          String  @id @default(uuid())
-  /// Free text: "1920", "القرن التاسع عشر", "1975 – 1990".
-  period      String
   title       String
   description String  @db.Text
   imageUrl    String?
@@ -305,7 +301,6 @@ model HistoryEntry {
   order       Int     @default(0)
 
   /// English versions (optional; Arabic is shown when empty).
-  periodEn      String?
   titleEn       String?
   descriptionEn String?
   createdAt     DateTime @default(now())

@@ -11,6 +11,8 @@ import ErrorMessage from '@/packages/common/components/ErrorMessage';
 import { getServiceCategoryMeta, serviceMatchesSearch } from '@/packages/services/utils/service.utils';
 import { useAuth } from '@/packages/common/hooks/useAuth';
 import AuthBanner from '@/packages/common/components/AuthBanner';
+import EmptyState from '@/packages/common/components/EmptyState';
+import { SearchX } from 'lucide-react';
 
 export default function ServicesPage() {
   const { t } = useTranslation();
@@ -43,7 +45,7 @@ export default function ServicesPage() {
   if (error) return <ErrorMessage />;
 
   return (
-    <div className="min-h-screen bg-gradient-to-r from-blue-50 to-green-50">
+    <div className="min-h-screen bg-gradient-to-r from-mist to-sand">
       {!isAuthenticated && (
         <AuthBanner />
       )}
@@ -68,7 +70,7 @@ export default function ServicesPage() {
       </div>
 
       {search.trim() && visibleServices.length === 0 && (
-        <p className="container mx-auto px-6 py-12 text-center text-lg text-gray-600">{t('services.search.empty')}</p>
+        <EmptyState icon={SearchX} title={t('services.search.empty')} description={t('services.search.emptyDescription')} />
       )}
 
       {/* Render each category section dynamically */}
