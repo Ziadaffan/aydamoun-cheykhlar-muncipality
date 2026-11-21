@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import type { ServiceField } from '../utils/serviceFields';
 import { useServiceForm } from '../hooks/useServiceForm';
 import PersonalInfoSection from './PersonalInfoSection';
@@ -26,18 +26,20 @@ export default function ServiceForm({ serviceId, fields }: ServiceFormProps) {
     control,
     formState: { errors, isDirty, isValid },
   } = form;
+  // A photo still uploading has no value yet: the request waits for it.
+  const [isUploading, setIsUploading] = useState(false);
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="rounded-2xl bg-white p-8 shadow-xl">
+    <form onSubmit={handleSubmit(data => !isUploading && onSubmit(data))} className="rounded-2xl bg-white p-8 shadow-xl">
       <InfoMessage message={message} onClose={closeMessage} />
 
       <PersonalInfoSection control={control} errors={errors} />
 
-      <AdditionalFieldsSection additionalFields={fields} control={control} errors={errors} />
+      <AdditionalFieldsSection additionalFields={fields} control={control} errors={errors} onUploadingChange={setIsUploading} />
 
       <RequestDetailsSection control={control} errors={errors} />
 
-      <FormSubmitButton isSubmitting={isSubmitting} isDirty={isDirty} />
+      <FormSubmitButton isSubmitting={isSubmitting} isDirty={isDirty} isUploading={isUploading} />
     </form>
   );
 }

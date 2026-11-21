@@ -28,13 +28,13 @@ const updateNews = async (data: UpdateNewsFormData & { id: string }) => {
     formData.append('tags', JSON.stringify(data.tags));
   }
 
-  if (data.images && data.images.length > 0) {
-    data.images.forEach((image, index) => {
-      if (image instanceof File) {
-        formData.append(`images`, image);
-      }
-    });
-  }
+  // Stored images to keep (indexes, in order); new files are added after them.
+  formData.append('keepImages', JSON.stringify(data.keepImages ?? []));
+  data.images?.forEach(image => {
+    if (image instanceof File) {
+      formData.append('images', image);
+    }
+  });
 
   const response = await fetch(`/api/news/${data.id}`, {
     method: 'PUT',

@@ -61,6 +61,26 @@ export function readNewsEnglish(formData: FormData) {
   };
 }
 
+/**
+ * The `keepImages` form field of an edit: a JSON array of indexes into the article's
+ * stored images, in the order to keep them. Undefined when absent (older clients):
+ * then new files replace every image and no files keep them all.
+ */
+export function readKeptImageIndexes(formData: FormData): number[] | undefined {
+  const raw = formData.get('keepImages');
+  if (raw === null) return undefined;
+  let parsed: unknown;
+  try {
+    parsed = typeof raw === 'string' ? JSON.parse(raw) : null;
+  } catch {
+    parsed = null;
+  }
+  if (!Array.isArray(parsed) || !parsed.every(index => Number.isInteger(index) && index >= 0)) {
+    throw new BadRequestError('keepImages must be an array of image indexes', 'INVALID_NEWS');
+  }
+  return parsed as number[];
+}
+
 const toSummary = <T extends { imageUrl: string[]; content: string; contentEn: string | null }>(news: T): T => ({
   ...news,
   imageUrl: news.imageUrl.slice(0, 1),
@@ -151,17 +171,34 @@ export class NewsService extends BasePrismaService<'news'> {
   }
 
   /**
-   * Uploaded images replace the article's images, as the web edit form expects.
-   * An edit that sends no images keeps the current ones instead of wiping them.
+   * Images: with `keptIndexes` (the edit form's `keepImages`) the article ends up with the
+   * stored images at those indexes, in that order, followed by the uploaded ones. Without
+   * it (older clients) uploaded images replace all of them and no upload keeps them all.
+   * Images dropped are removed from Cloudinary only after the row is saved.
    */
-  public async updateNews(id: string, newsData: NewsInput, images: File[]) {
+  public async updateNews(id: string, newsData: NewsInput, images: File[], keptIndexes?: number[]) {
     const existing = await this.repository.findUnique({ where: { id }, select: { imageUrl: true } });
 
     if (!existing) {
       throw new NotFoundError('News not found');
     }
 
-    const uploaded = images.length ? await uploadNewsImages(images) : null;
+    const kept =
+      keptIndexes === undefined
+        ? images.length
+          ? []
+          : existing.imageUrl
+        : keptIndexes
+            .filter((index, position) => index < existing.imageUrl.length && keptIndexes.indexOf(index) === position)
+            .map(index => existing.imageUrl[index]);
+
+    if (kept.length + images.length === 0 && existing.imageUrl.length > 0) {
+      throw new BadRequestError('A news item needs at least one image', 'INVALID_NEWS');
+    }
+
+    const uploaded = images.length ? await uploadNewsImages(images) : [];
+    const imageUrl = [...kept, ...uploaded];
+    const imagesChanged = imageUrl.length !== existing.imageUrl.length || imageUrl.some((image, index) => image !== existing.imageUrl[index]);
 
     let updated;
     try {
@@ -188,20 +225,17 @@ export class NewsService extends BasePrismaService<'news'> {
           author: newsData.author,
           tags: newsData.tags,
           featured: newsData.featured,
-          ...(uploaded && { imageUrl: uploaded }),
+          // Untouched images aren't written at all.
+          ...(imagesChanged && { imageUrl }),
         },
       });
     } catch (error) {
       console.error('Error updating news:', error);
-      if (uploaded) {
-        await destroyNewsImages(uploaded);
-      }
+      await destroyNewsImages(uploaded);
       throw error;
     }
 
-    if (uploaded) {
-      await destroyNewsImages(existing.imageUrl);
-    }
+    await destroyNewsImages(existing.imageUrl.filter(image => !imageUrl.includes(image)));
 
     return updated;
   }

@@ -12,6 +12,7 @@ import { useAuth } from '@/packages/common/hooks/useAuth';
 import { dateLocale } from '@/packages/common/utils/date.utils';
 import { describeAdditionalInfo } from '@/packages/services/utils/form.utils';
 import { resolveServiceFields } from '@/packages/services/utils/serviceFields';
+import ServiceImageThumbnail from '@/packages/services/components/ServiceImageThumbnail';
 import { submissionReference } from '@/packages/serviceSubmissions/utils/reference';
 import { useAdminServiceSubmission } from '../hooks/useAdminSubmission';
 import { useAdminDeleteServiceSubmission } from '../hooks/useAdminDeleteServiceSubmission';
@@ -139,9 +140,16 @@ export default function AdminViewSubmissionPage() {
               <div className="rounded-lg border border-gray-100 bg-gray-50 p-4 text-gray-700">{t('admin.serviceSubmissions.noAdditionalInfo')}</div>
             ) : (
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                {additionalInfoEntries.map(entry => (
-                  <InfoRow key={entry.key} label={entry.label} value={entry.value} />
-                ))}
+                {additionalInfoEntries.map(entry =>
+                  entry.image ? (
+                    <div key={entry.key} className="rounded-lg border border-gray-100 bg-gray-50 p-4">
+                      <div className="mb-2 text-sm font-semibold text-gray-700">{entry.label}</div>
+                      <ServiceImageThumbnail src={entry.image} label={entry.label} />
+                    </div>
+                  ) : (
+                    <InfoRow key={entry.key} label={entry.label} value={entry.value} />
+                  )
+                )}
               </div>
             )}
           </div>

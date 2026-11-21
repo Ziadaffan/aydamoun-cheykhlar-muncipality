@@ -1,10 +1,12 @@
 'use client';
 
+import { useCallback, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Control, Controller, FieldErrors } from 'react-hook-form';
 import ControlledSelect from '@/packages/common/components/form/ControlledSelect';
 import ControlledInputText from '@/packages/common/components/form/ControlledInputText';
 import ControlledTextArea from '@/packages/common/components/form/ControlledTextArea';
+import ServiceImageField from '@/packages/services/forms/ServiceImageField';
 import { toDateOnly } from '@/packages/services/utils/form.utils';
 import { serviceFieldLabel, serviceFieldOptionLabel, type ServiceField } from '@/packages/services/utils/serviceFields';
 import { siteLanguage } from '@/lib/localized';
@@ -15,10 +17,23 @@ type AdditionalFieldsSectionProps = {
   errors: FieldErrors<any> & {
     additionalInfo?: Record<string, any>;
   };
+  /** Whether a photo ('image' field) is still uploading; the form isn't sent meanwhile. */
+  onUploadingChange?: (uploading: boolean) => void;
 };
 
-export default function AdditionalFieldsSection({ additionalFields, control, errors }: AdditionalFieldsSectionProps) {
+export default function AdditionalFieldsSection({ additionalFields, control, errors, onUploadingChange }: AdditionalFieldsSectionProps) {
   const { t } = useTranslation();
+  // Keys of the image fields uploading now (a form can have several).
+  const uploadingKeys = useRef(new Set<string>());
+  const onUploadingChangeRef = useRef(onUploadingChange);
+  useEffect(() => {
+    onUploadingChangeRef.current = onUploadingChange;
+  }, [onUploadingChange]);
+  const setUploading = useCallback((key: string, uploading: boolean) => {
+    if (uploading) uploadingKeys.current.add(key);
+    else uploadingKeys.current.delete(key);
+    onUploadingChangeRef.current?.(uploadingKeys.current.size > 0);
+  }, []);
 
   if (additionalFields.length === 0) {
     return null;
@@ -31,7 +46,7 @@ export default function AdditionalFieldsSection({ additionalFields, control, err
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
         {additionalFields.map(field => (
           <div key={field.key} className={field.kind === 'textarea' ? 'md:col-span-2' : undefined}>
-            <AdditionalFieldRenderer field={field} control={control} errors={errors} />
+            <AdditionalFieldRenderer field={field} control={control} errors={errors} setUploading={setUploading} />
           </div>
         ))}
       </div>
@@ -45,9 +60,10 @@ type AdditionalFieldRendererProps = {
   errors: FieldErrors<any> & {
     additionalInfo?: Record<string, any>;
   };
+  setUploading: (key: string, uploading: boolean) => void;
 };
 
-function AdditionalFieldRenderer({ field, control, errors }: AdditionalFieldRendererProps) {
+function AdditionalFieldRenderer({ field, control, errors, setUploading }: AdditionalFieldRendererProps) {
   const { t, i18n } = useTranslation();
   // English labels for English visitors; the value sent is always the Arabic option.
   const english = siteLanguage(i18n.language) === 'en';
@@ -102,6 +118,19 @@ function AdditionalFieldRenderer({ field, control, errors }: AdditionalFieldRend
           />
           {error?.message && <span className="mt-1 block text-sm text-red-500">{error.message}</span>}
         </div>
+      );
+
+    case 'image':
+      return (
+        <ServiceImageField
+          id={id}
+          name={name}
+          control={control}
+          label={label}
+          required={field.required}
+          error={error}
+          onUploadingChange={uploading => setUploading(field.key, uploading)}
+        />
       );
 
     case 'number':

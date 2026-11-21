@@ -2,7 +2,7 @@
 
 import { TFunction } from 'i18next';
 import { Council } from '@prisma/client';
-import { CldImage } from 'next-cloudinary';
+import StoredImage from '@/packages/common/components/StoredImage';
 import { BriefcaseBusiness, GraduationCap, Mail, Phone, UserRound, type LucideIcon } from 'lucide-react';
 import { useLocalized } from '@/lib/localized';
 import Modal from '@/packages/common/components/Modal';
@@ -40,7 +40,7 @@ export default function CouncilMemberModal({ t, member, open, onClose }: Council
       <div className="mb-6 flex flex-col items-center text-center">
         <div className="relative mb-4 flex h-40 w-40 items-center justify-center overflow-hidden rounded-full border-4 border-blue-100 bg-gray-100 shadow-lg">
           {member.image ? (
-            <CldImage src={member.image} alt={name} fill sizes="160px" className="object-cover" />
+            <StoredImage src={member.image} alt={name} sizes="160px" />
           ) : (
             <UserRound className="h-16 w-16 text-gray-400" aria-hidden />
           )}

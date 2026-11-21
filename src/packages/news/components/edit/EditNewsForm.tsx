@@ -8,10 +8,10 @@ import ControlledMultiFileInput from '@/packages/common/components/form/Controll
 import ControlledTagsInput from '@/packages/common/components/form/ControlledTagsInput';
 import EditNewsButton from '../edit/EditNewsButton';
 import { useTranslation } from 'react-i18next';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { updateNewsSchema, UpdateNewsFormData } from '@/packages/news/validation/news.validation';
 import FormMessage from '@/packages/common/components/form/InfoMessage';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useUpdateNews } from '@/packages/news/hooks/useUpdateNews';
 import { useGetNewsById } from '@/packages/news/hooks/useGetNewsById';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -20,6 +20,7 @@ import { NewsCategory } from '@/packages/news/types/news.types';
 import Spinner from '@/packages/common/components/Spinner';
 import ErrorMessage from '@/packages/common/components/ErrorMessage';
 import { EnglishInput, EnglishSection } from '@/packages/admin/common/EnglishFields';
+import CurrentNewsImages from './CurrentNewsImages';
 
 export default function EditNewsForm() {
   const { t } = useTranslation();
@@ -48,12 +49,17 @@ export default function EditNewsForm() {
       tags: [],
       featured: false,
       images: [],
+      keepImages: [],
     },
     resolver: yupResolver(updateNewsSchema),
   });
 
+  // Filled once per article: a background refetch (e.g. on refocusing the window)
+  // must not wipe what the admin is typing.
+  const filledFor = useRef<string | null>(null);
   useEffect(() => {
-    if (newsData) {
+    if (newsData && filledFor.current !== newsData.id) {
+      filledFor.current = newsData.id;
       reset({
         title: newsData.title || '',
         titleEn: newsData.titleEn ?? '',
@@ -64,6 +70,8 @@ export default function EditNewsForm() {
         tags: newsData.tags || [],
         featured: newsData.featured || false,
         images: [],
+        // Every stored image is kept unless the admin removes it.
+        keepImages: (newsData.imageUrl ?? []).map((_, index) => index),
       });
     }
   }, [newsData, reset]);
@@ -176,14 +184,21 @@ export default function EditNewsForm() {
           required
         />
 
+        {newsData && newsData.imageUrl?.length > 0 && (
+          <Controller
+            name="keepImages"
+            control={control}
+            render={({ field }) => <CurrentNewsImages images={newsData.imageUrl} kept={field.value ?? []} onChange={field.onChange} />}
+          />
+        )}
+
         <ControlledMultiFileInput
           id="images"
-          label={t('news.form.images')}
+          label={t('news.form.addImages')}
           control={control}
           name="images"
           error={errors.images as any}
           accept="image/jpeg,image/png,image/gif,image/webp"
-          required
         />
 
         <ControlledCheckbox id="featured" label={t('news.form.featured')} control={control} name="featured" error={errors.featured} />

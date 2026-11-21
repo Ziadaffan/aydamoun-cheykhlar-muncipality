@@ -4,7 +4,7 @@ import { TFunction } from 'i18next';
 import React, { useState } from 'react';
 import { Council } from '@prisma/client';
 import { useLocalized } from '@/lib/localized';
-import { CldImage } from 'next-cloudinary';
+import StoredImage from '@/packages/common/components/StoredImage';
 import CouncilMemberModal from './CouncilMemberModal';
 
 type AboutUsPresidentSectionProps = {
@@ -31,10 +31,10 @@ export default function AboutUsPresidentSection({ t, president }: AboutUsPreside
                 <div className="absolute -inset-4 rounded-full bg-gradient-to-r from-blue-600 to-sky-600 opacity-30 blur-lg"></div>
                 <div className="relative h-80 w-80 overflow-hidden rounded-full border-8 border-white shadow-2xl ring-4 ring-blue-100">
                   {president.image && (
-                    <CldImage
+                    <StoredImage
                       src={president.image}
                       alt={loc(president.name, president.nameEn)}
-                      fill
+                      sizes="320px"
                       className="object-cover transition-transform duration-300 group-hover:scale-105"
                     />
                   )}

@@ -59,7 +59,14 @@ export class AboutUsService extends BasePrismaService<'council'> {
       imageId = null;
     }
 
-    const updated = await this.repository.update({ where: { id }, data: { ...input, image: imageId } });
+    let updated;
+    try {
+      updated = await this.repository.update({ where: { id }, data: { ...input, image: imageId } });
+    } catch (error) {
+      // The new upload isn't used: remove it again.
+      if (image.imageFile) await destroyImage(imageId);
+      throw error;
+    }
     if (existing.image && existing.image !== imageId) await destroyImage(existing.image);
     return updated;
   }

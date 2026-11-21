@@ -17,6 +17,45 @@ const PRIORITY_STYLES = {
   URGENT: { badge: 'bg-red-100 text-red-800 border-red-300', tile: 'bg-red-100 text-red-700' },
 } as const;
 
+function PriorityBadges({ t, announcement }: { t: TFunction; announcement: AnnouncementDto }) {
+  const styles = PRIORITY_STYLES[announcement.priority] ?? PRIORITY_STYLES.NORMAL;
+  return (
+    <>
+      <span className={`inline-flex items-center rounded-full border px-3 py-1 text-xs font-medium ${styles.badge}`}>
+        {t(`announcements.priority.${announcement.priority}`)}
+      </span>
+      {announcement.pinned && (
+        <span className="inline-flex items-center gap-1 rounded-full border border-gray-200 bg-white px-3 py-1 text-xs font-medium text-gray-700">
+          <Pin className="h-3 w-3" aria-hidden />
+          {t('announcements.pinned')}
+        </span>
+      )}
+    </>
+  );
+}
+
+/** The whole announcement, as its dialog shows it (announcements page and home). */
+export function AnnouncementDetails({ t, announcement }: { t: TFunction; announcement: AnnouncementDto }) {
+  const loc = useLocalized();
+  const title = loc(announcement.title, announcement.titleEn);
+  const body = loc(announcement.body, announcement.bodyEn);
+  return (
+    <div className="space-y-4">
+      {announcement.imageUrl && (
+        <div className="relative h-64 w-full overflow-hidden rounded-xl md:h-96">
+          <StoredImage src={announcement.imageUrl} alt={title} sizes="(max-width: 768px) 100vw, 768px" className="object-contain" />
+        </div>
+      )}
+      <div className="flex flex-wrap items-center gap-2">
+        <PriorityBadges t={t} announcement={announcement} />
+        <span className="text-sm text-gray-500">{formatDate(announcement.createdAt)}</span>
+      </div>
+      <h2 className="text-2xl font-bold text-gray-900">{title}</h2>
+      <p className="leading-relaxed whitespace-pre-line text-gray-700">{body}</p>
+    </div>
+  );
+}
+
 type AnnouncementGridCardProps = {
   t: TFunction;
   announcement: AnnouncementDto;
@@ -31,19 +70,7 @@ export default function AnnouncementGridCard({ t, announcement, open, onOpen, on
   const styles = PRIORITY_STYLES[announcement.priority] ?? PRIORITY_STYLES.NORMAL;
   const title = loc(announcement.title, announcement.titleEn);
   const body = loc(announcement.body, announcement.bodyEn);
-  const priorityLabel = t(`announcements.priority.${announcement.priority}`);
-
-  const badges = (
-    <>
-      <span className={`inline-flex items-center rounded-full border px-3 py-1 text-xs font-medium ${styles.badge}`}>{priorityLabel}</span>
-      {announcement.pinned && (
-        <span className="inline-flex items-center gap-1 rounded-full border border-gray-200 bg-white px-3 py-1 text-xs font-medium text-gray-700">
-          <Pin className="h-3 w-3" aria-hidden />
-          {t('announcements.pinned')}
-        </span>
-      )}
-    </>
-  );
+  const badges = <PriorityBadges t={t} announcement={announcement} />;
 
   return (
     <article
@@ -79,19 +106,7 @@ export default function AnnouncementGridCard({ t, announcement, open, onOpen, on
       </div>
 
       <Modal open={open} onClose={onClose} title={t('announcements.title')} size="lg">
-        <div className="space-y-4">
-          {announcement.imageUrl && (
-            <div className="relative h-64 w-full overflow-hidden rounded-xl md:h-96">
-              <StoredImage src={announcement.imageUrl} alt={title} sizes="(max-width: 768px) 100vw, 768px" className="object-contain" />
-            </div>
-          )}
-          <div className="flex flex-wrap items-center gap-2">
-            {badges}
-            <span className="text-sm text-gray-500">{formatDate(announcement.createdAt)}</span>
-          </div>
-          <h2 className="text-2xl font-bold text-gray-900">{title}</h2>
-          <p className="leading-relaxed whitespace-pre-line text-gray-700">{body}</p>
-        </div>
+        <AnnouncementDetails t={t} announcement={announcement} />
       </Modal>
     </article>
   );

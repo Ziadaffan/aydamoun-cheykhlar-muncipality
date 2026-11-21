@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { requireAdmin } from '@/lib/mobile-auth';
 import { ApiErrorHandler } from '@/packages/common/errors';
 import { returnProperErrorMessage } from '@/packages/common/utils/error.utils';
-import { AssociationsService, readAssociationEnglish } from '@/packages/associations/services/associations.service';
+import { AssociationsService, readAssociationEnglish, readAssociationImage } from '@/packages/associations/services/associations.service';
 
 export const dynamic = 'force-dynamic';
 const associationsService = AssociationsService.instance();
@@ -25,18 +25,6 @@ export async function POST(request: NextRequest) {
 
     const name = formData.get('name') as string;
     const description = formData.get('description') as string;
-    const imageFile = formData.get('image') as File | null;
-
-    if (!imageFile) {
-      return NextResponse.json({ error: 'Image is required' }, { status: 400 });
-    }
-
-    if (!imageFile.type.startsWith('image/')) {
-      return NextResponse.json({ error: 'Invalid image file' }, { status: 400 });
-    }
-
-    const bytes = await imageFile.arrayBuffer();
-    const imageBase64 = Buffer.from(bytes).toString('base64');
 
     const association = await associationsService.create(
       {
@@ -44,8 +32,7 @@ export async function POST(request: NextRequest) {
         description,
         ...readAssociationEnglish(formData),
       },
-      imageBase64,
-      imageFile.type
+      readAssociationImage(formData)
     );
 
     return NextResponse.json(association, { status: 201 });

@@ -21,7 +21,7 @@ const FOCUSABLE =
   'a[href], area[href], button:not([disabled]), input:not([disabled]):not([type="hidden"]), select:not([disabled]), textarea:not([disabled]), iframe, [tabindex]:not([tabindex="-1"]), [contenteditable="true"]';
 
 /**
- * Accessible dialog: a bottom sheet on small screens, a centred card on md+.
+ * Accessible dialog: a centred card on every screen size (with a margin on phones).
  * Closes on backdrop click, Esc and the close button; traps Tab focus while open,
  * locks page scroll, and returns focus to whatever opened it.
  */
@@ -87,7 +87,7 @@ export default function Modal({ open, onClose, title, children, footer, size = '
   if (!mounted || !open) return null;
 
   return createPortal(
-    <div className="fixed inset-0 z-[100] flex items-end justify-center md:items-center md:p-6">
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-6">
       {/* Backdrop: a mouse affordance only, Esc and the close button cover keyboards. */}
       <div className="absolute inset-0 bg-black/50 backdrop-blur-[2px]" aria-hidden="true" onClick={onClose} />
 
@@ -96,15 +96,10 @@ export default function Modal({ open, onClose, title, children, footer, size = '
         role="dialog"
         aria-modal="true"
         aria-labelledby={titleId}
-        className={`relative flex max-h-[90dvh] w-full flex-col overflow-hidden rounded-t-3xl bg-white shadow-2xl md:max-h-[85vh] md:rounded-3xl ${
+        className={`relative flex max-h-[85dvh] w-full flex-col overflow-hidden rounded-2xl bg-white shadow-2xl md:rounded-3xl ${
           size === 'lg' ? 'md:max-w-3xl' : 'md:max-w-xl'
         }`}
       >
-        {/* Grab handle: the sheet look on phones. */}
-        <div className="flex justify-center pt-3 md:hidden" aria-hidden="true">
-          <span className="h-1.5 w-12 rounded-full bg-gray-300" />
-        </div>
-
         <div className="flex items-center justify-between gap-4 border-b border-gray-100 px-5 py-4 md:px-6">
           <h2 id={titleId} className="text-lg font-bold text-gray-800">
             {title}
@@ -120,9 +115,9 @@ export default function Modal({ open, onClose, title, children, footer, size = '
           </button>
         </div>
 
-        <div className="flex-1 overflow-y-auto overscroll-contain px-5 pt-5 pb-[max(1.25rem,env(safe-area-inset-bottom))] md:px-6">{children}</div>
+        <div className="flex-1 overflow-y-auto overscroll-contain px-5 pt-5 pb-5 md:px-6">{children}</div>
 
-        {footer && <div className="border-t border-gray-100 px-5 py-4 pb-[max(1rem,env(safe-area-inset-bottom))] md:px-6">{footer}</div>}
+        {footer && <div className="border-t border-gray-100 px-5 py-4 md:px-6">{footer}</div>}
       </div>
     </div>,
     document.body

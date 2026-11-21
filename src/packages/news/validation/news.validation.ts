@@ -149,9 +149,17 @@ export const updateNewsSchema = yup.object({
           return value.size <= maxSize;
         })
     )
-    .min(1, messages.imagesRequired)
-    .max(5, messages.tooManyImages)
-    .required(validationMessages.required('الصور')),
+    .default([])
+    // Counted with the stored images kept: an edit doesn't have to pick new files.
+    .test('images-required', messages.imagesRequired, function (value) {
+      return (value?.length ?? 0) + (this.parent.keepImages?.length ?? 0) >= 1;
+    })
+    .test('too-many-images', messages.tooManyImages, function (value) {
+      return (value?.length ?? 0) + (this.parent.keepImages?.length ?? 0) <= 5;
+    }),
+
+  // Indexes of the stored images to keep, in order (all of them when the form opens).
+  keepImages: yup.array().of(yup.number().integer().min(0).required()).default([]),
 });
 
 export type UpdateNewsFormData = yup.InferType<typeof updateNewsSchema>;

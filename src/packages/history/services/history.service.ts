@@ -53,7 +53,14 @@ export class HistoryService extends BasePrismaService<'historyEntry'> {
       imageUrl = null;
     }
 
-    const updated = await this.repository.update({ where: { id }, data: { ...input, imageUrl } });
+    let updated;
+    try {
+      updated = await this.repository.update({ where: { id }, data: { ...input, imageUrl } });
+    } catch (error) {
+      // The new upload isn't used: remove it again.
+      if (image.imageFile) await destroyImage(imageUrl);
+      throw error;
+    }
     if (existing.imageUrl && existing.imageUrl !== imageUrl) await destroyImage(existing.imageUrl);
     return updated;
   }

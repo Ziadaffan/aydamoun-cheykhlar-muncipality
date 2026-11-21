@@ -15,3 +15,10 @@ export const HOME_SLIDES: readonly HeroSlide[] = [
   { key: 'sunset', image: 'home-slides/slide-2' },
   { key: 'morning', image: 'home-slides/slide-3' },
 ];
+
+/**
+ * "Our village's story" picture (home card and the history page's header), the
+ * same as the app's. To change it, replace home-slides/village-story in the
+ * Cloudinary Media Library.
+ */
+export const VILLAGE_STORY_IMAGE = 'home-slides/village-story';

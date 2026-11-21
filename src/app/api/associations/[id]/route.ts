@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { requireAdmin } from '@/lib/mobile-auth';
 import { returnProperErrorMessage } from '@/packages/common/utils/error.utils';
-import { AssociationsService, readAssociationEnglish } from '@/packages/associations/services/associations.service';
+import { AssociationsService, readAssociationEnglish, readAssociationImage } from '@/packages/associations/services/associations.service';
 
 const associationsService = AssociationsService.instance();
 
@@ -48,20 +48,6 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
 
     const name = formData.get('name') as string;
     const description = formData.get('description') as string;
-    const imageFile = formData.get('image') as File | null;
-
-    let imageBase64: string | undefined;
-    let imageMimeType: string | undefined;
-
-    if (imageFile) {
-      if (!imageFile.type.startsWith('image/')) {
-        return NextResponse.json({ error: 'Invalid image file' }, { status: 400 });
-      }
-
-      const bytes = await imageFile.arrayBuffer();
-      imageBase64 = Buffer.from(bytes).toString('base64');
-      imageMimeType = imageFile.type;
-    }
 
     const result = await associationsService.updateAssociation(
       id,
@@ -70,8 +56,8 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
         description,
         ...readAssociationEnglish(formData),
       },
-      imageBase64,
-      imageMimeType
+      // No new file keeps the current image.
+      readAssociationImage(formData)
     );
 
     if (!result) {
