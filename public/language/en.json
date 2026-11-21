@@ -230,6 +230,20 @@
         "submitSuccess": "Your request was submitted successfully",
         "submitError": "An error occurred while submitting the request",
         "fieldRequired": "This field is required"
+      },
+      "photo": {
+        "choose": "Choose or take a photo",
+        "replace": "Replace",
+        "remove": "Remove",
+        "uploading": "Uploading photo...",
+        "view": "View photo",
+        "waitForUpload": "Uploading photo...",
+        "errors": {
+          "tooBig": "The photo is too large (4 MB maximum)",
+          "invalid": "This file is not a supported image (JPEG, PNG, WebP or HEIC)",
+          "network": "Could not upload the photo. Check your internet connection and try again",
+          "failed": "Could not upload the photo. Please try again"
+        }
       }
     },
     "buildingLicenses": {
@@ -707,7 +721,8 @@
         "textarea": "Long text",
         "number": "Number",
         "select": "Dropdown list",
-        "date": "Date"
+        "date": "Date",
+        "image": "Photo"
       },
       "types": {
         "LICENSEES_AND_CONSTRUCTION_SERVICES": "Permits & construction",
@@ -759,6 +774,11 @@
       "tags": "Tags",
       "tagsPlaceholder": "Enter tags separated by commas",
       "images": "Images",
+      "currentImages": "Current images",
+      "addImages": "Add images",
+      "removeImage": "Remove this image",
+      "restoreImage": "Keep this image",
+      "imagesHint": "Up to 5 images in total. Removed images are deleted when you save; new images are added after the current ones.",
       "featured": "Featured news",
       "createNews": "Create news item",
       "creating": "Creating...",

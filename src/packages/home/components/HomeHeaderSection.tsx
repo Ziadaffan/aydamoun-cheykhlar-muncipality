@@ -108,7 +108,7 @@ export default function HomeHeaderSection({ t }: HomeHeaderSectionProps) {
 
   return (
     <section
-      className="relative h-[500px] w-full overflow-hidden bg-gray-800"
+      className="relative h-[340px] w-full sm:h-[420px] md:h-[500px] overflow-hidden bg-gray-800"
       aria-roledescription="carousel"
       aria-label={t('home.hero.carouselLabel')}
       onMouseEnter={() => setHovered(true)}

@@ -1,7 +1,7 @@
 'use client';
 
 import { useTranslation } from 'react-i18next';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -14,6 +14,7 @@ import ErrorMessage from '@/packages/common/components/ErrorMessage';
 import { updateAssociationSchema, UpdateAssociationFormData } from '@/packages/associations/validation/associations.validation';
 import useGetAssociationById from '@/packages/associations/hooks/useGetAssociationById';
 import { useUpdateAssociation } from '@/packages/associations/hooks/useUpdateAssociation';
+import StoredImage from '@/packages/common/components/StoredImage';
 import EditAssociationButton from './EditAssociationButton';
 import { EnglishInput, EnglishSection } from '@/packages/admin/common/EnglishFields';
 
@@ -44,8 +45,11 @@ export default function EditAssociationForm() {
     resolver: yupResolver(updateAssociationSchema),
   });
 
+  // Filled once per association: a background refetch must not wipe unsaved edits.
+  const filledFor = useRef<string | null>(null);
   useEffect(() => {
-    if (data) {
+    if (data && filledFor.current !== data.id) {
+      filledFor.current = data.id;
       reset({
         name: data.name || '',
         nameEn: data.nameEn ?? '',
@@ -116,6 +120,15 @@ export default function EditAssociationForm() {
           rows={6}
           required
         />
+
+        {data?.picaURL && (
+          <div>
+            <span className="mb-1 block text-start text-sm font-medium text-gray-700 md:text-base">{t('associations.form.image')}</span>
+            <div className="relative aspect-[16/10] w-48 overflow-hidden rounded-lg border border-gray-200 bg-gray-100">
+              <StoredImage src={data.picaURL} alt={data.name} sizes="192px" />
+            </div>
+          </div>
+        )}
 
         <ControlledFileInput
           id="image"

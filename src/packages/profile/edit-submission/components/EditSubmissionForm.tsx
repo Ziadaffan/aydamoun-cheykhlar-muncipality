@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { ServiceField } from '@/packages/services/utils/serviceFields';
 import PersonalInfoSection from '@/packages/services/forms/PersonalInfoSection';
@@ -49,6 +49,8 @@ export default function EditSubmissionForm({
     control,
     formState: { errors, isDirty, isValid },
   } = form;
+  // A photo still uploading has no value yet: the changes wait for it.
+  const [isUploading, setIsUploading] = useState(false);
 
   const statusOptions = [
     { value: 'PENDING', label: t('profile.submissions.status.pending') },
@@ -58,7 +60,7 @@ export default function EditSubmissionForm({
   ];
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="rounded-2xl bg-white p-8 shadow-xl">
+    <form onSubmit={handleSubmit(data => !isUploading && onSubmit(data))} className="rounded-2xl bg-white p-8 shadow-xl">
       <InfoMessage message={message} onClose={closeMessage} />
 
       <PersonalInfoSection control={control} errors={errors} />
@@ -78,11 +80,11 @@ export default function EditSubmissionForm({
         </div>
       )}
 
-      <AdditionalFieldsSection additionalFields={fields} control={control} errors={errors} />
+      <AdditionalFieldsSection additionalFields={fields} control={control} errors={errors} onUploadingChange={setIsUploading} />
 
       <RequestDetailsSection control={control} errors={errors} />
 
-      <EditSubmissionButton isSubmitting={isSubmitting} isDirty={isDirty} isValid={isValid} />
+      <EditSubmissionButton isSubmitting={isSubmitting} isDirty={isDirty} isValid={isValid} isUploading={isUploading} />
     </form>
   );
 }

@@ -1,10 +1,14 @@
 'use client';
 
+import { useState } from 'react';
 import Link from 'next/link';
 import { TFunction } from 'i18next';
 import { ChevronLeft, Megaphone } from 'lucide-react';
 import { useGetAnnouncements } from '@/packages/announcements/hooks/useGetAnnouncements';
 import AnnouncementCard from '@/packages/announcements/components/AnnouncementCard';
+import { AnnouncementDetails } from '@/packages/announcements/components/AnnouncementGridCard';
+import Modal from '@/packages/common/components/Modal';
+import type { AnnouncementDto } from '@/packages/announcements/types';
 import HomeSectionHeader from './HomeSectionHeader';
 
 type HomeAnnouncementsProps = {
@@ -17,6 +21,8 @@ type HomeAnnouncementsProps = {
  */
 export default function HomeAnnouncements({ t }: HomeAnnouncementsProps) {
   const { data: announcements, isPending, isError } = useGetAnnouncements(3);
+  // Opens right here on home, like the app.
+  const [selected, setSelected] = useState<AnnouncementDto | null>(null);
 
   let body: React.ReactNode;
   if (isPending) {
@@ -51,9 +57,15 @@ export default function HomeAnnouncements({ t }: HomeAnnouncementsProps) {
     body = (
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
         {announcements.map(announcement => (
-          <Link key={announcement.id} href={`/announcements#${announcement.id}`} className="block transition-transform hover:-translate-y-0.5">
+          <button
+            key={announcement.id}
+            type="button"
+            onClick={() => setSelected(announcement)}
+            aria-haspopup="dialog"
+            className="block w-full cursor-pointer rounded-2xl text-start transition-transform hover:-translate-y-0.5 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:outline-none"
+          >
             <AnnouncementCard t={t} announcement={announcement} compact />
-          </Link>
+          </button>
         ))}
       </div>
     );
@@ -68,6 +80,9 @@ export default function HomeAnnouncements({ t }: HomeAnnouncementsProps) {
         />
         {body}
       </div>
+      <Modal open={!!selected} onClose={() => setSelected(null)} title={t('announcements.title')} size="lg">
+        {selected && <AnnouncementDetails t={t} announcement={selected} />}
+      </Modal>
     </section>
   );
 }

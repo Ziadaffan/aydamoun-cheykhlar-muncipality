@@ -1,7 +1,7 @@
 import * as yup from 'yup';
 import { ServiceStatus } from '@prisma/client';
 import { toDateOnly } from '@/packages/services/utils/form.utils';
-import type { ServiceField } from '@/packages/services/utils/serviceFields';
+import { SERVICE_IMAGE_PUBLIC_ID, type ServiceField } from '@/packages/services/utils/serviceFields';
 import { commonValidations, localizedMessage, validationMessages } from '../../common/validation/common.validation';
 import { isValidPhone, normalizePhone } from '@/packages/common/utils/phone.utils';
 
@@ -61,6 +61,16 @@ const createAdditionalInfoSchema = (fields: ServiceField[]) => {
             .string()
             .transform((value: unknown) => (typeof value === 'string' && value ? toDateOnly(value) : undefined))
             .matches(/^\d{4}-\d{2}-\d{2}$/, localizedMessage(`${ar} يجب أن يكون تاريخاً صحيحاً`, `${en} must be a valid date`))
+        );
+        break;
+
+      case 'image':
+        // The public id POST /api/service-images answered with (ServiceImageField sets it).
+        fieldSchema = required(
+          yup
+            .string()
+            .transform((value: unknown) => (value === '' || value === null ? undefined : value))
+            .matches(SERVICE_IMAGE_PUBLIC_ID, localizedMessage(`${ar}: يرجى رفع صورة`, `${en}: please upload a photo`))
         );
         break;
 

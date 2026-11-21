@@ -4,7 +4,7 @@ import { TFunction } from 'i18next';
 import React, { useState } from 'react';
 import { Council } from '@prisma/client';
 import { useLocalized } from '@/lib/localized';
-import { CldImage } from 'next-cloudinary';
+import StoredImage from '@/packages/common/components/StoredImage';
 import { UserRound } from 'lucide-react';
 import CouncilMemberModal from './CouncilMemberModal';
 
@@ -32,7 +32,7 @@ function CouncilMemberCard({ t, member }: { t: TFunction; member: Council }) {
         <div className="mb-6 flex justify-center">
           <div className="relative flex h-48 w-48 flex-shrink-0 items-center justify-center overflow-hidden rounded-full border-4 border-white bg-gray-100 shadow-lg">
             {member.image ? (
-              <CldImage src={member.image} alt="" fill sizes="192px" className="object-cover transition-transform duration-300 group-hover:scale-105" />
+              <StoredImage src={member.image} alt="" sizes="192px" className="object-cover transition-transform duration-300 group-hover:scale-105" />
             ) : (
               <UserRound className="h-16 w-16 text-gray-400" aria-hidden />
             )}

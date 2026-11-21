@@ -39,12 +39,17 @@ const cloudinaryImageLoader: ImageLoader = ({ src, width, quality }) => {
   return `${match[1]}f_auto,q_${quality ?? 'auto'},c_limit,w_${width}/${match[2]}`;
 };
 
+/** Other hosts (older rows) as they are: next/image's default loader refuses hosts missing from remotePatterns. */
+const passThroughImageLoader: ImageLoader = ({ src }) => src;
+
 /**
- * `loader` for next/image: Cloudinary's own resizing for Cloudinary URLs; undefined
- * (the default loader) otherwise. data: URIs are never optimized by next/image.
+ * `loader` for next/image: Cloudinary's own resizing for Cloudinary URLs, the URL as it
+ * is for other hosts, undefined (the default loader) for local files and data: URIs
+ * (which next/image never optimizes).
  */
 export function newsImageLoader(src: string): ImageLoader | undefined {
-  return CLOUDINARY_UPLOAD_URL.test(src) ? cloudinaryImageLoader : undefined;
+  if (CLOUDINARY_UPLOAD_URL.test(src)) return cloudinaryImageLoader;
+  return isRemoteImageUrl(src) ? passThroughImageLoader : undefined;
 }
 
 /**

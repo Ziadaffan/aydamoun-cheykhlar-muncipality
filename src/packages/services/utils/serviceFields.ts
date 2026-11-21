@@ -5,9 +5,21 @@
 // its category's defaults below. The mobile app renders the same `fields` it gets
 // from the API, so the defaults only need to live here.
 
-export type ServiceFieldKind = 'text' | 'textarea' | 'number' | 'select' | 'date';
+export type ServiceFieldKind = 'text' | 'textarea' | 'number' | 'select' | 'date' | 'image';
 
-export const SERVICE_FIELD_KINDS: readonly ServiceFieldKind[] = ['text', 'textarea', 'number', 'select', 'date'];
+export const SERVICE_FIELD_KINDS: readonly ServiceFieldKind[] = ['text', 'textarea', 'number', 'select', 'date', 'image'];
+
+/**
+ * 'image' fields: the photo is uploaded first (POST /api/service-images) and the
+ * request stores the Cloudinary public id it got back, always in this folder.
+ */
+export const SERVICE_IMAGE_FOLDER = 'service-submissions';
+export const SERVICE_IMAGE_PUBLIC_ID = /^service-submissions\/[A-Za-z0-9_-]+$/;
+
+/** Whether `value` is the stored value of an 'image' field (an uploaded photo's public id). */
+export function isServiceImageValue(value: unknown): value is string {
+  return typeof value === 'string' && SERVICE_IMAGE_PUBLIC_ID.test(value);
+}
 
 export interface ServiceField {
   /** Name inside submission.additionalInfo; /^[a-zA-Z][a-zA-Z0-9_]*$/, unique per service. */
@@ -228,7 +240,8 @@ export type AdditionalInfoValue = string | number | boolean | null;
 
 /**
  * Checks a request's additionalInfo against the service's fields: required fields
- * present, select values among the options, numbers numeric, dates 'YYYY-MM-DD'.
+ * present, select values among the options, numbers numeric, dates 'YYYY-MM-DD',
+ * images the public id of an uploaded photo.
  * Values of other keys (older app versions, fields removed since) are kept as they are.
  * With `requireAll: false` (staff edits) missing required fields are allowed.
  * Returns the reason of the first problem, or null.
@@ -259,6 +272,9 @@ export function findAdditionalInfoProblem(
         if (typeof value !== 'string' || !DATE_ONLY.test(value) || Number.isNaN(new Date(`${value}T00:00:00Z`).getTime())) {
           return `additionalInfo.${field.key} must be a date (YYYY-MM-DD)`;
         }
+        break;
+      case 'image':
+        if (!isServiceImageValue(value)) return `additionalInfo.${field.key} must be an uploaded image`;
         break;
       default:
         if (typeof value !== 'string' && typeof value !== 'number') return `additionalInfo.${field.key} must be text`;

@@ -27,19 +27,25 @@ function ensureCloudinary() {
   configured = true;
 }
 
-/** Throws 400 INVALID_IMAGE for anything but a JPEG/PNG/GIF/WebP of at most 5 MB. */
-export function assertValidImage(file: File) {
-  if (!ALLOWED_IMAGE_TYPES.includes(file.type)) {
+/** What an upload accepts; the defaults are the admin content's. */
+export type ImageRules = {
+  allowedTypes?: readonly string[];
+  maxBytes?: number;
+};
+
+/** Throws 400 INVALID_IMAGE for anything but an allowed type within the size (default: JPEG/PNG/GIF/WebP of at most 5 MB). */
+export function assertValidImage(file: File, { allowedTypes = ALLOWED_IMAGE_TYPES, maxBytes = MAX_IMAGE_BYTES }: ImageRules = {}) {
+  if (!allowedTypes.includes(file.type)) {
     throw new BadRequestError('Invalid image file', 'INVALID_IMAGE');
   }
-  if (file.size > MAX_IMAGE_BYTES) {
+  if (file.size > maxBytes) {
     throw new BadRequestError('Image is too large', 'INVALID_IMAGE');
   }
 }
 
 /** Uploads one image to `folder` and resolves with its Cloudinary public id. */
-export async function uploadImage(file: File, folder: string): Promise<string> {
-  assertValidImage(file);
+export async function uploadImage(file: File, folder: string, rules: ImageRules = {}): Promise<string> {
+  assertValidImage(file, rules);
   ensureCloudinary();
   const base64 = Buffer.from(await file.arrayBuffer()).toString('base64');
   const result = await cloudinary.uploader.upload(`data:${file.type};base64,${base64}`, {

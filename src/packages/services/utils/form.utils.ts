@@ -1,4 +1,4 @@
-import { serviceFieldLabel, serviceFieldOptionLabel, type ServiceField } from './serviceFields';
+import { isServiceImageValue, serviceFieldLabel, serviceFieldOptionLabel, type ServiceField } from './serviceFields';
 
 // The request form's extra fields now come from the service itself (resolved by
 // resolveServiceFields in ./serviceFields). This file keeps the display helpers.
@@ -106,13 +106,20 @@ export function formatAdditionalInfoValue(value: unknown, english = false): stri
   }
 }
 
+export type AdditionalInfoRow = { key: string; label: string; value: string; image?: string };
+
 /**
  * Label/value rows for a request's additionalInfo: the form's own fields first, in
  * form order, then anything else stored (older app fields, removed fields).
  * With `english`, the form's fields use their English label and select values their
  * English option label when the admin gave them (values are stored in Arabic).
+ * A photo ('image' field) also has `image`, its public id: show it as a picture, not as text.
  */
-export function describeAdditionalInfo(additionalInfo: unknown, fields: ServiceField[], { english = false }: { english?: boolean } = {}) {
+export function describeAdditionalInfo(
+  additionalInfo: unknown,
+  fields: ServiceField[],
+  { english = false }: { english?: boolean } = {}
+): AdditionalInfoRow[] {
   if (!additionalInfo || typeof additionalInfo !== 'object' || Array.isArray(additionalInfo)) {
     const value = formatAdditionalInfoValue(additionalInfo, english);
     return value ? [{ key: 'value', label: english ? 'Value' : 'القيمة', value }] : [];
@@ -125,7 +132,12 @@ export function describeAdditionalInfo(additionalInfo: unknown, fields: ServiceF
     ...fields
       .filter(f => Object.prototype.hasOwnProperty.call(info, f.key))
       // formatLegacyValue: 'type' kept its name but the older app stored English codes.
-      .map(f => ({ key: f.key, label: serviceFieldLabel(f, english), value: formatFieldValue(f, info[f.key], english) })),
+      .map(f => ({
+        key: f.key,
+        label: serviceFieldLabel(f, english),
+        value: formatFieldValue(f, info[f.key], english),
+        ...(f.kind === 'image' && isServiceImageValue(info[f.key]) && { image: info[f.key] as string }),
+      })),
     ...Object.keys(info)
       .filter(key => !known.has(key))
       .sort()
